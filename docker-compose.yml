@@ -1,0 +1,83 @@
+version: '3'
+
+services:
+
+  db:
+    container_name: dev-db
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+    networks:
+      - internal
+    ports:
+      - 3306:3306
+
+  adminer:
+    container_name: dev-adminer
+    image: adminer
+    networks:
+      - internal
+    ports:
+      - 8080:8080
+
+  web:
+    container_name: dev-php
+    build:
+      context: ./
+      dockerfile: docker/web.Dockerfile
+    volumes:
+      -  ./:/var/www/
+      - ./public:/var/www/html
+      - ./docker/php:/usr/local/etc/php/custom.d
+    networks:
+      - internal
+    links:
+      - db
+      - memcached
+    environment:
+      XDEBUG_CONFIG: "remote_host=host.docker.internal remote_enable=1"
+      PHP_IDE_CONFIG: "serverName=Docker"
+      PHP_INI_SCAN_DIR: "/usr/local/etc/php/custom.d:/usr/local/etc/php/conf.d"
+
+  nginx:
+    container_name: dev-nginx
+    image: nginx:1.13
+    ports:
+      - 80:80
+    volumes:
+      - ./:/var/www/
+      - ./public:/var/www/html
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - web
+    networks:
+      - internal
+
+  memcached:
+    container_name: dev-memcached
+    image: memcached:latest
+    networks:
+      - internal
+
+  mailhog:
+    container_name: dev-mailhog
+    image: mailhog/mailhog
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    networks:
+      - internal
+
+volumes:
+  mysql:
+
+networks:
+  internal:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.220.0/28
