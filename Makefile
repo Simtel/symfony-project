@@ -19,11 +19,17 @@ stop: ## Stop contrainers
 
 restart: stop up ## Restart docker containers	
 
-mysql-console: ## Mysql Console Failed
+mysql-cli: ## Mysql Console Failed
 	@docker exec -it dev-db /usr/bin/mysql -uroot -pexample
 
-php-console: ## php консоль
+cli: ## php консоль
 	@docker exec -it --user www-data dev-php bash
 
-php-console-root: ##php консоль под рутом
+cli-root: ##php консоль под рутом
 	@docker exec -it  dev-php bash
+
+to-migration:
+	@docker exec -it --user www-data dev-php  bin/console doctrine:migrations:diff --no-interaction --formatted
+
+migrate:
+	@docker exec -it --user www-data dev-php bin/console doctrine:migrations:migrate
