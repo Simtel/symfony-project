@@ -4,30 +4,27 @@ declare(strict_types=1);
 
 namespace App\Context\Common\Infrastructure\Controller;
 
-use DateTimeImmutable;
+use App\Context\Common\Application\Contract\ConfigProviderInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class CommonController extends AbstractController
+class ConfigController extends AbstractController
 {
     public function __construct(
-        private readonly NormalizerInterface $normalizer
+        private readonly ConfigProviderInterface $configProvider,
+        private readonly NormalizerInterface $normalizer,
     ) {
     }
 
     /**
      * @throws ExceptionInterface
      */
-    #[Route('/api/test', name: 'test', methods: ['GET'])]
-    public function test(): JsonResponse
+    #[Route(path: '/api/config/list', name: 'list_config', methods: ['GET'])]
+    public function list(): JsonResponse
     {
-        return $this->json(
-            $this->normalizer->normalize(
-                ['test' => true, 'time' => new DateTimeImmutable()]
-            )
-        );
+        return $this->json($this->normalizer->normalize($this->configProvider->getList(), 'array'));
     }
 }

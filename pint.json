@@ -1,0 +1,11 @@
+{
+  "preset": "psr12",
+  "exclude": [
+    ".composer",
+    ".github",
+    "docker",
+    "storage",
+    "config",
+    "var"
+  ]
+}
