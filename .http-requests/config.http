@@ -1,0 +1,7 @@
+POST http://localhost/api/config
+Content-Type: application/json
+
+{
+  "name": "logging",
+  "value": 1
+}

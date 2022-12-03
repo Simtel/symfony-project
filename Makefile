@@ -34,3 +34,6 @@ to-migration:
 migrate:
 	@docker exec -it --user www-data dev-php bin/console doctrine:migrations:migrate
 	@docker exec -it --user www-data dev-php bin/console --env=test doctrine:migrations:migrate
+
+test:
+	@docker exec -it --user www-data dev-php bin/phpunit
