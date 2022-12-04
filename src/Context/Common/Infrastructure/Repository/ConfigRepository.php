@@ -11,6 +11,9 @@ use Doctrine\ORM\EntityRepository;
 
 class ConfigRepository implements ConfigRepositoryInterface
 {
+    /**
+     * @var EntityRepository<Config>
+     */
     private readonly EntityRepository $repository;
 
     public function __construct(

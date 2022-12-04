@@ -37,3 +37,9 @@ migrate:
 
 test:
 	@docker exec -it --user www-data dev-php bin/phpunit
+
+pint:
+	@docker exec -it --user www-data dev-php vendor/bin/pint
+
+phpstan:
+	@docker exec -it --user www-data dev-php vendor/bin/phpstan analyze --memory-limit=2G

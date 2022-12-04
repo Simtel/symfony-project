@@ -1,7 +1,16 @@
+### Create config
 POST http://localhost/api/config
 Content-Type: application/json
 
 {
-  "name": "logging",
-  "value": 1
+  "name": "logging_dev",
+  "value": "1"
+}
+
+### Check create config validation
+POST http://localhost/api/config
+Content-Type: application/json
+
+{
+
 }
