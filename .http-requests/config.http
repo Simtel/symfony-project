@@ -14,3 +14,8 @@ Content-Type: application/json
 {
 
 }
+
+###Get config list
+GET http://localhost/api/config/list
+Content-Type: application/json
+X-AUTH-TOKEN: 123
