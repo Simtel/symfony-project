@@ -15,7 +15,11 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Context/Common/Domain/Entity/'
                 prefix: 'App\Context\Common\Domain\Entity'
                 alias: App
-
+            User:
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/Context/User/Domain/Entity/'
+                prefix: 'App\Context\User\Domain\Entity'
+                alias: App
 
 when@test:
     doctrine:
