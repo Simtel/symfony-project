@@ -19,9 +19,13 @@ class User
     #[ORM\Column(type: 'string')]
     private string $password;
 
-    public function __construct(string $email)
+    #[ORM\Column(type: 'string', length: 255)]
+    private string $name;
+
+    public function __construct(string $email, string $name)
     {
         $this->email = $email;
+        $this->name = $name;
     }
 
     public function getId(): ?int
@@ -47,5 +51,18 @@ class User
     public function setPassword(string $password): void
     {
         $this->password = $password;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function changeName(string $name): void
+    {
+        if ($this->name === $name) {
+            return;
+        }
+        $this->name = $name;
     }
 }
