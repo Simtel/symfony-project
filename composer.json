@@ -4,13 +4,12 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "php": ">=8.1",
+        "php": ">=8.2",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "doctrine/doctrine-bundle": "^2.7",
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.13",
-        "laravel/pint": "^1.2",
         "sensio/framework-extra-bundle": "^6.2",
         "symfony/console": "6.2.*",
         "symfony/dotenv": "6.2.*",
@@ -81,6 +80,7 @@
         "symfony/browser-kit": "6.2.*",
         "symfony/css-selector": "6.2.*",
         "symfony/maker-bundle": "^1.48",
-        "symfony/phpunit-bridge": "^6.2"
+        "symfony/phpunit-bridge": "^6.2",
+        "laravel/pint": "^1.2"
     }
 }
