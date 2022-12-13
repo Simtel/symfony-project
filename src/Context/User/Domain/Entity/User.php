@@ -41,10 +41,11 @@ class User implements UserInterface
     #[ORM\Column(type: 'string', length: 255)]
     private ?string $token;
 
-    public function __construct(string $email, string $name)
+    public function __construct(string $email, string $name, string $password)
     {
         $this->email = $email;
         $this->name = $name;
+        $this->password = $password;
     }
 
     public function getId(): ?int
