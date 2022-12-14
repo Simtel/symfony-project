@@ -7,6 +7,7 @@ namespace App\Context\Common\Infrastructure\Controller;
 use App\Context\Common\Application\Contract\ConfigProviderInterface;
 use App\Context\Common\Application\Dto\CreateConfigDto;
 use App\Context\Common\Domain\Entity\Config;
+use App\Context\User\Domain\Contract\UserProviderInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -35,9 +36,10 @@ class ConfigController extends AbstractController
     #[Route(path: '/api/config', name: 'create_config', methods: ['POST'])]
     public function create(
         CreateConfigDto $dto,
+        UserProviderInterface $userProvider,
         EntityManagerInterface $entityManager,
     ): JsonResponse {
-        $config = new Config($dto->getName(), $dto->getValue());
+        $config = new Config($dto->getName(), $dto->getValue(), $userProvider->getCurrentUser());
 
         $entityManager->persist($config);
         $entityManager->flush();

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Context\Common\Domain\Entity;
 
+use App\Context\User\Domain\Entity\User;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -24,14 +25,17 @@ class Config
     #[ORM\Column(type: 'datetime_immutable')]
     private DateTimeImmutable $updateAt;
 
-    /**
-     * @param string $name
-     * @param string|null $value
-     */
-    public function __construct(string $name, ?string $value)
+    #[ORM\OneToOne(targetEntity: User::class, )]
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id')]
+    private User $createdBy;
+
+
+    public function __construct(string $name, ?string $value, User $user)
     {
         $this->name = $name;
         $this->value = $value;
+        $this->createdBy = $user;
+
         $this->updateAt = new DateTimeImmutable();
     }
 
@@ -57,5 +61,10 @@ class Config
     public function getUpdateAt(): DateTimeImmutable
     {
         return $this->updateAt;
+    }
+
+    public function getCreatedBy(): User
+    {
+        return $this->createdBy;
     }
 }

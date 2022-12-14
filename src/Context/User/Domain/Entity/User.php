@@ -14,21 +14,6 @@ class User implements UserInterface
     #[ORM\Column]
     private ?int $id = null;
 
-    public function getRoles(): array
-    {
-        return ['ROLE_USER'];
-    }
-
-    public function eraseCredentials(): void
-    {
-        /* do nothing */
-    }
-
-    public function getUserIdentifier(): string
-    {
-        return (string)$this->getId();
-    }
-
     #[ORM\Column(type: 'string', length: 180, unique: true)]
     private string $email;
 
@@ -94,5 +79,20 @@ class User implements UserInterface
     public function setToken(?string $token): void
     {
         $this->token = $token;
+    }
+
+    public function getRoles(): array
+    {
+        return ['ROLE_USER'];
+    }
+
+    public function eraseCredentials(): void
+    {
+        /* do nothing */
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return (string)$this->getId();
     }
 }

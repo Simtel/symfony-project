@@ -3,16 +3,27 @@
 namespace App\DataFixtures;
 
 use App\Context\Common\Domain\Entity\Config;
+use App\Context\User\Domain\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class ConfigFixture extends Fixture
+class ConfigFixture extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
-        $config = new Config('app', 'Test Project');
+        /** @var User $user */
+        $user =  $this->getReference(UserFixture::USER_REFERENCE);
+        $config = new Config('app', 'Test Project', $user);
         $manager->persist($config);
 
         $manager->flush();
+    }
+
+    public function getDependencies(): array
+    {
+        return [
+            UserFixture::class
+        ];
     }
 }
