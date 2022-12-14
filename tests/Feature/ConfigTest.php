@@ -57,7 +57,7 @@ class ConfigTest extends WebTestCase
         $user->setToken(123);
         $em->persist($user);
 
-        $config = new Config('app', 'Test App');
+        $config = new Config('app', 'Test App', $user);
         $em->persist($config);
 
         $em->flush();

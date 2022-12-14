@@ -9,6 +9,7 @@ use App\Context\Common\Application\Service\ConfigProvider;
 use App\Context\Common\Domain\Contract\ConfigRepositoryInterface;
 use App\Context\Common\Domain\Entity\Config;
 use App\Context\Common\Infrastructure\View\ConfigView;
+use App\Context\User\Domain\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 
 use Exception;
@@ -59,8 +60,11 @@ class ConfigProviderTest extends KernelTestCase
      */
     public function providerReturnFillViewConfig(): void
     {
-        $config = new Config('app', 'Test Project');
+        $user = new User('test@test.com', 'Test', '4444');
+        $user->setToken('3232323');
+        $config = new Config('app', 'Test Project', $user);
         $this->entityManager->persist($config);
+        $this->entityManager->persist($user);
         $this->entityManager->flush();
 
         /** @var ConfigProviderInterface $provider */
