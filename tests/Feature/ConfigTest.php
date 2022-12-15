@@ -76,7 +76,11 @@ class ConfigTest extends WebTestCase
                 [
                     'name' => $config->getName(),
                     'value' => $config->getValue(),
-                    'updatedAt' => $config->getUpdateAt()->format('Y-m-d H:i:s')
+                    'updatedAt' => $config->getUpdateAt()->format('Y-m-d H:i:s'),
+                    'user' => [
+                        'name' => $config->getCreatedBy()->getName(),
+                        'id' => $config->getCreatedBy()->getId(),
+                    ]
                 ]
             ]
         ], json_decode($response->getContent(), true, 512, JSON_THROW_ON_ERROR));

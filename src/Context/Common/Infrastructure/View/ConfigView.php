@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace App\Context\Common\Infrastructure\View;
 
 use App\Context\Common\Domain\Entity\Config;
+use App\Context\User\Infrastructure\View\UserView;
 
-class ConfigView
+readonly class ConfigView
 {
     public function __construct(
-        private readonly Config $config,
+        private Config $config,
     ) {
     }
 
@@ -26,5 +27,10 @@ class ConfigView
     public function getUpdatedAt(): string
     {
         return $this->config->getUpdateAt()->format('Y-m-d H:i:s');
+    }
+
+    public function getUser(): UserView
+    {
+        return new UserView($this->config->getCreatedBy());
     }
 }

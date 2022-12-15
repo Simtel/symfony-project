@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Context\Common\Infrastructure\View;
 
-class ConfigListView
+readonly class ConfigListView
 {
     /**
      * @var ConfigView[]
