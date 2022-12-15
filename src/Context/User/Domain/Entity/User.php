@@ -2,11 +2,10 @@
 
 namespace App\Context\User\Domain\Entity;
 
-use App\Context\User\Infrastructure\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-#[ORM\Entity(repositoryClass: UserRepository::class)]
+#[ORM\Entity()]
 class User implements UserInterface
 {
     #[ORM\Id]

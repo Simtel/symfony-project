@@ -43,3 +43,6 @@ pint:
 
 phpstan:
 	@docker exec -it --user www-data dev-php vendor/bin/phpstan analyze --memory-limit=2G
+
+deptrac:
+	@docker exec -it --user www-data dev-php vendor/bin/deptrac

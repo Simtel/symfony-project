@@ -2,82 +2,29 @@
 
 namespace App\Context\User\Infrastructure\Repository;
 
+use App\Context\User\Domain\Contract\UserRepositoryInterface;
 use App\Context\User\Domain\Entity\User;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 
-/**
- * @extends ServiceEntityRepository<User>
- *
- * @method User|null find($id, $lockMode = null, $lockVersion = null)
- * @method User|null findOneBy(array $criteria, array $orderBy = null)
- * @method User[]    findAll()
- * @method User[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- */
-class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
+class UserRepository implements UserRepositoryInterface
 {
-    public function __construct(ManagerRegistry $registry)
-    {
-        parent::__construct($registry, User::class);
-    }
-
-    public function save(User $entity, bool $flush = false): void
-    {
-        $this->getEntityManager()->persist($entity);
-
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
-    }
-
-    public function remove(User $entity, bool $flush = false): void
-    {
-        $this->getEntityManager()->remove($entity);
-
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
-    }
-
     /**
-     * Used to upgrade (rehash) the user's password automatically over time.
+     * @var EntityRepository<User>
      */
-    public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
-    {
-        if (!$user instanceof User) {
-            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', \get_class($user)));
-        }
+    private EntityRepository $repository;
 
-        $user->setPassword($newHashedPassword);
-
-        $this->save($user, true);
+    public function __construct(
+        EntityManagerInterface $entityManager
+    ) {
+        $this->repository = new EntityRepository(
+            $entityManager,
+            $entityManager->getClassMetadata(User::class)
+        );
     }
 
-//    /**
-//     * @return User[] Returns an array of User objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('u')
-//            ->andWhere('u.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('u.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?User
-//    {
-//        return $this->createQueryBuilder('u')
-//            ->andWhere('u.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function findOneBy(array $criteria, ?array $orderBy = null): ?User
+    {
+        return $this->repository->findOneBy($criteria, $orderBy);
+    }
 }
