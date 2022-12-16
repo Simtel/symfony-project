@@ -1,0 +1,13 @@
+{
+    "configs": [
+        {
+            "name": "app",
+            "value": "Test App",
+            "updatedAt": "@string@.isDateTime()",
+            "user": {
+                "name": "Test",
+                "id": "@integer@"
+            }
+        }
+    ]
+}

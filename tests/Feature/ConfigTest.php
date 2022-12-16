@@ -4,54 +4,42 @@ namespace App\Tests\Feature;
 
 use App\Context\Common\Domain\Entity\Config;
 use App\Context\User\Domain\Entity\User;
-use JsonException;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Exception;
 
-class ConfigTest extends WebTestCase
+class ConfigTest extends FeatureTest
 {
     public function testAccessDenied(): void
     {
-        static::createClient()->request('GET', '/api/config/list');
-        self::assertResponseStatusCodeSame(401);
+        $this->json('/api/config/list');
+        self::assertResponseStatusCodeSame(403);
     }
 
     /**
-     * @throws JsonException
+     * @throws Exception
      */
     public function testAllowAccess(): void
     {
-        $client = static::createClient();
-
-        $em = $client->getContainer()->get('doctrine.orm.entity_manager');
+        $em = $this->getEntityManager();
 
         $user = new User('test@mail.com', 'Test', '456');
         $user->setToken(123);
         $em->persist($user);
         $em->flush();
 
-        $client->request(
-            'GET',
-            '/api/config/list',
-            [],
-            [],
-            ['HTTP_X_AUTH_TOKEN' => $user->getToken()]
-        );
-        $response = $client->getResponse();
+        $this->loginAs($user);
+
+        $response = $this->json('/api/config/list');
+
         self::assertSame(200, $response->getStatusCode());
-        self::assertSame(
-            ['configs' => []],
-            json_decode($response->getContent(), true, 512, JSON_THROW_ON_ERROR)
-        );
+        $this->assertResponse($response, 'Common/configs_empty');
     }
 
     /**
-     * @throws JsonException
+     * @throws Exception
      */
     public function testGetConfigs(): void
     {
-        $client = static::createClient();
-
-        $em = $client->getContainer()->get('doctrine.orm.entity_manager');
+        $em = $this->getEntityManager();
 
         $user = new User('test@mail.com', 'Test', '456');
         $user->setToken(123);
@@ -62,27 +50,11 @@ class ConfigTest extends WebTestCase
 
         $em->flush();
 
-        $client->request(
-            'GET',
-            '/api/config/list',
-            [],
-            [],
-            ['HTTP_X_AUTH_TOKEN' => $user->getToken()]
-        );
-        $response = $client->getResponse();
+        $this->loginAs($user);
+
+        $response = $this->json('/api/config/list');
+
         self::assertSame(200, $response->getStatusCode());
-        self::assertSame([
-            'configs' => [
-                [
-                    'name' => $config->getName(),
-                    'value' => $config->getValue(),
-                    'updatedAt' => $config->getUpdateAt()->format('Y-m-d H:i:s'),
-                    'user' => [
-                        'name' => $config->getCreatedBy()->getName(),
-                        'id' => $config->getCreatedBy()->getId(),
-                    ]
-                ]
-            ]
-        ], json_decode($response->getContent(), true, 512, JSON_THROW_ON_ERROR));
+        $this->assertResponse($response, 'Common/configs');
     }
 }
