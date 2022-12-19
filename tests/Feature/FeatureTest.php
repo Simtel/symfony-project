@@ -16,7 +16,6 @@ abstract class FeatureTest extends JsonApiTestCase
     {
         parent::setUp();
         $this->setUpDatabase();
-        $this->getEntityManager()->beginTransaction();
     }
 
 
@@ -66,7 +65,6 @@ abstract class FeatureTest extends JsonApiTestCase
     protected function tearDown(): void
     {
         $this->currentUser = null;
-        $this->getEntityManager()->rollback();
         parent::tearDown();
     }
 }
