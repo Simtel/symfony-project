@@ -10,19 +10,8 @@ permissions:
   contents: read
 
 jobs:
-  symfony-tests:
+  symfony-pint:
     runs-on: ubuntu-latest
-    # Docs: https://docs.github.com/en/actions/using-containerized-services
-    services:
-      mysql:
-        image: mysql:latest
-        env:
-          MYSQL_ALLOW_EMPTY_PASSWORD: false
-          MYSQL_ROOT_PASSWORD: symfony
-          MYSQL_DATABASE: symfony_test
-        ports:
-          - 3306/tcp
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     steps:
     - uses: shivammathur/setup-php@2cb9b829437ee246e9b3cac53555a39208ca6d28
       with:
@@ -40,15 +29,5 @@ jobs:
           ${{ runner.os }}-php-
     - name: Install Dependencies
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-    - name: Migrate
-      env:
-        DATABASE_URL: mysql://root:symfony@127.0.0.1:${{ job.services.mysql.ports['3306'] }}/symfony
-      run: bin/console --env=test doctrine:migrations:migrate
-    - name: Execute tests (Unit and Feature tests) via PHPUnit
-      env:
-        DATABASE_URL: mysql://root:symfony@127.0.0.1:${{ job.services.mysql.ports['3306'] }}/symfony
-      run: vendor/bin/phpunit
-    - name: PHPStan
-      run: vendor/bin/phpstan
     - name: Pint
       run: vendor/bin/pint --test
