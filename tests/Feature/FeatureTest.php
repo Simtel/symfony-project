@@ -15,7 +15,7 @@ abstract class FeatureTest extends JsonApiTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->setUpDatabase();
+       // $this->setUpDatabase();
     }
 
 
