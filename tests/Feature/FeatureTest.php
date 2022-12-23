@@ -6,6 +6,8 @@ namespace App\Tests\Feature;
 
 use ApiTestCase\JsonApiTestCase;
 use App\Context\User\Domain\Entity\User;
+use Doctrine\ORM\Exception\ORMException;
+use JsonException;
 use Symfony\Component\HttpFoundation\Response;
 
 abstract class FeatureTest extends JsonApiTestCase
@@ -19,7 +21,7 @@ abstract class FeatureTest extends JsonApiTestCase
     }
 
 
-    public function json($uri, array $parameters = [], array $headers = []): Response
+    public function getJson(string $uri, array $parameters = [], array $headers = []): Response
     {
         $this->client->request(
             'GET',
@@ -27,6 +29,35 @@ abstract class FeatureTest extends JsonApiTestCase
             $parameters,
             [],
             $this->transformHeadersToServerVars(array_merge($this->getDefaultHeaders(), $headers))
+        );
+
+        return $this->client->getResponse();
+    }
+
+
+    /**
+     * @throws JsonException
+     */
+    public function postJson(string $uri, array $data = [], array $headers = []): Response
+    {
+        $content = json_encode($data, JSON_THROW_ON_ERROR);
+
+        $jsonHeaders = [
+            'CONTENT_LENGTH' => mb_strlen($content, '8bit'),
+            'CONTENT_TYPE' => 'application/json',
+            'Accept' => 'application/json',
+        ];
+
+        $headers = array_replace($jsonHeaders, array_merge($this->getDefaultHeaders(), $headers));
+
+
+        $this->client->request(
+            'POST',
+            $uri,
+            [],
+            [],
+            $this->transformHeadersToServerVars($headers),
+            $content
         );
 
         return $this->client->getResponse();
@@ -66,5 +97,21 @@ abstract class FeatureTest extends JsonApiTestCase
     {
         $this->currentUser = null;
         parent::tearDown();
+    }
+
+    /**
+     * @throws ORMException
+     */
+    public function createUser(): User
+    {
+        $em = $this->getEntityManager();
+
+        $user = new User('test@mail.com', 'Test', '456');
+        $user->setToken('4444');
+        $em->persist($user);
+
+        $em->flush();
+
+        return $user;
     }
 }

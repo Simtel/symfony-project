@@ -15,11 +15,11 @@ use Symfony\Component\Validator\Constraints\Type;
 use Symfony\Component\Validator\Exception\ValidationFailedException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class CreateConfigDtoParamConverter implements
+readonly class CreateConfigDtoParamConverter implements
     ParamConverterInterface
 {
     public function __construct(
-        private readonly ValidatorInterface $validator
+        private ValidatorInterface $validator
     ) {
     }
 
