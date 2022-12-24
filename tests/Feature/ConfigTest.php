@@ -2,6 +2,7 @@
 
 namespace App\Tests\Feature;
 
+use App\Context\Common\Domain\Contract\ConfigRepositoryInterface;
 use App\Context\Common\Domain\Entity\Config;
 use App\Context\User\Domain\Entity\User;
 use Doctrine\ORM\Exception\ORMException;
@@ -88,5 +89,27 @@ class ConfigTest extends FeatureTest
 
         self::assertSame(422, $response->getStatusCode());
         $this->assertJsonResponseContent($response, 'Common/configs_validate_missing_value');
+    }
+
+    /**
+     * @throws ORMException
+     * @throws JsonExceptionAlias
+     * @throws Exception
+     */
+    public function testCreateConfig(): void
+    {
+        $user = $this->createUser();
+        $this->loginAs($user);
+
+        $this->postJson('/api/config', ['name' => 'app', 'value' => 'name']);
+
+        /** @var ConfigRepositoryInterface $repository */
+        $repository = self::getContainer()->get(ConfigRepositoryInterface::class);
+        $config = $repository->getByName('app');
+
+        self::assertResponseStatusCodeSame(201);
+        self::assertSame('app', $config->getName());
+        self::assertSame('name', $config->getValue());
+        self::assertSame($user->getId(), $config->getCreatedBy()->getId());
     }
 }

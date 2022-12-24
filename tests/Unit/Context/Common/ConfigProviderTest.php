@@ -38,7 +38,7 @@ class ConfigProviderTest extends KernelTestCase
     {
         $repositoryMock = $this->getMockBuilder(ConfigRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['findAll'])
+            ->onlyMethods(['findAll','getByName'])
             ->getMock();
 
         $repositoryMock->expects(self::once())

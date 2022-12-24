@@ -12,4 +12,6 @@ interface ConfigRepositoryInterface
      * @return Config[]
      */
     public function findAll(): array;
+
+    public function getByName(string $name): Config;
 }
