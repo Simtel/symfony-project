@@ -2,6 +2,8 @@
 
 namespace App\Context\User\Domain\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -25,11 +27,22 @@ class User implements UserInterface
     #[ORM\Column(type: 'string', length: 255)]
     private ?string $token;
 
+    /**
+     * @var Collection<int, Location>
+     */
+    #[ORM\JoinTable(name: 'user_location')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'location_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: Location::class)]
+    private Collection $locations;
+
     public function __construct(string $email, string $name, string $password)
     {
         $this->email = $email;
         $this->name = $name;
         $this->password = $password;
+
+        $this->locations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -94,4 +107,13 @@ class User implements UserInterface
     {
         return (string)$this->getId();
     }
+
+    /**
+     * @return Location[]
+     */
+    public function getLocations(): array
+    {
+        return $this->locations->toArray();
+    }
+
 }
