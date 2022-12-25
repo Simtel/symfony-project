@@ -115,5 +115,4 @@ class User implements UserInterface
     {
         return $this->locations->toArray();
     }
-
 }
