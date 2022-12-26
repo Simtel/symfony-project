@@ -1,0 +1,10 @@
+{
+  "name": "Test",
+  "id": "@integer@",
+  "email": "test@mail.com",
+  "locations": [
+    {
+      "name": "Moscow"
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+### Show User
+POST http://localhost/api/user/3
+Content-Type: application/json
+X-AUTH-TOKEN: 123

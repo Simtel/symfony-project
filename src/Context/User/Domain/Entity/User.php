@@ -33,7 +33,7 @@ class User implements UserInterface
     #[ORM\JoinTable(name: 'user_location')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
     #[ORM\InverseJoinColumn(name: 'location_id', referencedColumnName: 'id')]
-    #[ORM\ManyToMany(targetEntity: Location::class)]
+    #[ORM\ManyToMany(targetEntity: Location::class, fetch: 'EXTRA_LAZY')]
     private Collection $locations;
 
     public function __construct(string $email, string $name, string $password)
@@ -114,5 +114,10 @@ class User implements UserInterface
     public function getLocations(): array
     {
         return $this->locations->toArray();
+    }
+
+    public function addLocation(Location $location): void
+    {
+        $this->locations->add($location);
     }
 }
