@@ -27,4 +27,9 @@ class UserRepository implements UserRepositoryInterface
     {
         return $this->repository->findOneBy($criteria, $orderBy);
     }
+
+    public function find(int $id): ?User
+    {
+        return $this->repository->find($id);
+    }
 }

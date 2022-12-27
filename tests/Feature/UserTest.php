@@ -6,6 +6,7 @@ namespace App\Tests\Feature;
 
 use App\Context\User\Domain\Entity\Location;
 use Doctrine\ORM\Exception\ORMException;
+use Doctrine\ORM\OptimisticLockException;
 use Exception;
 
 class UserTest extends FeatureTest
@@ -32,5 +33,47 @@ class UserTest extends FeatureTest
 
         self::assertResponseStatusCodeSame(200);
         $this->assertResponse($response, 'User/user_full_view');
+    }
+
+    /**
+     * @throws OptimisticLockException
+     * @throws ORMException
+     * @throws Exception
+     */
+    public function testAddLocationToUser(): void
+    {
+        $em = $this->getEntityManager();
+
+        $user = $this->createUser();
+        $location = new Location('Moscow');
+        $em->persist($location);
+        $user->addLocation($location);
+
+
+        $newLocation = new Location('Ulyanovsk');
+        $em->persist($newLocation);
+
+        $em->flush();
+
+        $this->loginAs($user);
+
+        $this->putJson('/api/user/' . $user->getId() . '/location/' . $newLocation->getId());
+
+        $em->refresh($user);
+
+        self::assertSame(
+            [
+            [
+                'name' => 'Moscow',
+            ],
+            [
+                'name' => 'Ulyanovsk'
+            ]
+        ],
+            array_map(
+                static fn (Location $location): array => ['name' => $location->getName()],
+                $user->getLocations()
+            )
+        );
     }
 }

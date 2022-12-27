@@ -63,6 +63,34 @@ abstract class FeatureTest extends JsonApiTestCase
         return $this->client->getResponse();
     }
 
+    /**
+     * @throws JsonException
+     */
+    public function putJson(string $uri, array $data = [], array $headers = []): Response
+    {
+        $content = json_encode($data, JSON_THROW_ON_ERROR);
+
+        $jsonHeaders = [
+            'CONTENT_LENGTH' => mb_strlen($content, '8bit'),
+            'CONTENT_TYPE' => 'application/json',
+            'Accept' => 'application/json',
+        ];
+
+        $headers = array_replace($jsonHeaders, array_merge($this->getDefaultHeaders(), $headers));
+
+
+        $this->client->request(
+            'PUT',
+            $uri,
+            [],
+            [],
+            $this->transformHeadersToServerVars($headers),
+            $content
+        );
+
+        return $this->client->getResponse();
+    }
+
     public function loginAs(User $user): void
     {
         $this->currentUser = $user;
@@ -102,12 +130,15 @@ abstract class FeatureTest extends JsonApiTestCase
     /**
      * @throws ORMException
      */
-    public function createUser(): User
+    public function createUser(array $overrides = []): User
     {
+        $default = ['email' => 'test@mail.com', 'name' => 'Test', 'password' => '456', 'token' => '4444'];
+        $attributes = array_replace($default, $overrides);
+
         $em = $this->getEntityManager();
 
-        $user = new User('test@mail.com', 'Test', '456');
-        $user->setToken('4444');
+        $user = new User($attributes['email'], $attributes['name'], $attributes['password']);
+        $user->setToken($attributes['token']);
         $em->persist($user);
 
         $em->flush();
