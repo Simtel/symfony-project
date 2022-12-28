@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Context\Common\Infrastructure\Security;
 
-use App\Context\User\Infrastructure\Repository\UserRepository;
+use App\Context\User\Domain\Contract\UserRepositoryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,7 +19,7 @@ use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPasspor
 class ApiKeyAuthenticator extends AbstractAuthenticator
 {
     public function __construct(
-        private readonly UserRepository $userRepository,
+        private readonly UserRepositoryInterface $userRepository,
     ) {
     }
 

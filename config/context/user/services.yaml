@@ -11,5 +11,10 @@ services:
     autowire: true      # Automatically injects dependencies in your services.
     autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
-  App\Context\Common\:
-    resource: '../../../src/Context/user/'
+  _instanceof:
+    App\Context\Common\Infrastructure\Contract\CommandHandlerInterface:
+      tags: [ 'internal.command_handler' ]
+
+  App\Context\User\:
+    resource: '../../../src/Context/User/'
+

@@ -2,65 +2,34 @@
 
 namespace App\Context\User\Infrastructure\Repository;
 
+use App\Context\User\Domain\Contract\LocationRepositoryInterface;
 use App\Context\User\Domain\Entity\Location;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 
-/**
- * @extends ServiceEntityRepository<Location>
- *
- * @method Location|null find($id, $lockMode = null, $lockVersion = null)
- * @method Location|null findOneBy(array $criteria, array $orderBy = null)
- * @method Location[]    findAll()
- * @method Location[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- */
-class LocationRepository extends ServiceEntityRepository
+class LocationRepository implements LocationRepositoryInterface
 {
-    public function __construct(ManagerRegistry $registry)
-    {
-        parent::__construct($registry, Location::class);
+    /**
+     * @var EntityRepository<Location>
+     */
+    private EntityRepository $repository;
+
+    public function __construct(
+        EntityManagerInterface $entityManager
+    ) {
+        $this->repository = new EntityRepository(
+            $entityManager,
+            $entityManager->getClassMetadata(Location::class)
+        );
     }
 
-    public function save(Location $entity, bool $flush = false): void
+    public function findOneBy(array $criteria, ?array $orderBy = null): ?Location
     {
-        $this->getEntityManager()->persist($entity);
-
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
+        return $this->repository->findOneBy($criteria, $orderBy);
     }
 
-    public function remove(Location $entity, bool $flush = false): void
+    public function find(int $id): ?Location
     {
-        $this->getEntityManager()->remove($entity);
-
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
+        return $this->repository->find($id);
     }
-
-//    /**
-//     * @return Location[] Returns an array of Location objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('l')
-//            ->andWhere('l.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('l.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?Location
-//    {
-//        return $this->createQueryBuilder('l')
-//            ->andWhere('l.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
 }

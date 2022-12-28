@@ -57,7 +57,9 @@ class UserTest extends FeatureTest
 
         $this->loginAs($user);
 
-        $this->putJson('/api/user/' . $user->getId() . '/location/' . $newLocation->getId());
+        $response = $this->putJson('/api/user/' . $user->getId() . '/location/' . $newLocation->getId());
+
+
 
         $em->refresh($user);
 

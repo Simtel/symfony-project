@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Context\User\Infrastructure\Controller;
 
+use App\Context\Common\Infrastructure\Contract\CommandBusInterface;
+use App\Context\User\Application\Command\UpdateUserCommand;
+use App\Context\User\Application\Dto\UpdateUserDto;
 use App\Context\User\Domain\Entity\Location;
 use App\Context\User\Domain\Entity\User;
 use App\Context\User\Infrastructure\View\UserFullView;
@@ -37,8 +40,12 @@ class UserController extends AbstractController
         User $user,
         Location $location,
         EntityManagerInterface $entityManager,
+        CommandBusInterface $commandBus
     ): JsonResponse {
-        $user->addLocation($location);
+        $dto = new UpdateUserDto($user);
+        $dto->addLocation($location);
+
+        $commandBus->dispatch(new UpdateUserCommand($dto));
 
         $entityManager->flush();
 
