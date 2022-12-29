@@ -6,9 +6,15 @@ namespace App\Context\User\Application\CommandHandler;
 
 use App\Context\Common\Infrastructure\Contract\CommandHandlerInterface;
 use App\Context\User\Application\Command\UpdateUserCommand;
+use App\Context\User\Domain\Event\AddLocationToUserEvent;
+use Psr\EventDispatcher\EventDispatcherInterface;
 
-class UpdateUserCommandHandler implements CommandHandlerInterface
+readonly class UpdateUserCommandHandler implements CommandHandlerInterface
 {
+    public function __construct(private EventDispatcherInterface $dispatcher)
+    {
+    }
+
     public function __invoke(UpdateUserCommand $command): void
     {
         $dto = $command->getDto();
@@ -16,6 +22,7 @@ class UpdateUserCommandHandler implements CommandHandlerInterface
 
         foreach ($dto->getLocations() as $location) {
             $user->addLocation($location);
+            $this->dispatcher->dispatch(new AddLocationToUserEvent($user, $location));
         }
     }
 }
