@@ -32,4 +32,12 @@ class UserRepository implements UserRepositoryInterface
     {
         return $this->repository->find($id);
     }
+
+    /**
+     * @return User[]
+     */
+    public function findAll(): array
+    {
+        return $this->repository->findAll();
+    }
 }
