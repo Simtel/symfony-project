@@ -2,6 +2,8 @@
 
 namespace App\Context\User\Domain\Entity;
 
+use App\Context\Common\Application\Contract\EntityEventInterface;
+use App\Context\User\Domain\Event\AddLocationToUserEvent;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -26,6 +28,9 @@ class User implements UserInterface
 
     #[ORM\Column(type: 'string', length: 255)]
     private ?string $token;
+
+    /** @var EntityEventInterface[] */
+    private array $events = [];
 
     /**
      * @var Collection<int, Location>
@@ -119,5 +124,14 @@ class User implements UserInterface
     public function addLocation(Location $location): void
     {
         $this->locations->add($location);
+        $this->events[] = new AddLocationToUserEvent($this, $location);
+    }
+
+    /**
+     * @return EntityEventInterface[]
+     */
+    public function getEvents(): array
+    {
+        return $this->events;
     }
 }

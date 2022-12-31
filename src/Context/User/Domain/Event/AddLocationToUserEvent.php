@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Context\User\Domain\Event;
 
+use App\Context\Common\Application\Contract\EntityEventInterface;
 use App\Context\User\Domain\Entity\Location;
 use App\Context\User\Domain\Entity\User;
 use App\Context\User\Infrastructure\EventListener\AddLocationToUserEventListener;
@@ -11,7 +12,7 @@ use App\Context\User\Infrastructure\EventListener\AddLocationToUserEventListener
 /**
  * @see AddLocationToUserEventListener
  */
-readonly class AddLocationToUserEvent
+readonly class AddLocationToUserEvent implements EntityEventInterface
 {
     public function __construct(
         private User $user,

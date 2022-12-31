@@ -6,7 +6,6 @@ namespace App\Context\User\Application\CommandHandler;
 
 use App\Context\Common\Infrastructure\Contract\CommandHandlerInterface;
 use App\Context\User\Application\Command\UpdateUserCommand;
-use App\Context\User\Domain\Event\AddLocationToUserEvent;
 use Psr\EventDispatcher\EventDispatcherInterface;
 
 readonly class UpdateUserCommandHandler implements CommandHandlerInterface
@@ -22,7 +21,11 @@ readonly class UpdateUserCommandHandler implements CommandHandlerInterface
 
         foreach ($dto->getLocations() as $location) {
             $user->addLocation($location);
-            $this->dispatcher->dispatch(new AddLocationToUserEvent($user, $location));
+        }
+
+        $events = $user->getEvents();
+        foreach ($events as $event) {
+            $this->dispatcher->dispatch($event);
         }
     }
 }
