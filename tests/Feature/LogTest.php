@@ -7,13 +7,14 @@ namespace App\Tests\Feature;
 use App\Context\Common\Domain\Entity\Log;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
+use Exception;
 
 class LogTest extends FeatureTest
 {
     /**
      * @throws OptimisticLockException
      * @throws ORMException
-     * @throws \JsonException
+     * @throws Exception
      */
     public function testLogsListView(): void
     {

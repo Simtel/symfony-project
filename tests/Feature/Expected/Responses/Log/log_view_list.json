@@ -1,3 +1,3 @@
 [
-    "User: Test\nAction: Location has been added to user\nCreated At:@string@.isDateTime()"
+    "User: Test\nAction: Location has been added to user\nCreated At:@string@.isDateTime()\nUrl: /api/log/@integer@\n"
 ]
