@@ -13,6 +13,8 @@ use App\Context\User\Domain\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 
 use Exception;
+use Psr\Cache\CacheItemPoolInterface;
+use Psr\Cache\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class ConfigProviderTest extends KernelTestCase
@@ -33,6 +35,8 @@ class ConfigProviderTest extends KernelTestCase
      * @test
      *
      * @return void
+     * @throws InvalidArgumentException
+     * @throws Exception
      */
     public function providerCanReturnEmptyView(): void
     {
@@ -45,7 +49,10 @@ class ConfigProviderTest extends KernelTestCase
             ->method('findAll')
             ->willReturn([]);
 
-        $provider = new ConfigProvider($repositoryMock);
+        /** @var CacheItemPoolInterface $cachePool */
+        $cachePool = self::getContainer()->get(CacheItemPoolInterface::class);
+
+        $provider = new ConfigProvider($repositoryMock, $cachePool);
 
         $result = $provider->getList();
 
