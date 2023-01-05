@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Context\Common\Infrastructure\Controller;
 
-use App\Context\Common\Domain\Contract\LogRepositoryInterface;
+use App\Context\Common\Application\Contract\LogProviderInterface;
 use App\Context\Common\Domain\Entity\Log;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -25,12 +25,12 @@ class LogController extends AbstractController
      */
     #[Route(path: '/api/log/list', name: 'log_list_view', methods: ['GET'])]
     public function list(
-        LogRepositoryInterface $logRepository,
+        LogProviderInterface $logProvider,
         Environment $twig,
     ): JsonResponse {
         $out = [];
 
-        $logs = $logRepository->findAll();
+        $logs = $logProvider->getList();
         foreach ($logs as $log) {
             $out[] = $twig->render('Logs/base_view.html.twig', [
                 'user' => $log->getAuthor()->getName(),
