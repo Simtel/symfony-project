@@ -10,12 +10,11 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 class DebugSubscriber implements EventSubscriberInterface
 {
-
     public function onKernelResponse(ResponseEvent $event): void
     {
         $response = $event->getResponse();
 
-        $hash = sha1($response->getContent());
+        $hash = sha1((string)$response->getContent());
         $response->headers->set('X-DEBUG-HASH', $hash);
     }
 
