@@ -11,6 +11,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+/**
+ * @see ListUserCommandHandler
+ */
 #[AsCommand(name: 'users:list')]
 class ListUserCommand extends Command
 {
