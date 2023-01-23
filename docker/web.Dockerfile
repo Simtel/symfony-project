@@ -15,6 +15,10 @@ RUN apt-get update && apt-get install -y \
     libzip-dev
 RUN docker-php-ext-install zip
 RUN docker-php-ext-install opcache
+RUN apt update && apt install -y libicu-dev && rm -rf /var/lib/apt/lists/*
+RUN docker-php-ext-configure intl
+RUN docker-php-ext-install intl
+
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer
 
 RUN yes | pecl install xdebug \
