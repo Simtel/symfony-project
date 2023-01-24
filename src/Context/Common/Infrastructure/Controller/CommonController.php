@@ -18,7 +18,7 @@ class CommonController extends AbstractController
 {
     public function __construct(
         private readonly NormalizerInterface $normalizer,
-        private MailerInterface $mailer
+        private readonly MailerInterface $mailer
     ) {
     }
 
