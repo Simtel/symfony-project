@@ -6,10 +6,14 @@ use App\Context\Common\Application\Contract\EntityEventInterface;
 use App\Context\User\Domain\Event\AddLocationToUserEvent;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Event\PrePersistEventArgs;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
+use Doctrine\ORM\Mapping\PrePersist;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity()]
+#[HasLifecycleCallbacks]
 class User implements UserInterface
 {
     #[ORM\Id]
@@ -28,6 +32,9 @@ class User implements UserInterface
 
     #[ORM\Column(type: 'string', length: 255)]
     private ?string $token;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $secretKey = null;
 
     /** @var EntityEventInterface[] */
     private array $events = [];
@@ -133,5 +140,16 @@ class User implements UserInterface
     public function getEvents(): array
     {
         return $this->events;
+    }
+
+    #[PrePersist]
+    public function fillSecretKeyBeforePersist(PrePersistEventArgs $eventArgs): void
+    {
+        $this->secretKey = sha1($this->getName() . '/' . $this->getPassword());
+    }
+
+    public function getSecretKey(): ?string
+    {
+        return $this->secretKey;
     }
 }
