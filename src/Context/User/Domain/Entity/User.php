@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Event\PrePersistEventArgs;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Embedded;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\ORM\Mapping\PrePersist;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -39,6 +40,9 @@ class User implements UserInterface
     /** @var EntityEventInterface[] */
     private array $events = [];
 
+    #[Embedded(class: Block::class, columnPrefix: "blocked_")]
+    private Block $block;
+
     /**
      * @var Collection<int, Location>
      */
@@ -54,6 +58,7 @@ class User implements UserInterface
         $this->name = $name;
         $this->password = $password;
 
+        $this->block = new Block();
         $this->locations = new ArrayCollection();
     }
 
@@ -151,5 +156,15 @@ class User implements UserInterface
     public function getSecretKey(): ?string
     {
         return $this->secretKey;
+    }
+
+    public function getBlock(): Block
+    {
+        return $this->block;
+    }
+
+    public function setBlock(Block $block): void
+    {
+        $this->block = $block;
     }
 }
