@@ -10,6 +10,7 @@ use Doctrine\ORM\Event\PrePersistEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Embedded;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
+use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\PrePersist;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -52,6 +53,10 @@ class User implements UserInterface
     #[ORM\ManyToMany(targetEntity: Location::class, fetch: 'EXTRA_LAZY')]
     private Collection $locations;
 
+    /** @var Collection<string, Contact> */
+    #[OneToMany(mappedBy: 'user', targetEntity: Contact::class, indexBy: 'code')]
+    private Collection $contacts;
+
     public function __construct(string $email, string $name, string $password)
     {
         $this->email = $email;
@@ -60,6 +65,7 @@ class User implements UserInterface
 
         $this->block = new Block();
         $this->locations = new ArrayCollection();
+        $this->contacts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -166,5 +172,18 @@ class User implements UserInterface
     public function setBlock(Block $block): void
     {
         $this->block = $block;
+    }
+
+    public function addContact(Contact $contact): void
+    {
+        $this->contacts[$contact->getCode()] = $contact;
+    }
+
+    /**
+     * @return array<string, Contact>
+     */
+    public function getContacts(): array
+    {
+        return $this->contacts->toArray();
     }
 }

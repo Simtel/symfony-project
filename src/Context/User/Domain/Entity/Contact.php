@@ -1,0 +1,84 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Context\User\Domain\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Entity()]
+class Contact
+{
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
+
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'contacts')]
+    private User $user;
+
+    #[ORM\Column(type: 'string', length: 180)]
+    private string $code;
+
+    #[ORM\Column(type: 'string', length: 180)]
+    private string $name;
+
+    #[ORM\Column(type: 'string', length: 180, nullable: true)]
+    private ?string $value;
+
+    public function __construct(User $user, string $code, string $name, ?string $value)
+    {
+        $this->user = $user;
+        $this->code = $code;
+        $this->name = $name;
+        $this->value = $value;
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function setId(?int $id): void
+    {
+        $this->id = $id;
+    }
+
+
+    public function getCode(): string
+    {
+        return $this->code;
+    }
+
+    public function setCode(string $code): void
+    {
+        $this->code = $code;
+    }
+
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+
+    public function setName(string $name): void
+    {
+        $this->name = $name;
+    }
+
+    public function getValue(): ?string
+    {
+        return $this->value;
+    }
+
+    public function setValue(?string $value): void
+    {
+        $this->value = $value;
+    }
+
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+}
