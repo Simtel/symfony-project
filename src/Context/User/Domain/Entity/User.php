@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Embedded;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\ORM\Mapping\OneToMany;
+use Doctrine\ORM\Mapping\OrderBy;
 use Doctrine\ORM\Mapping\PrePersist;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -51,6 +52,7 @@ class User implements UserInterface
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
     #[ORM\InverseJoinColumn(name: 'location_id', referencedColumnName: 'id')]
     #[ORM\ManyToMany(targetEntity: Location::class, fetch: 'EXTRA_LAZY')]
+    #[OrderBy(["name" => "ASC"])]
     private Collection $locations;
 
     /** @var Collection<string, Contact> */
