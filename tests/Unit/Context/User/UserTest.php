@@ -6,25 +6,14 @@ namespace App\Tests\Unit\Context\User;
 
 use App\Context\User\Domain\Contract\UserRepositoryInterface;
 use App\Context\User\Domain\Entity\Block;
+use App\Context\User\Domain\Entity\Location;
 use App\Context\User\Domain\Entity\User;
+use App\Tests\UnitTest;
 use DateTimeImmutable;
-use Doctrine\ORM\EntityManagerInterface;
 use Exception;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class UserTest extends KernelTestCase
+class UserTest extends UnitTest
 {
-    private EntityManagerInterface $entityManager;
-
-    protected function setUp(): void
-    {
-        $kernel = self::bootKernel();
-
-        $this->entityManager = $kernel->getContainer()
-            ->get('doctrine')
-            ->getManager();
-    }
-
     public function testSecretKey(): void
     {
         $user = new User('test@mail.com', 'Test', '123');
@@ -65,6 +54,43 @@ class UserTest extends KernelTestCase
                 $user->getBlock()->getStartDate()->format('c'),
                 $user->getBlock()->getEndDate()->format('c'),
             ]
+        );
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testOrderLocations(): void
+    {
+        $user = $this->createUser();
+        $user2 = $this->createUser(['email' => 'user2@email.com','name' => 'Second User']);
+        $user3 = $this->createUser(['email' => 'user3@email.com','name' => 'Third User']);
+        $location = new Location('Amsterdam');
+        $location2 = new Location('Moscow');
+        $location3 = new Location('Ulyanovsk');
+
+        $this->entityManager->persist($location3);
+        $this->entityManager->persist($location);
+        $this->entityManager->persist($location2);
+
+        $user->addLocation($location);
+        $user->addLocation($location3);
+        $user2->addLocation($location2);
+        $user3->addLocation($location3);
+
+        $this->entityManager->flush();
+
+
+        $userRepository = self::getContainer()->get(UserRepositoryInterface::class);
+
+        $users = $userRepository->findByLocation($location3);
+
+        self::assertSame(
+            [$user->getId(), $user3->getId()],
+            array_map(
+                static fn (User $user): int => $user->getId(),
+                $users
+            )
         );
     }
 }

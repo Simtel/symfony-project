@@ -3,6 +3,7 @@
 namespace App\Context\User\Infrastructure\Repository;
 
 use App\Context\User\Domain\Contract\UserRepositoryInterface;
+use App\Context\User\Domain\Entity\Location;
 use App\Context\User\Domain\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
@@ -15,11 +16,11 @@ class UserRepository implements UserRepositoryInterface
     private EntityRepository $repository;
 
     public function __construct(
-        EntityManagerInterface $entityManager
+        private readonly EntityManagerInterface $entityManager
     ) {
         $this->repository = new EntityRepository(
-            $entityManager,
-            $entityManager->getClassMetadata(User::class)
+            $this->entityManager,
+            $this->entityManager->getClassMetadata(User::class)
         );
     }
 
@@ -39,5 +40,18 @@ class UserRepository implements UserRepositoryInterface
     public function findAll(): array
     {
         return $this->repository->findAll();
+    }
+
+    /**
+     * @return User[]
+     */
+    public function findByLocation(Location $location): array
+    {
+        $builder = $this->repository->createQueryBuilder('users');
+        $builder->innerJoin('users.locations', 'locations')
+            ->where('locations IN (:location)')
+            ->setParameter('location', $location);
+
+        return $builder->getQuery()->getResult();
     }
 }

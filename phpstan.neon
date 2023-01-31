@@ -2,9 +2,10 @@ includes:
     - vendor/phpstan/phpstan-doctrine/extension.neon
     - vendor/simtel/phpstan-rules/rules.neon
 parameters:
+    doctrine:
+        objectManagerLoader: phpstan-object-manager.php
     paths:
         - src
-    # The level 8 is the highest level
     level: max
     ignoreErrors:
     excludePaths:

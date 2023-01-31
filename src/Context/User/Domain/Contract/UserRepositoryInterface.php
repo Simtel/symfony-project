@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Context\User\Domain\Contract;
 
+use App\Context\User\Domain\Entity\Location;
 use App\Context\User\Domain\Entity\User;
 
 interface UserRepositoryInterface
@@ -16,4 +17,9 @@ interface UserRepositoryInterface
      * @return User[]
      */
     public function findAll(): array;
+
+    /**
+     * @return User[]
+     */
+    public function findByLocation(Location $location): array;
 }
