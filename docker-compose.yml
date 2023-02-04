@@ -23,11 +23,11 @@ services:
     ports:
       - 8080:8080
 
-  web:
+  php:
     container_name: dev-php
     build:
       context: ./
-      dockerfile: docker/web.Dockerfile
+      dockerfile: docker/php.Dockerfile
     volumes:
       -  ./:/var/www/
       - ./public:/var/www/html
@@ -38,7 +38,24 @@ services:
       - db
       - memcached
     environment:
-      XDEBUG_CONFIG: "client_host=172.17.0.1 idekey=PHPSTORM"
+      PHP_INI_SCAN_DIR: "/usr/local/etc/php/custom.d:/usr/local/etc/php/conf.d"
+  php-xdebug:
+    container_name: dev-php-xdebug
+    build:
+      context: ./
+      dockerfile: docker/php-xdebug.Dockerfile
+    volumes:
+      - ./:/var/www/
+      - ./public:/var/www/html
+      - ./docker/php-xdebug:/usr/local/etc/php/custom.d
+    networks:
+      - internal
+    links:
+      - db
+      - memcached
+    environment:
+      #XDEBUG_CONFIG: "client_host=172.17.0.1 idekey=PHPSTORM"
+      XDEBUG_CONFIG: "client_host=host.docker.internal idekey=PHPSTORM"
       PHP_IDE_CONFIG: "serverName=Docker"
       PHP_INI_SCAN_DIR: "/usr/local/etc/php/custom.d:/usr/local/etc/php/conf.d"
 
@@ -47,12 +64,14 @@ services:
     image: nginx:1.13
     ports:
       - 80:80
+      - 8044:8044
     volumes:
       - ./:/var/www/
       - ./public:/var/www/html
       - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
     depends_on:
-      - web
+      - php
+      - php-xdebug
     networks:
       - internal
 

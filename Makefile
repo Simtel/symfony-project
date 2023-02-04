@@ -38,11 +38,20 @@ migrate:
 test:
 	@docker exec -it --user www-data dev-php bin/phpunit
 
+xtest:
+	@docker exec -it --user www-data dev-php-xdebug bin/phpunit
+
 pint:
 	@docker exec -it --user www-data dev-php vendor/bin/pint
 
+xpint:
+	@docker exec -it --user www-data dev-php-xdebug vendor/bin/pint
+
 phpstan:
 	@docker exec -it --user www-data dev-php vendor/bin/phpstan analyze --memory-limit=2G --xdebug
+
+xphpstan:
+	@docker exec -it --user www-data dev-php-xdebug vendor/bin/phpstan analyze --memory-limit=2G --xdebug
 
 deptrac:
 	@docker exec -it --user www-data dev-php vendor/bin/deptrac
