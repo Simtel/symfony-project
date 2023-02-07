@@ -25,6 +25,9 @@ mysql-cli: ## Mysql Console Failed
 cli: ## php консоль
 	@docker exec -it --user www-data dev-php bash
 
+xcli: ## php консоль
+	@docker exec -it --user www-data dev-php-xdebug bash
+
 cli-root: ##php консоль под рутом
 	@docker exec -it  dev-php bash
 
