@@ -39,9 +39,6 @@ class Config
         $this->updateAt = new DateTimeImmutable();
     }
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
