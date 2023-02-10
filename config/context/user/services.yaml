@@ -18,3 +18,6 @@ services:
   App\Context\User\:
     resource: '../../../src/Context/User/'
 
+  App\Context\User\Infrastructure\Service\UserService:
+    public: true
+

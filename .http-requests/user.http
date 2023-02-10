@@ -2,3 +2,8 @@
 POST http://localhost/api/user/3
 Content-Type: application/json
 X-AUTH-TOKEN: 123
+
+###
+POST http://localhost/api/user/3/calculate-access
+Content-Type: application/json
+X-AUTH-TOKEN: 123

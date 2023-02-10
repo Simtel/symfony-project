@@ -7,6 +7,7 @@ namespace App\Context\User\Infrastructure\Controller;
 use App\Context\Common\Infrastructure\Contract\CommandBusInterface;
 use App\Context\User\Application\Command\UpdateUserCommand;
 use App\Context\User\Application\Dto\UpdateUserDto;
+use App\Context\User\Domain\Contract\UserServiceInterface;
 use App\Context\User\Domain\Entity\Location;
 use App\Context\User\Domain\Entity\User;
 use App\Context\User\Infrastructure\View\UserFullView;
@@ -50,5 +51,13 @@ class UserController extends AbstractController
         $entityManager->flush();
 
         return new JsonResponse([], Response::HTTP_OK);
+    }
+
+    #[Route(path: '/api/user/{user}/calculate-access', name: 'calculate_access', methods: ['POST'])]
+    public function calculateAccess(USer $user, UserServiceInterface $userService): JsonResponse
+    {
+        $userService->calculateAccesses($user);
+
+        return new JsonResponse([], Response::HTTP_CREATED);
     }
 }
