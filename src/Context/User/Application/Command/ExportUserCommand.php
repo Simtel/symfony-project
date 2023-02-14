@@ -43,14 +43,17 @@ class ExportUserCommand extends Command
         }
         $io->table($headers, $rows);
 
-        $this->exportToFile($rows);
+        $fileName = $this->getFile();
+        $this->exportToFile($fileName, $rows);
+
+        $this->commandLogger->info('Export ' . count($rows) . ' users to file ' . $fileName);
 
         $this->commandLogger->info('End  ' . $this->getName() . ' command at' . date('Y-m-d H:i:s'));
 
         return Command::SUCCESS;
     }
 
-    public function exportToFile(array $data): void
+    private function exportToFile(string $fileName, array $data): void
     {
         $uploadDir = $this->publicDir . '/upload';
         if (!$this->filesystem->exists($uploadDir)) {
@@ -58,7 +61,20 @@ class ExportUserCommand extends Command
         }
 
         foreach ($data as $row) {
-            $this->filesystem->appendToFile($uploadDir . '/users.txt', implode(' | ', $row).PHP_EOL);
+            $this->filesystem->appendToFile($fileName, implode(';', $row) . PHP_EOL);
         }
+    }
+
+    private function getFile(): string
+    {
+        $uploadDir = $this->publicDir . '/upload';
+        if (!$this->filesystem->exists($uploadDir)) {
+            $this->filesystem->mkdir($uploadDir);
+        }
+        $fileName = $uploadDir . '/users-' . date('Y-m-d') . '.csv';
+        if ($this->filesystem->exists($fileName)) {
+            $this->filesystem->remove($fileName);
+        }
+        return $fileName;
     }
 }
