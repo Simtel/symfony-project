@@ -54,8 +54,8 @@ services:
       - db
       - memcached
     environment:
-      #XDEBUG_CONFIG: "client_host=172.17.0.1 idekey=PHPSTORM"
-      XDEBUG_CONFIG: "client_host=host.docker.internal idekey=PHPSTORM"
+      XDEBUG_CONFIG: "client_host=172.17.0.1 idekey=PHPSTORM"
+      #XDEBUG_CONFIG: "client_host=host.docker.internal idekey=PHPSTORM"
       PHP_IDE_CONFIG: "serverName=Docker"
       PHP_INI_SCAN_DIR: "/usr/local/etc/php/custom.d:/usr/local/etc/php/conf.d"
 
