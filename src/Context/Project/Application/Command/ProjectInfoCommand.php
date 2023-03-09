@@ -24,7 +24,6 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 #[AsCommand(name: 'project:git-repo-info')]
 class ProjectInfoCommand extends Command
 {
-
     public function __construct(private readonly HttpClientInterface $httpClient)
     {
         parent::__construct();
@@ -33,12 +32,11 @@ class ProjectInfoCommand extends Command
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @return int
-     * @throws TransportExceptionInterface
      * @throws ClientExceptionInterface
      * @throws DecodingExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
