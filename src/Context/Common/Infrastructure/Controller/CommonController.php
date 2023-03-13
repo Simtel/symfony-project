@@ -10,6 +10,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
+use Symfony\Component\Notifier\ChatterInterface;
+use Symfony\Component\Notifier\Message\ChatMessage;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -56,5 +58,19 @@ class CommonController extends AbstractController
                 ['test-email' => true, 'time' => new DateTimeImmutable()]
             )
         );
+    }
+
+    /**
+     * @throws \Symfony\Component\Notifier\Exception\TransportExceptionInterface
+     */
+    #[Route('/api/test-notify', name: 'test-notify', methods: ['GET'])]
+    public function testNotify(ChatterInterface $chatter): JsonResponse
+    {
+        $message = (new ChatMessage('Notification from symfony project'))
+            ->transport('telegram');
+
+        $sentMessage = $chatter->send($message);
+
+        return new JsonResponse(['messageId' => $sentMessage?->getMessageId()]);
     }
 }
