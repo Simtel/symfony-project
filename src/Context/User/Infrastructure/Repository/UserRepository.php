@@ -54,4 +54,13 @@ class UserRepository implements UserRepositoryInterface
 
         return $builder->getQuery()->getResult();
     }
+
+    public function findAllWithLocations(): array
+    {
+        $builder = $this->repository->createQueryBuilder('users')
+            ->addSelect('locations')
+            ->leftJoin('users.locations', 'locations');
+
+        return $builder->getQuery()->getResult();
+    }
 }

@@ -22,4 +22,9 @@ interface UserRepositoryInterface
      * @return User[]
      */
     public function findByLocation(Location $location): array;
+
+    /**
+     * @return User[]
+     */
+    public function findAllWithLocations(): array;
 }
