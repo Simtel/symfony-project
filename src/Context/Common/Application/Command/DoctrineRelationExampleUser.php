@@ -16,7 +16,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-#[AsCommand(name: 'examples:relations:users')]
+#[AsCommand(name: 'example:relations:users')]
 class DoctrineRelationExampleUser extends Command
 {
     public function __construct(
@@ -52,6 +52,7 @@ class DoctrineRelationExampleUser extends Command
      */
     private function findAll(SymfonyStyle $io): void
     {
+        //SELECT t0.id AS id_1, t0.email AS email_2, t0.password AS password_3, t0.name AS name_4, t0.token AS token_5, t0.secret_key AS secret_key_6, t0.blocked_start_date AS blocked_start_date_7, t0.blocked_end_date AS blocked_end_date_8, t9.id AS id_10, t9.code AS code_11, t9.name AS name_12, t9.value AS value_13, t9.user_id AS user_id_14 FROM user t0 LEFT JOIN contact t9 ON t9.user_id = t0.id
         $users = $this->userRepository->findAll();
 
         $headers = ['id', 'name', 'email', 'locations'];
@@ -63,6 +64,7 @@ class DoctrineRelationExampleUser extends Command
                 $user->getEmail(),
                 implode(
                     ',',
+                    //SELECT t0.id AS id_1, t0.name AS name_2 FROM location t0 INNER JOIN user_location ON t0.id = user_location.location_id WHERE user_location.user_id = ? ORDER BY t0.name ASC
                     array_map(static fn (Location $location): string => $location->getName(), $user->getLocations())
                 )
             ];
@@ -106,6 +108,7 @@ class DoctrineRelationExampleUser extends Command
                 $user->getEmail(),
                 implode(
                     ',',
+                    //SELECT t0.id AS id_1, t0.code AS code_2, t0.name AS name_3, t0.value AS value_4, t0.user_id AS user_id_5 FROM contact t0 WHERE t0.user_id = ?
                     array_map(static fn (Location $location): string => $location->getName(), $user->getLocations())
                 )
             ];
