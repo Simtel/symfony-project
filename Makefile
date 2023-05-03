@@ -58,3 +58,6 @@ xphpstan:
 
 deptrac:
 	@docker exec -it --user www-data dev-php vendor/bin/deptrac
+
+bench:
+	@docker exec -it --user www-data dev-php vendor/bin/phpbench run tests/Bench --report=default
