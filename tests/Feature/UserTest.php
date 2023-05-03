@@ -72,7 +72,7 @@ class UserTest extends FeatureTest
                 ]
             ],
             array_map(
-                static fn(Location $location): array => ['name' => $location->getName()],
+                static fn (Location $location): array => ['name' => $location->getName()],
                 $user->getLocations()
             )
         );
@@ -114,7 +114,7 @@ class UserTest extends FeatureTest
                 ]
             ],
             array_map(
-                static fn(Log $log): array => ['action' => $log->getAction(), 'author' => $log->getAuthor()->getId()],
+                static fn (Log $log): array => ['action' => $log->getAction(), 'author' => $log->getAuthor()->getId()],
                 $logs
             )
         );
