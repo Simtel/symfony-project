@@ -72,18 +72,19 @@ class UserTest extends FeatureTest
                 ]
             ],
             array_map(
-                static fn (Location $location): array => ['name' => $location->getName()],
+                static fn(Location $location): array => ['name' => $location->getName()],
                 $user->getLocations()
             )
         );
     }
 
     /**
+     * @dataProvider iterations
      * @throws OptimisticLockException
      * @throws ORMException
      * @throws Exception
      */
-    public function testAddLocationToUserLogCreated(): void
+    public function testAddLocationToUserLogCreated($iteration): void
     {
         $em = $this->getEntityManager();
 
@@ -113,9 +114,14 @@ class UserTest extends FeatureTest
                 ]
             ],
             array_map(
-                static fn (Log $log): array => ['action' => $log->getAction(), 'author' => $log->getAuthor()->getId()],
+                static fn(Log $log): array => ['action' => $log->getAction(), 'author' => $log->getAuthor()->getId()],
                 $logs
             )
         );
+    }
+
+    public function iterations(): array
+    {
+        return array_fill(0, 1000, [0]);
     }
 }
