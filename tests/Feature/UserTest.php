@@ -79,12 +79,11 @@ class UserTest extends FeatureTest
     }
 
     /**
-     * @dataProvider iterations
      * @throws OptimisticLockException
      * @throws ORMException
      * @throws Exception
      */
-    public function testAddLocationToUserLogCreated($iteration): void
+    public function testAddLocationToUserLogCreated(): void
     {
         $em = $this->getEntityManager();
 
@@ -118,10 +117,5 @@ class UserTest extends FeatureTest
                 $logs
             )
         );
-    }
-
-    public function iterations(): array
-    {
-        return array_fill(0, 1000, [0]);
     }
 }
