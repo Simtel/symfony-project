@@ -8,16 +8,19 @@ use ApiTestCase\JsonApiTestCase;
 use App\Context\User\Domain\Entity\User;
 use Doctrine\ORM\Exception\ORMException;
 use JsonException;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
-abstract class FeatureTest extends JsonApiTestCase
+abstract class FeatureTest extends WebTestCase
 {
     private ?User $currentUser = null;
 
+    protected KernelBrowser $client;
     protected function setUp(): void
     {
         parent::setUp();
-        $this->setUpDatabase();
+        $this->client = static::createClient();
     }
 
 
