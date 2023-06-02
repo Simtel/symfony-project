@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Feature;
 
-use ApiTestCase\JsonApiTestCase;
 use App\Context\User\Domain\Entity\User;
 use Doctrine\ORM\Exception\ORMException;
 use JsonException;
