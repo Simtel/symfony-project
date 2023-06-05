@@ -39,7 +39,7 @@ migrate:
 	@docker exec -it --user www-data dev-php bin/console --env=test doctrine:migrations:migrate
 
 test:
-	@docker exec -it --user www-data dev-php bin/phpunit
+	docker exec -it --user www-data dev-php vendor/bin/phpunit
 
 xtest:
 	@docker exec -it --user www-data dev-php-xdebug bin/phpunit

@@ -51,7 +51,7 @@ class User implements UserInterface
     #[ORM\JoinTable(name: 'user_location')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
     #[ORM\InverseJoinColumn(name: 'location_id', referencedColumnName: 'id')]
-    #[ORM\ManyToMany(targetEntity: Location::class, fetch: 'EXTRA_LAZY')]
+    #[ORM\ManyToMany(targetEntity: Location::class, cascade: ['remove'], fetch: 'EXTRA_LAZY')]
     #[OrderBy(["name" => "ASC"])]
     private Collection $locations;
 

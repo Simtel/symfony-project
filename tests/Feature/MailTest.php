@@ -6,7 +6,7 @@ namespace App\Tests\Feature;
 
 use Doctrine\ORM\Exception\ORMException;
 
-class MailTest extends FeatureTest
+class MailTest extends FeatureTestBaseCase
 {
     /**
      * @throws ORMException

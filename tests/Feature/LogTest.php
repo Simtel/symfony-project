@@ -9,7 +9,7 @@ use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 use Exception;
 
-class LogTest extends FeatureTest
+class LogTest extends FeatureTestBaseCase
 {
     /**
      * @throws OptimisticLockException

@@ -8,11 +8,11 @@ use App\Context\User\Domain\Contract\UserRepositoryInterface;
 use App\Context\User\Domain\Entity\Block;
 use App\Context\User\Domain\Entity\Location;
 use App\Context\User\Domain\Entity\User;
-use App\Tests\UnitTest;
+use App\Tests\UnitTestBaseCase;
 use DateTimeImmutable;
 use Exception;
 
-class UserTest extends UnitTest
+class UserTest extends UnitTestBaseCase
 {
     public function testSecretKey(): void
     {

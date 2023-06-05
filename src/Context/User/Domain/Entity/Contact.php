@@ -14,7 +14,7 @@ class Contact
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'contacts')]
+    #[ORM\ManyToOne(targetEntity: User::class, cascade: ['remove'], inversedBy: 'contacts', )]
     private User $user;
 
     #[ORM\Column(type: 'string', length: 180)]

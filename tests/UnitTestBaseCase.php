@@ -8,7 +8,7 @@ use App\Context\User\Domain\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-abstract class UnitTest extends KernelTestCase
+abstract class UnitTestBaseCase extends KernelTestCase
 {
     protected EntityManagerInterface $entityManager;
 

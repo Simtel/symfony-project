@@ -9,7 +9,7 @@ use Doctrine\ORM\Exception\ORMException;
 use Exception;
 use JsonException as JsonExceptionAlias;
 
-class ConfigTest extends FeatureTest
+class ConfigTest extends FeatureTestBaseCase
 {
     public function testAccessDenied(): void
     {

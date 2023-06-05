@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Tests\Unit\Context\User;
 
 use App\Context\User\Domain\Entity\Location;
-use App\Tests\UnitTest;
+use App\Tests\UnitTestBaseCase;
 
-class UserLocationTest extends UnitTest
+class UserLocationTest extends UnitTestBaseCase
 {
     public function testOrderLocations(): void
     {

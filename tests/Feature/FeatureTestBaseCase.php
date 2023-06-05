@@ -5,42 +5,121 @@ declare(strict_types=1);
 namespace App\Tests\Feature;
 
 use App\Context\User\Domain\Entity\User;
+use App\Tests\TestEntityManager;
+use App\Tests\TestResponse;
+use Doctrine\DBAL\Exception;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
 use JsonException;
-use Symfony\Bundle\FrameworkBundle\KernelBrowser;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 
-abstract class FeatureTest extends WebTestCase
+abstract class FeatureTestBaseCase extends KernelTestCase
 {
     private ?User $currentUser = null;
+    private ?TestEntityManager $entityManager = null;
 
-    protected KernelBrowser $client;
+    /**
+     * @throws ConnectionException
+     * @throws Exception
+     * @throws Exception
+     */
     protected function setUp(): void
     {
         parent::setUp();
-        $this->client = static::createClient();
+
+        static::bootKernel(static::getKernelConfig());
+
+        $entityManager = $this->getEntityManager();
+
+        $connection = $entityManager->getConnection();
+
+        $connection->setNestTransactionsWithSavepoints(true);
+        $connection->beginTransaction();
+
     }
 
-
-    public function getJson(string $uri, array $parameters = [], array $headers = []): Response
+    protected static function getKernelConfig(): array
     {
-        $this->client->request(
+        return [
+            'environment' => 'test',
+            'debug' => true,
+        ];
+    }
+
+    protected function tearDown(): void
+    {
+        $this->currentUser = null;
+
+        $entityManager = $this->getEntityManager();
+        $connection = $entityManager->getConnection();
+        if ($connection->isTransactionActive()) {
+            $connection->rollBack();
+        }
+
+        $entityManager->clear();
+        $entityManager->close();
+
+        $this->entityManager->truncateEntityTables();
+        $this->entityManager = null;
+
+        parent::tearDown();
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function getJson(string $uri, array $parameters = [], array $headers = []): TestResponse
+    {
+        return $this->apiCall(
             'GET',
             $uri,
             $parameters,
             [],
+            [],
             $this->transformHeadersToServerVars(array_merge($this->getDefaultHeaders(), $headers))
         );
 
-        return $this->client->getResponse();
     }
 
+    /**
+     * @throws \Exception
+     */
+    protected function apiCall(
+        string  $method,
+        string  $uri,
+        array   $parameters = [],
+        array   $cookies = [],
+        array   $files = [],
+        array   $server = [],
+        ?string $content = null,
+    ): TestResponse {
+        $request = Request::create(
+            $uri,
+            $method,
+            $parameters,
+            $cookies,
+            $files,
+            $server,
+            $content,
+        );
+
+        $response = self::$kernel->handle(
+            $request,
+            HttpKernelInterface::MAIN_REQUEST,
+            false,
+        );
+
+        self::$kernel->terminate($request, $response);
+
+        return new TestResponse($response);
+    }
 
     /**
      * @throws JsonException
      */
-    public function postJson(string $uri, array $data = [], array $headers = []): Response
+    public function postJson(string $uri, array $data = [], array $headers = []): TestResponse
     {
         $content = json_encode($data, JSON_THROW_ON_ERROR);
 
@@ -52,23 +131,22 @@ abstract class FeatureTest extends WebTestCase
 
         $headers = array_replace($jsonHeaders, array_merge($this->getDefaultHeaders(), $headers));
 
-
-        $this->client->request(
+        return $this->apiCall(
             'POST',
             $uri,
             [],
             [],
+            [],
             $this->transformHeadersToServerVars($headers),
             $content
         );
 
-        return $this->client->getResponse();
     }
 
     /**
      * @throws JsonException
      */
-    public function putJson(string $uri, array $data = [], array $headers = []): Response
+    public function putJson(string $uri, array $data = [], array $headers = []): TestResponse
     {
         $content = json_encode($data, JSON_THROW_ON_ERROR);
 
@@ -81,16 +159,15 @@ abstract class FeatureTest extends WebTestCase
         $headers = array_replace($jsonHeaders, array_merge($this->getDefaultHeaders(), $headers));
 
 
-        $this->client->request(
+        return $this->apiCall(
             'PUT',
             $uri,
+            [],
             [],
             [],
             $this->transformHeadersToServerVars($headers),
             $content
         );
-
-        return $this->client->getResponse();
     }
 
     public function loginAs(User $user): void
@@ -123,14 +200,9 @@ abstract class FeatureTest extends WebTestCase
         return $name;
     }
 
-    protected function tearDown(): void
-    {
-        $this->currentUser = null;
-        parent::tearDown();
-    }
-
     /**
      * @throws ORMException
+     * @throws \Exception
      */
     public function createUser(array $overrides = []): User
     {
@@ -146,5 +218,16 @@ abstract class FeatureTest extends WebTestCase
         $em->flush();
 
         return $user;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function getEntityManager(): TestEntityManager
+    {
+        if ($this->entityManager === null) {
+            $this->entityManager = static::getContainer()->get(EntityManagerInterface::class);
+        }
+        return $this->entityManager;
     }
 }
