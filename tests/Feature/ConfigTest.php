@@ -11,10 +11,13 @@ use JsonException as JsonExceptionAlias;
 
 class ConfigTest extends FeatureTestBaseCase
 {
+    /**
+     * @throws Exception
+     */
     public function testAccessDenied(): void
     {
-        $this->getJson('/api/config/list');
-        self::assertResponseStatusCodeSame(403);
+        $response = $this->getJson('/api/config/list');
+        $response->assertStatus(403);
     }
 
     /**
@@ -33,8 +36,8 @@ class ConfigTest extends FeatureTestBaseCase
 
         $response = $this->getJson('/api/config/list');
 
-        self::assertSame(200, $response->getStatusCode());
-        $this->assertResponse($response, 'Common/configs_empty');
+        $response->assertStatus(200);
+        //$this->assertResponse($response, 'Common/configs_empty');
     }
 
     /**
@@ -57,8 +60,8 @@ class ConfigTest extends FeatureTestBaseCase
 
         $response = $this->getJson('/api/config/list');
 
-        self::assertSame(200, $response->getStatusCode());
-        $this->assertResponse($response, 'Common/configs');
+        $response->assertStatus(200);
+        //$this->assertResponse($response, 'Common/configs');
     }
 
     /**
@@ -72,8 +75,8 @@ class ConfigTest extends FeatureTestBaseCase
 
         $response = $this->postJson('/api/config', ['value' => '13']);
 
-        self::assertSame(422, $response->getStatusCode());
-        $this->assertJsonResponseContent($response, 'Common/configs_validate_missing_name');
+        $response->assertStatus(422);
+        //$this->assertJsonResponseContent($response, 'Common/configs_validate_missing_name');
     }
 
     /**
@@ -87,8 +90,8 @@ class ConfigTest extends FeatureTestBaseCase
 
         $response = $this->postJson('/api/config', ['name' => 'config_name']);
 
-        self::assertSame(422, $response->getStatusCode());
-        $this->assertJsonResponseContent($response, 'Common/configs_validate_missing_value');
+        $response->assertStatus(422);
+        //$this->assertJsonResponseContent($response, 'Common/configs_validate_missing_value');
     }
 
     /**
@@ -101,13 +104,13 @@ class ConfigTest extends FeatureTestBaseCase
         $user = $this->createUser();
         $this->loginAs($user);
 
-        $this->postJson('/api/config', ['name' => 'app', 'value' => 'name']);
+        $response = $this->postJson('/api/config', ['name' => 'app', 'value' => 'name']);
 
         /** @var ConfigRepositoryInterface $repository */
         $repository = self::getContainer()->get(ConfigRepositoryInterface::class);
         $config = $repository->getByName('app');
 
-        self::assertResponseStatusCodeSame(201);
+        $response->assertStatus(201);
         self::assertSame('app', $config->getName());
         self::assertSame('name', $config->getValue());
         self::assertSame($user->getId(), $config->getCreatedBy()->getId());

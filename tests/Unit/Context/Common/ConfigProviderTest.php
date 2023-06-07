@@ -10,27 +10,14 @@ use App\Context\Common\Domain\Contract\ConfigRepositoryInterface;
 use App\Context\Common\Domain\Entity\Config;
 use App\Context\Common\Infrastructure\View\ConfigView;
 use App\Context\User\Domain\Entity\User;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Tests\Feature\FeatureTestBaseCase;
 
 use Exception;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Cache\InvalidArgumentException;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class ConfigProviderTest extends KernelTestCase
+class ConfigProviderTest extends FeatureTestBaseCase
 {
-    private EntityManagerInterface $entityManager;
-
-    protected function setUp(): void
-    {
-        $kernel = self::bootKernel();
-
-        $this->entityManager = $kernel->getContainer()
-            ->get('doctrine')
-            ->getManager();
-    }
-
-
     /**
      * @test
      *
@@ -70,9 +57,9 @@ class ConfigProviderTest extends KernelTestCase
         $user = new User('test@test.com', 'Test', '4444');
         $user->setToken('3232323');
         $config = new Config('app', 'Test Project', $user);
-        $this->entityManager->persist($config);
-        $this->entityManager->persist($user);
-        $this->entityManager->flush();
+        $this->getEntityManager()->persist($config);
+        $this->getEntityManager()->persist($user);
+        $this->getEntityManager()->flush();
 
         /** @var ConfigProviderInterface $provider */
         $provider = self::getContainer()->get(ConfigProviderInterface::class);

@@ -56,7 +56,7 @@ class User implements UserInterface
     private Collection $locations;
 
     /** @var Collection<string, Contact> */
-    #[OneToMany(mappedBy: 'user', targetEntity: Contact::class, fetch: 'EAGER', indexBy: 'code', cascade: ['remove'] )]
+    #[OneToMany(mappedBy: 'user', targetEntity: Contact::class, fetch: 'EAGER', indexBy: 'code', cascade: ['remove'])]
     private Collection $contacts;
 
     public function __construct(string $email, string $name, string $password)

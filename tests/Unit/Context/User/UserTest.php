@@ -8,17 +8,17 @@ use App\Context\User\Domain\Contract\UserRepositoryInterface;
 use App\Context\User\Domain\Entity\Block;
 use App\Context\User\Domain\Entity\Location;
 use App\Context\User\Domain\Entity\User;
-use App\Tests\UnitTestBaseCase;
+use App\Tests\Feature\FeatureTestBaseCase;
 use DateTimeImmutable;
 use Exception;
 
-class UserTest extends UnitTestBaseCase
+class UserTest extends FeatureTestBaseCase
 {
     public function testSecretKey(): void
     {
         $user = new User('test@mail.com', 'Test', '123');
 
-        $this->entityManager->persist($user);
+        $this->getEntityManager()->persist($user);
 
         self::assertSame(sha1('Test' . '/' . '123'), $user->getSecretKey());
     }
@@ -37,8 +37,8 @@ class UserTest extends UnitTestBaseCase
             )
         );
 
-        $this->entityManager->persist($user);
-        $this->entityManager->flush();
+        $this->getEntityManager()->persist($user);
+        $this->getEntityManager()->flush();
 
         /** @var UserRepositoryInterface $userRepository */
         $userRepository = self::getContainer()->get(UserRepositoryInterface::class);
@@ -62,6 +62,7 @@ class UserTest extends UnitTestBaseCase
      */
     public function testOrderLocations(): void
     {
+        $em = $this->getEntityManager();
         $user = $this->createUser();
         $user2 = $this->createUser(['email' => 'user2@email.com','name' => 'Second User']);
         $user3 = $this->createUser(['email' => 'user3@email.com','name' => 'Third User']);
@@ -69,16 +70,16 @@ class UserTest extends UnitTestBaseCase
         $location2 = new Location('Moscow');
         $location3 = new Location('Ulyanovsk');
 
-        $this->entityManager->persist($location3);
-        $this->entityManager->persist($location);
-        $this->entityManager->persist($location2);
+        $em->persist($location3);
+        $em->persist($location);
+        $em->persist($location2);
 
         $user->addLocation($location);
         $user->addLocation($location3);
         $user2->addLocation($location2);
         $user3->addLocation($location3);
 
-        $this->entityManager->flush();
+        $em->flush();
 
 
         $userRepository = self::getContainer()->get(UserRepositoryInterface::class);

@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace App\Tests\Unit\Context\User;
 
 use App\Context\User\Domain\Entity\Location;
-use App\Tests\UnitTestBaseCase;
+use App\Tests\Feature\FeatureTestBaseCase;
 
-class UserLocationTest extends UnitTestBaseCase
+class UserLocationTest extends FeatureTestBaseCase
 {
     public function testOrderLocations(): void
     {
+        $em = $this->getEntityManager();
         $user = $this->createUser();
         $location = new Location('Amsterdam');
         $location2 = new Location('Moscow');
@@ -20,14 +21,14 @@ class UserLocationTest extends UnitTestBaseCase
         $user->addLocation($location2);
         $user->addLocation($location);
 
-        $this->entityManager->persist($location3);
-        $this->entityManager->persist($location);
-        $this->entityManager->persist($location2);
+        $em->persist($location3);
+        $em->persist($location);
+        $em->persist($location2);
 
 
-        $this->entityManager->flush();
+        $em->flush();
 
-        $this->entityManager->refresh($user);
+        $em->refresh($user);
 
         self::assertSame(
             ['Amsterdam', 'Moscow', 'Ulyanovsk'],

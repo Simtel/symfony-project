@@ -28,16 +28,8 @@ services:
   # please note that last definitions always *replace* previous ones
 
   test_entity_manager:
-    class: Tests\Util\Feature\TestEntityManager
+    class: App\Tests\TestEntityManager
     shared: false
     arguments:
       - '@doctrine.orm.entity_manager'
-    calls:
-      - [ addForbiddenToTruncateEntitiesOfClass, [ 'App\Domains\Task\Entity\Status' ] ]
-      - [ addForbiddenToTruncateEntitiesOfClass, [ 'App\Domains\Common\Entity\Module' ] ]
-      - [ addForbiddenToTruncateEntitiesOfClass, [ 'App\Entity\Action' ] ]
-      - [ addForbiddenToTruncateEntitiesOfClass, [ 'App\Entity\Application' ] ]
-      - [ addForbiddenToTruncateEntitiesOfClass, [ 'App\Context\Agenda\Infrastructure\Agenda\Entity\AgendaRole' ] ]
-      # TODO: leave entity class here 'persons_outlook_columns'
-
   Doctrine\ORM\EntityManagerInterface: '@test_entity_manager'

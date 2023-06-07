@@ -47,6 +47,9 @@ test:
 xtest:
 	@docker exec -it --user www-data dev-php-xdebug bin/phpunit
 
+xtestf:
+	@docker exec -it --user www-data dev-php-xdebug ./vendor/bin/phpunit --filter $(FILTER) --testdox
+
 pint:
 	@docker exec -it --user www-data dev-php vendor/bin/pint
 

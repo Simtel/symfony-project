@@ -6,25 +6,13 @@ namespace App\Tests\Unit\Context\User;
 
 use App\Context\User\Domain\Entity\Contact;
 use App\Context\User\Domain\Entity\User;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use App\Tests\Feature\FeatureTestBaseCase;
 
-class UserContactsTest extends KernelTestCase
+class UserContactsTest extends FeatureTestBaseCase
 {
-    private EntityManagerInterface $entityManager;
-
-    protected function setUp(): void
-    {
-        $kernel = self::bootKernel();
-
-        $this->entityManager = $kernel->getContainer()
-            ->get('doctrine')
-            ->getManager();
-    }
-
-
     public function testArrayContactsIncludeCodeAsKeys(): void
     {
+        $em = $this->getEntityManager();
         $user = new User('s@mail.com', 'Test', '134');
         $user->setToken('33333');
 
@@ -34,12 +22,12 @@ class UserContactsTest extends KernelTestCase
         $user->addContact($contactFirst);
         $user->addContact($contactSecond);
 
-        $this->entityManager->persist($user);
-        $this->entityManager->persist($contactFirst);
-        $this->entityManager->persist($contactSecond);
-        $this->entityManager->flush();
+        $em->persist($user);
+        $em->persist($contactFirst);
+        $em->persist($contactSecond);
+        $em->flush();
 
-        $this->entityManager->refresh($user);
+        $em->refresh($user);
 
         self::assertSame(
             [

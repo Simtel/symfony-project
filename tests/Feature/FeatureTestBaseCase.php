@@ -54,6 +54,8 @@ abstract class FeatureTestBaseCase extends KernelTestCase
 
         $entityManager = $this->getEntityManager();
         $connection = $entityManager->getConnection();
+
+        $t= $connection->isTransactionActive();
         if ($connection->isTransactionActive()) {
             $connection->rollBack();
         }
@@ -108,7 +110,7 @@ abstract class FeatureTestBaseCase extends KernelTestCase
         $response = self::$kernel->handle(
             $request,
             HttpKernelInterface::MAIN_REQUEST,
-            false,
+            true,
         );
 
         self::$kernel->terminate($request, $response);
@@ -206,7 +208,7 @@ abstract class FeatureTestBaseCase extends KernelTestCase
      */
     public function createUser(array $overrides = []): User
     {
-        $default = ['email' => 'test@mail.com', 'name' => 'Test', 'password' => '456', 'token' => '4444'];
+        $default = ['email' => 'test@mail22.com', 'name' => 'Test', 'password' => '456', 'token' => '4444'];
         $attributes = array_replace($default, $overrides);
 
         $em = $this->getEntityManager();
