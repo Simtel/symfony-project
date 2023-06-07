@@ -25,7 +25,7 @@ class Config
     #[ORM\Column(type: 'datetime_immutable')]
     private DateTimeImmutable $updateAt;
 
-    #[ORM\OneToOne(targetEntity: User::class, )]
+    #[ORM\OneToOne(targetEntity: User::class, cascade: ['remove'])]
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id')]
     private User $createdBy;
 
