@@ -9,6 +9,8 @@ use Doctrine\ORM\Exception\ORMException;
 use Exception;
 use JsonException as JsonExceptionAlias;
 
+use function PHPUnit\Framework\assertSame;
+
 class ConfigTest extends FeatureTestBaseCase
 {
     /**
@@ -37,7 +39,7 @@ class ConfigTest extends FeatureTestBaseCase
         $response = $this->getJson('/api/config/list');
 
         $response->assertStatus(200);
-        //$this->assertResponse($response, 'Common/configs_empty');
+        self::assertSame([], $response->json('configs'));
     }
 
     /**
@@ -61,7 +63,21 @@ class ConfigTest extends FeatureTestBaseCase
         $response = $this->getJson('/api/config/list');
 
         $response->assertStatus(200);
-        //$this->assertResponse($response, 'Common/configs');
+        assertSame(
+            [
+                [
+                    "name" => "app",
+                    "value" => "Test App",
+                    "updatedAt" => $config->getUpdateAt()->format('Y-m-d H:i:s'),
+                    "user" => [
+                        "name" => "Test",
+                        "id" => $user->getId()
+                    ]
+                ]
+
+            ],
+            $response->json('configs')
+        );
     }
 
     /**
@@ -76,7 +92,11 @@ class ConfigTest extends FeatureTestBaseCase
         $response = $this->postJson('/api/config', ['value' => '13']);
 
         $response->assertStatus(422);
-        //$this->assertJsonResponseContent($response, 'Common/configs_validate_missing_name');
+        self::assertSame(
+            ['name: This field is missing.'],
+            $response->json('errors'),
+        );
+
     }
 
     /**
@@ -91,7 +111,10 @@ class ConfigTest extends FeatureTestBaseCase
         $response = $this->postJson('/api/config', ['name' => 'config_name']);
 
         $response->assertStatus(422);
-        //$this->assertJsonResponseContent($response, 'Common/configs_validate_missing_value');
+        self::assertSame(
+            ['value: This field is missing.'],
+            $response->json('errors'),
+        );
     }
 
     /**

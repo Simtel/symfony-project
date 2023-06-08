@@ -147,6 +147,7 @@ abstract class FeatureTestBaseCase extends KernelTestCase
 
     /**
      * @throws JsonException
+     * @throws \Exception
      */
     public function putJson(string $uri, array $data = [], array $headers = []): TestResponse
     {
