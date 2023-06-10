@@ -30,7 +30,14 @@ class LogTest extends FeatureTestBaseCase
         $response = $this->getJson('/api/log/list');
 
         $response->assertStatus(200);
-        //$this->assertResponse($response, 'Log/log_view_list');
+        $expected = [
+            'Author: Test
+Action: Location has been added to user
+Created at: '.$log->getCreatedAt()->format('Y-m-d H:i:s').'
+Url: /api/log/'.$log->getId().'
+'
+        ];
+        self::assertSame($expected, $response->json());
     }
 
     /**

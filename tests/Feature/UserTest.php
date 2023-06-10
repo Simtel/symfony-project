@@ -33,7 +33,17 @@ class UserTest extends FeatureTestBaseCase
         $response = $this->getJson('/api/user/' . $user->getId());
 
         $response->assertStatus(200);
-        //$this->assertResponse($response, 'User/user_full_view');
+        $expected = [
+            "name" => "Test",
+            "id" => $user->getId(),
+            "email" => "test@mail22.com",
+            "locations" => [
+                [
+                    "name" => "Moscow"
+                ]
+            ]
+        ];
+        self::assertSame($expected, $response->json());
     }
 
     /**
