@@ -12,7 +12,6 @@ use App\Context\User\Domain\Entity\Location;
 use App\Context\User\Domain\Entity\User;
 use App\Context\User\Infrastructure\View\UserFullView;
 use Doctrine\ORM\EntityManagerInterface;
-use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
