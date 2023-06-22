@@ -70,8 +70,6 @@ class UserTest extends FeatureTestBaseCase
 
         $this->putJson('/api/user/' . $user->getId() . '/location/' . $newLocation->getId());
 
-        $em->refresh($user);
-
         self::assertSame(
             [
                 [
