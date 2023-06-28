@@ -22,7 +22,7 @@ class Log
     #[ORM\Column(type: 'datetime_immutable')]
     private DateTimeImmutable $createdAt;
 
-    #[ORM\OneToOne(targetEntity: User::class, )]
+    #[ORM\ManyToOne(targetEntity: User::class, )]
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id')]
     private User $author;
 

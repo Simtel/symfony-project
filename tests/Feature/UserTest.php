@@ -116,6 +116,10 @@ class UserTest extends FeatureTestBaseCase
         self::assertSame(
             [
                 [
+                    'action' => 'Moscow has been added to ' . $user->getName(),
+                    'author' => $user->getId(),
+                ],
+                [
                     'action' => 'Ulyanovsk has been added to ' . $user->getName(),
                     'author' => $user->getId(),
                 ]
