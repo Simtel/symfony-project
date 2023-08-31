@@ -51,7 +51,7 @@ class ExampleBench
         $aHash = array_fill(10000000, 10000, $tmp);
         unset($i, $tmp);
 
-        $tmp =[];
+        $tmp = [];
         /* The Test */
         $t = microtime(true);
         reset($aHash);

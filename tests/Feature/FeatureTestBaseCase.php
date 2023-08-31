@@ -55,7 +55,7 @@ abstract class FeatureTestBaseCase extends KernelTestCase
         $entityManager = $this->getEntityManager();
         $connection = $entityManager->getConnection();
 
-        $t= $connection->isTransactionActive();
+        $t = $connection->isTransactionActive();
         if ($connection->isTransactionActive()) {
             $connection->rollBack();
         }
