@@ -13,3 +13,8 @@ X-AUTH-TOKEN: 123
 PUT http://localhost/api/user/1/location/1
 Content-Type: application/json
 X-AUTH-TOKEN: 123
+
+### Find user
+GET http://localhost/api/user/find/Simtel
+Content-Type: application/json
+X-AUTH-TOKEN: 123

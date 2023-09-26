@@ -12,6 +12,7 @@ use App\Context\User\Domain\Entity\Location;
 use App\Context\User\Domain\Entity\User;
 use App\Context\User\Infrastructure\View\UserFullView;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -59,5 +60,16 @@ class UserController extends AbstractController
         $userService->calculateAccesses($user);
 
         return new JsonResponse([], Response::HTTP_CREATED);
+    }
+
+    /**
+     * @throws ExceptionInterface
+     */
+    #[Route(path: '/api/user/find/{userName}', name: 'show_user_by_name', methods: ['GET'])]
+    public function showByName(
+        #[MapEntity(mapping: ['userName' => 'name'])]
+        User $user,
+    ): JsonResponse {
+        return new JsonResponse($this->normalizer->normalize(new UserFullView($user)));
     }
 }
