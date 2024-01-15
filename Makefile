@@ -31,6 +31,9 @@ xcli: ## php консоль
 cli-root: ##php консоль под рутом
 	@docker exec -it  dev-php bash
 
+composer-install: ##Install composer packages
+	docker exec -it --user www-data dev-php sh -c "composer install"
+
 to-migration:
 	@docker exec -it --user www-data dev-php  bin/console doctrine:migrations:diff --no-interaction --formatted
 
