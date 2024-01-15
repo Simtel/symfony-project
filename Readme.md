@@ -9,7 +9,7 @@
 - Deptrac for analyse file paths
 - PHPUnit
 - PHPBench
-
+- GitHub Actions
 
 ### Instruction
 Clone repository
