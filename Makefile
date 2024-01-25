@@ -60,7 +60,7 @@ xpint:
 	@docker exec -it --user www-data dev-php-xdebug vendor/bin/pint
 
 phpstan:
-	@docker exec -it --user www-data dev-php vendor/bin/phpstan analyze --memory-limit=2G --xdebug
+	@docker exec -it --user www-data dev-php vendor/bin/phpstan analyze --memory-limit=2G
 
 xphpstan:
 	@docker exec -it --user www-data dev-php-xdebug vendor/bin/phpstan analyze --memory-limit=2G --xdebug

@@ -55,8 +55,9 @@ class UserController extends AbstractController
     }
 
     #[Route(path: '/api/user/{user}/calculate-access', name: 'calculate_access', methods: ['POST'])]
-    public function calculateAccess(USer $user, UserServiceInterface $userService): JsonResponse
+    public function calculateAccess(User $user, UserServiceInterface $userService): JsonResponse
     {
+
         $userService->calculateAccesses($user);
 
         return new JsonResponse([], Response::HTTP_CREATED);
