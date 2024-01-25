@@ -14,6 +14,9 @@ use Exception;
 
 class UserTest extends FeatureTestBaseCase
 {
+    /**
+     * @throws Exception
+     */
     public function testSecretKey(): void
     {
         $user = new User('test@mail.com', 'Test', '123');
@@ -45,14 +48,18 @@ class UserTest extends FeatureTestBaseCase
 
         $userFromDb = $userRepository->find($user->getId());
 
+        if ($userFromDb === null) {
+            self::fail('Entity not found');
+        }
+
         self::assertSame(
             [
-                $userFromDb->getBlock()->getStartDate()->format('c'),
-                $userFromDb->getBlock()->getEndDate()->format('c'),
+                $userFromDb->getBlock()->getStartDate()?->format('c'),
+                $userFromDb->getBlock()->getEndDate()?->format('c'),
             ],
             [
-                $user->getBlock()->getStartDate()->format('c'),
-                $user->getBlock()->getEndDate()->format('c'),
+                $user->getBlock()->getStartDate()?->format('c'),
+                $user->getBlock()->getEndDate()?->format('c'),
             ]
         );
     }
@@ -64,8 +71,8 @@ class UserTest extends FeatureTestBaseCase
     {
         $em = $this->getEntityManager();
         $user = $this->createUser();
-        $user2 = $this->createUser(['email' => 'user2@email.com','name' => 'Second User']);
-        $user3 = $this->createUser(['email' => 'user3@email.com','name' => 'Third User']);
+        $user2 = $this->createUser(['email' => 'user2@email.com', 'name' => 'Second User']);
+        $user3 = $this->createUser(['email' => 'user3@email.com', 'name' => 'Third User']);
         $location = new Location('Amsterdam');
         $location2 = new Location('Moscow');
         $location3 = new Location('Ulyanovsk');
@@ -81,7 +88,7 @@ class UserTest extends FeatureTestBaseCase
 
         $em->flush();
 
-
+        /** @var  UserRepositoryInterface $userRepository */
         $userRepository = self::getContainer()->get(UserRepositoryInterface::class);
 
         $users = $userRepository->findByLocation($location3);

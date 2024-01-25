@@ -70,8 +70,11 @@ class User implements UserInterface
         $this->contacts = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getId(): int
     {
+        if($this->id === null) {
+            throw new \RuntimeException('Entity not persisted');
+        }
         return $this->id;
     }
 

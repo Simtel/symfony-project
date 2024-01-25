@@ -12,7 +12,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Internal\Hydration\AbstractHydrator;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Doctrine\ORM\Mapping\ClassMetadataFactory;
 use Doctrine\ORM\NativeQuery;
 use Doctrine\ORM\Proxy\ProxyFactory;
 use Doctrine\ORM\Query;
@@ -23,8 +22,6 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\UnitOfWork;
 use Doctrine\Persistence\ObjectRepository;
 use Exception;
-use Override;
-use RuntimeException;
 
 class TestEntityManager implements EntityManagerInterface
 {
@@ -206,10 +203,9 @@ class TestEntityManager implements EntityManagerInterface
         $this->wrappedEntityManager->remove($object);
     }
 
-
-    public function clear(?object $objectName = null): void
+    public function clear(): void
     {
-        $this->wrappedEntityManager->clear($objectName);
+        $this->wrappedEntityManager->clear();
     }
 
     public function detach($object): void
@@ -287,21 +283,12 @@ class TestEntityManager implements EntityManagerInterface
         $this->entityClassesToTruncate[] = $className;
     }
 
-    public function addForbiddenToTruncateEntitiesOfClass(string $entityClass): void
-    {
-        if (array_key_exists($entityClass, $this->forbiddenToTruncateEntityClasses)) {
-            throw new RuntimeException(
-                'The duplicated class "' . $entityClass . '" to ignore table in config!',
-            );
-        }
-        $this->forbiddenToTruncateEntityClasses[$entityClass] = true;
-    }
-
     /**
      * @return \Doctrine\Persistence\Mapping\ClassMetadataFactory<\Doctrine\Persistence\Mapping\ClassMetadata<object>>
      */
     public function getMetadataFactory(): \Doctrine\Persistence\Mapping\ClassMetadataFactory
     {
+        /** @phpstan-ignore-next-line  */
         return $this->wrappedEntityManager->getMetadataFactory();
     }
 }

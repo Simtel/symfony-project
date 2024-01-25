@@ -6,6 +6,7 @@ namespace App\Tests;
 
 use App\Context\User\Domain\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 abstract class UnitTestBaseCase extends KernelTestCase
@@ -16,9 +17,11 @@ abstract class UnitTestBaseCase extends KernelTestCase
     {
         $kernel = self::bootKernel();
 
-        $this->entityManager = $kernel->getContainer()
-            ->get('doctrine')
-            ->getManager();
+        /** @var ManagerRegistry $manager */
+        $manager = $kernel->getContainer()->get('doctrine');
+        /** @var EntityManagerInterface $entityManager */
+        $entityManager = $manager->getManager();
+        $this->entityManager = $entityManager;
     }
 
     public function createUser(array $overrides = []): User

@@ -75,8 +75,7 @@ class TestResponse
                 JSON_THROW_ON_ERROR,
             );
         }
-
-        if ($key !== null) {
+        if (is_array($this->jsonCache) && $key !== null) {
             return $this->jsonCache[$key] ?? $default;
         }
 
