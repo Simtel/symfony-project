@@ -13,7 +13,10 @@ use Doctrine\ORM\Exception\ORMException;
 use JsonException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\HttpKernel\TerminableInterface;
+
 
 abstract class FeatureTestBaseCase extends KernelTestCase
 {
@@ -21,9 +24,9 @@ abstract class FeatureTestBaseCase extends KernelTestCase
     private ?TestEntityManager $entityManager = null;
 
     /**
-     * @throws ConnectionException
      * @throws Exception
      * @throws Exception
+     * @throws \Exception
      */
     protected function setUp(): void
     {
@@ -37,7 +40,6 @@ abstract class FeatureTestBaseCase extends KernelTestCase
 
         $connection->setNestTransactionsWithSavepoints(true);
         $connection->beginTransaction();
-
     }
 
     protected static function getKernelConfig(): array
@@ -48,6 +50,10 @@ abstract class FeatureTestBaseCase extends KernelTestCase
         ];
     }
 
+    /**
+     * @throws Exception
+     * @throws \Exception
+     */
     protected function tearDown(): void
     {
         $this->currentUser = null;
@@ -55,7 +61,6 @@ abstract class FeatureTestBaseCase extends KernelTestCase
         $entityManager = $this->getEntityManager();
         $connection = $entityManager->getConnection();
 
-        $t = $connection->isTransactionActive();
         if ($connection->isTransactionActive()) {
             $connection->rollBack();
         }
@@ -63,7 +68,7 @@ abstract class FeatureTestBaseCase extends KernelTestCase
         $entityManager->clear();
         $entityManager->close();
 
-        $this->entityManager->truncateEntityTables();
+        $this->entityManager?->truncateEntityTables();
         $this->entityManager = null;
 
         parent::tearDown();
@@ -82,19 +87,18 @@ abstract class FeatureTestBaseCase extends KernelTestCase
             [],
             $this->transformHeadersToServerVars(array_merge($this->getDefaultHeaders(), $headers))
         );
-
     }
 
     /**
      * @throws \Exception
      */
     protected function apiCall(
-        string  $method,
-        string  $uri,
-        array   $parameters = [],
-        array   $cookies = [],
-        array   $files = [],
-        array   $server = [],
+        string $method,
+        string $uri,
+        array $parameters = [],
+        array $cookies = [],
+        array $files = [],
+        array $server = [],
         ?string $content = null,
     ): TestResponse {
         $request = Request::create(
@@ -107,19 +111,14 @@ abstract class FeatureTestBaseCase extends KernelTestCase
             $content,
         );
 
-        $response = self::$kernel->handle(
-            $request,
-            HttpKernelInterface::MAIN_REQUEST,
-            true,
-        );
+        $response = self::$kernel?->handle($request);
 
-        self::$kernel->terminate($request, $response);
-
-        return new TestResponse($response);
+        return new TestResponse($response ?? new Response());
     }
 
     /**
      * @throws JsonException
+     * @throws \Exception
      */
     public function postJson(string $uri, array $data = [], array $headers = []): TestResponse
     {
@@ -142,7 +141,6 @@ abstract class FeatureTestBaseCase extends KernelTestCase
             $this->transformHeadersToServerVars($headers),
             $content
         );
-
     }
 
     /**
@@ -229,7 +227,9 @@ abstract class FeatureTestBaseCase extends KernelTestCase
     public function getEntityManager(): TestEntityManager
     {
         if ($this->entityManager === null) {
-            $this->entityManager = static::getContainer()->get(EntityManagerInterface::class);
+            /** @var TestEntityManager $entityManager */
+            $entityManager = static::getContainer()->get(EntityManagerInterface::class);
+            $this->entityManager = $entityManager;
         }
         return $this->entityManager;
     }

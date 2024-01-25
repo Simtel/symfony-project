@@ -13,7 +13,7 @@ class ExampleBench
      * @Revs(1000)
      * @Iterations(5)
      */
-    public function benchForeach()
+    public function benchForeach(): float
     {
         $aHash = [];
         $i = 0;
@@ -32,14 +32,14 @@ class ExampleBench
             $sum += (int)$val;
         }
 
-        return (microtime(true) - $t);
+        return ($t - microtime(true));
     }
 
     /**
      * @Revs(1000)
      * @Iterations(5)
      */
-    public function benchForeachKeyAndTmp()
+    public function benchForeachKeyAndTmp(): float
     {
         $aHash = [];
         $i = 0;

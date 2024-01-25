@@ -6,6 +6,7 @@ parameters:
         objectManagerLoader: phpstan-object-manager.php
     paths:
         - src
+        - tests
     level: max
     ignoreErrors:
     excludePaths:

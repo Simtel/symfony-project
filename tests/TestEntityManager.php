@@ -23,6 +23,7 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\UnitOfWork;
 use Doctrine\Persistence\ObjectRepository;
 use Exception;
+use Override;
 use RuntimeException;
 
 class TestEntityManager implements EntityManagerInterface
@@ -205,12 +206,8 @@ class TestEntityManager implements EntityManagerInterface
         $this->wrappedEntityManager->remove($object);
     }
 
-    public function merge($object): object
-    {
-        return $this->wrappedEntityManager->merge($object);
-    }
 
-    public function clear($objectName = null): void
+    public function clear(?object $objectName = null): void
     {
         $this->wrappedEntityManager->clear($objectName);
     }
@@ -230,12 +227,12 @@ class TestEntityManager implements EntityManagerInterface
         $this->wrappedEntityManager->flush();
     }
 
-    public function initializeObject($obj): void
+    public function initializeObject(object $obj): void
     {
         $this->wrappedEntityManager->initializeObject($obj);
     }
 
-    public function contains($object): bool
+    public function contains(object $object): bool
     {
         return $this->wrappedEntityManager->contains($object);
     }
@@ -250,17 +247,17 @@ class TestEntityManager implements EntityManagerInterface
         }
         $connection = $this->wrappedEntityManager->getConnection();
         $databasePlatform = $connection->getDatabasePlatform();
-        if ($databasePlatform?->supportsForeignKeyConstraints()) {
+        if ($databasePlatform->supportsForeignKeyConstraints()) {
             $connection->executeQuery('SET FOREIGN_KEY_CHECKS=0');
         }
         foreach ($this->entityClassesToTruncate as $entityClass) {
             $table = $this->getClassMetadata($entityClass)->getTableName();
 
-            $query = $databasePlatform?->getTruncateTableSQL($table);
+            $query = $databasePlatform->getTruncateTableSQL($table);
 
             $connection->executeQuery($query);
         }
-        if ($databasePlatform?->supportsForeignKeyConstraints()) {
+        if ($databasePlatform->supportsForeignKeyConstraints()) {
             $connection->executeQuery('SET FOREIGN_KEY_CHECKS=1');
         }
         $this->entityClassesToTruncate = [];
@@ -300,7 +297,10 @@ class TestEntityManager implements EntityManagerInterface
         $this->forbiddenToTruncateEntityClasses[$entityClass] = true;
     }
 
-    public function getMetadataFactory(): ClassMetadataFactory
+    /**
+     * @return \Doctrine\Persistence\Mapping\ClassMetadataFactory<\Doctrine\Persistence\Mapping\ClassMetadata<object>>
+     */
+    public function getMetadataFactory(): \Doctrine\Persistence\Mapping\ClassMetadataFactory
     {
         return $this->wrappedEntityManager->getMetadataFactory();
     }

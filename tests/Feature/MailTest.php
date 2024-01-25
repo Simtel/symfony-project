@@ -22,6 +22,9 @@ class MailTest extends FeatureTestBaseCase
         self::assertEmailCount(1);
 
         $email = self::getMailerMessage();
+        if ($email === null) {
+            self::fail('Message not found');
+        }
         self::assertEmailAddressContains($email, 'to', 'simtel@example.com');
         self::assertEmailAddressContains($email, 'from', 'noreply@mail.com');
         self::assertEmailHtmlBodyContains($email, '<p>Send html email!</p>');
