@@ -3,7 +3,7 @@
 ### Features
 - Docker
 - Makefile
-- Symfony 6
+- Symfony 7
 - PHPStan max level
 - Laravel Pint for code style
 - Deptrac for analyse file paths

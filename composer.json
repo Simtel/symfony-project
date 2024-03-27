@@ -94,6 +94,7 @@
         "symfony/css-selector": "^7",
         "symfony/maker-bundle": "^1.48",
         "symfony/phpunit-bridge": "^6",
+        "symfony/stopwatch": "^7",
         "symfony/web-profiler-bundle": "7",
         "symplify/config-transformer": "^12.3"
     }

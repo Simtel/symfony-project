@@ -18,3 +18,7 @@ X-AUTH-TOKEN: 123
 GET http://localhost/api/user/find/Simtel
 Content-Type: application/json
 X-AUTH-TOKEN: 123
+
+### Find user
+GET http://localhost/_profiler/
+X-AUTH-TOKEN: 123

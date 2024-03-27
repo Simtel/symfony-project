@@ -20,7 +20,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             'main' => [
                 'lazy' => true,
                 'logout' => true,
-                'stateless' => true,
+                'stateless' => false,
                 'custom_authenticators' => [
                     ApiKeyAuthenticator::class,
                 ],
