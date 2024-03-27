@@ -4,18 +4,18 @@ help: ## Show this help.
 	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/\\$$//' | sed -e 's/##//'
 
 up: ## Up containers
-	@docker-compose up -d
+	@docker compose up -d
 	@echo -e "Make: Up containers.\n"
 
 build: ## Build containers
-	@docker-compose up -d --build
+	@docker compose up -d --build
 	@echo -e "Make: Up containers.\n"
 
 down: ## Down containers
-	@docker-compose down
+	@docker compose down
 
 stop: ## Stop contrainers
-	@docker-compose stop	
+	@docker compose stop
 
 restart: stop up ## Restart docker containers	
 
