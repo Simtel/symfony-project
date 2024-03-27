@@ -14,6 +14,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             'enable_lazy_ghost_objects' => true,
             'naming_strategy' => 'doctrine.orm.naming_strategy.underscore_number_aware',
             'auto_mapping' => true,
+            'controller_resolver' => [
+                'auto_mapping' => false,
+            ],
             'mappings' => [
                 'Common' => [
                     'is_bundle' => false,
