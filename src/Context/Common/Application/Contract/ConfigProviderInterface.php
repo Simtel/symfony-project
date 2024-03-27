@@ -8,5 +8,5 @@ use App\Context\Common\Infrastructure\View\ConfigListView;
 
 interface ConfigProviderInterface
 {
-    public function getList(): ConfigListView;
+    public function getList();
 }
