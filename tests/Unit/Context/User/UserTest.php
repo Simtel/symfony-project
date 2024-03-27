@@ -10,6 +10,7 @@ use App\Context\User\Domain\Entity\Location;
 use App\Context\User\Domain\Entity\User;
 use App\Tests\Feature\FeatureTestBaseCase;
 use DateTimeImmutable;
+use Doctrine\ORM\Exception\ORMException;
 use Exception;
 
 class UserTest extends FeatureTestBaseCase
@@ -100,5 +101,35 @@ class UserTest extends FeatureTestBaseCase
                 $users
             )
         );
+    }
+
+    /**
+     * @throws ORMException
+     */
+    public function testRemoveUser(): void
+    {
+        $em = $this->getEntityManager();
+        $user = $this->createUser();
+        $location = new Location('Amsterdam');
+        $location2 = new Location('Moscow');
+
+        $user->addLocation($location);
+
+        $em->persist($location);
+        $em->persist($location2);
+        $em->flush();
+
+        $locationRepository = $em->getRepository(Location::class);
+        $userRepository = $em->getRepository(User::class);
+
+        self::assertCount(2, $locationRepository->findAll());
+        self::assertCount(1, $userRepository->findAll());
+
+        $em->remove($user);
+        $em->flush();
+
+        self::assertCount(2, $locationRepository->findAll());
+        self::assertCount(0, $userRepository->findAll());
+
     }
 }

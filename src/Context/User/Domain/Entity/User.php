@@ -13,6 +13,7 @@ use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\OrderBy;
 use Doctrine\ORM\Mapping\PrePersist;
+use RuntimeException;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity()]
@@ -51,12 +52,12 @@ class User implements UserInterface
     #[ORM\JoinTable(name: 'user_location')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
     #[ORM\InverseJoinColumn(name: 'location_id', referencedColumnName: 'id')]
-    #[ORM\ManyToMany(targetEntity: Location::class, cascade: ['remove'], fetch: 'EXTRA_LAZY')]
+    #[ORM\ManyToMany(targetEntity: Location::class, fetch: 'EXTRA_LAZY')]
     #[OrderBy(["name" => "ASC"])]
     private Collection $locations;
 
     /** @var Collection<string, Contact> */
-    #[OneToMany(mappedBy: 'user', targetEntity: Contact::class, fetch: 'EAGER', indexBy: 'code', cascade: ['remove'])]
+    #[OneToMany(mappedBy: 'user', targetEntity: Contact::class, fetch: 'EAGER', orphanRemoval: true, indexBy: 'code')]
     private Collection $contacts;
 
     public function __construct(string $email, string $name, string $password)
@@ -73,7 +74,7 @@ class User implements UserInterface
     public function getId(): int
     {
         if($this->id === null) {
-            throw new \RuntimeException('Entity not persisted');
+            throw new RuntimeException('Entity not persisted');
         }
         return $this->id;
     }

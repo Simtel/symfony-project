@@ -243,9 +243,8 @@ class TestEntityManager implements EntityManagerInterface
         }
         $connection = $this->wrappedEntityManager->getConnection();
         $databasePlatform = $connection->getDatabasePlatform();
-        if ($databasePlatform->supportsForeignKeyConstraints()) {
-            $connection->executeQuery('SET FOREIGN_KEY_CHECKS=0');
-        }
+        $connection->executeQuery('SET FOREIGN_KEY_CHECKS=0');
+
         foreach ($this->entityClassesToTruncate as $entityClass) {
             $table = $this->getClassMetadata($entityClass)->getTableName();
 
@@ -253,9 +252,8 @@ class TestEntityManager implements EntityManagerInterface
 
             $connection->executeQuery($query);
         }
-        if ($databasePlatform->supportsForeignKeyConstraints()) {
-            $connection->executeQuery('SET FOREIGN_KEY_CHECKS=1');
-        }
+        $connection->executeQuery('SET FOREIGN_KEY_CHECKS=1');
+
         $this->entityClassesToTruncate = [];
     }
 
@@ -288,7 +286,7 @@ class TestEntityManager implements EntityManagerInterface
      */
     public function getMetadataFactory(): \Doctrine\Persistence\Mapping\ClassMetadataFactory
     {
-        /** @phpstan-ignore-next-line  */
+        /** @phpstan-ignore-next-line */
         return $this->wrappedEntityManager->getMetadataFactory();
     }
 }
