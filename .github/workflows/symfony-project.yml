@@ -53,3 +53,33 @@ jobs:
         run: composer install
       - name: Pint
         run: vendor/bin/pint --test
+
+  symfony-test:
+    runs-on: ubuntu-latest
+    services:
+      mysql-service:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: example
+          MYSQL_DATABASE: db_test
+        ports:
+          - 33306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+      - name: Install dependencies
+        run: composer install --no-scripts
+      - name: Fill Db
+        run: php bin/console doctrine:schema:create --env=github
+      - name: Copy .env
+        run: php -r "file_exists('.env.test.local') || copy('.env.github.test', '.env.test.local');"
+      - name: Run test
+        run: ./vendor/bin/phpunit
