@@ -142,8 +142,8 @@ class UserTest extends FeatureTestBaseCase
     {
         $em = $this->getEntityManager();
         $user = $this->createUser();
-        $contact = new Contact($user,'email','Email','s@s.com');
-        $contact2 = new Contact($user,'phone','Phone', '13465');
+        $contact = new Contact($user, 'email', 'Email', 's@s.com');
+        $contact2 = new Contact($user, 'phone', 'Phone', '13465');
 
         $em->persist($contact);
         $em->persist($contact2);

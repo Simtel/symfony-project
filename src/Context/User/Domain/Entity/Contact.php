@@ -15,7 +15,7 @@ class Contact
     private ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: User::class, cascade: ['persist'], inversedBy: 'contacts')]
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE',options: [] )]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE', options: [])]
     private User $user;
 
     #[ORM\Column(type: 'string', length: 180)]
