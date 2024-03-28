@@ -6,6 +6,7 @@ namespace App\Tests\Unit\Context\User;
 
 use App\Context\User\Domain\Contract\UserRepositoryInterface;
 use App\Context\User\Domain\Entity\Block;
+use App\Context\User\Domain\Entity\Contact;
 use App\Context\User\Domain\Entity\Location;
 use App\Context\User\Domain\Entity\User;
 use App\Tests\Feature\FeatureTestBaseCase;
@@ -129,6 +130,35 @@ class UserTest extends FeatureTestBaseCase
         $em->flush();
 
         self::assertCount(2, $locationRepository->findAll());
+        self::assertCount(0, $userRepository->findAll());
+
+    }
+
+    /**
+     * @throws ORMException
+     * @throws Exception
+     */
+    public function testRemoveUserWithContacts(): void
+    {
+        $em = $this->getEntityManager();
+        $user = $this->createUser();
+        $contact = new Contact($user,'email','Email','s@s.com');
+        $contact2 = new Contact($user,'phone','Phone', '13465');
+
+        $em->persist($contact);
+        $em->persist($contact2);
+        $em->flush();
+
+        $contactRepository = $em->getRepository(Contact::class);
+        $userRepository = $em->getRepository(User::class);
+
+        self::assertCount(2, $contactRepository->findAll());
+        self::assertCount(1, $userRepository->findAll());
+
+        $em->remove($user);
+        $em->flush();
+
+        self::assertCount(0, $contactRepository->findAll());
         self::assertCount(0, $userRepository->findAll());
 
     }

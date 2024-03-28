@@ -73,7 +73,7 @@ class User implements UserInterface
 
     public function getId(): int
     {
-        if($this->id === null) {
+        if ($this->id === null) {
             throw new RuntimeException('Entity not persisted');
         }
         return $this->id;
