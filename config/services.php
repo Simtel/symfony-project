@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Context\Common\Infrastructure\Contract\CommandHandlerInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -14,6 +15,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->defaults()
         ->autowire()
         ->autoconfigure();
+
+    $services->instanceof(CommandHandlerInterface::class)
+        ->tag('messenger.message_handler', ['bus'=> 'command.bus']);
 
     $services->load('App\\', __DIR__ . '/../src/')
         ->exclude([

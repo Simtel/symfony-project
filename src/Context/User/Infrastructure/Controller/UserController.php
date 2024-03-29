@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Context\User\Infrastructure\Controller;
 
-use App\Context\Common\Infrastructure\Contract\CommandBusInterface;
 use App\Context\User\Application\Command\UpdateUserCommand;
 use App\Context\User\Application\Dto\UpdateUserDto;
 use App\Context\User\Domain\Contract\UserServiceInterface;
@@ -16,6 +15,7 @@ use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -42,12 +42,12 @@ class UserController extends AbstractController
         User $user,
         Location $location,
         EntityManagerInterface $entityManager,
-        CommandBusInterface $commandBus,
+        MessageBusInterface $bus
     ): JsonResponse {
         $dto = new UpdateUserDto($user);
         $dto->addLocation($location);
 
-        $commandBus->dispatch(new UpdateUserCommand($dto));
+        $bus->dispatch(new UpdateUserCommand($dto));
 
         $entityManager->flush();
 
