@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Context\Common\Infrastructure\Controller;
 
+use App\Context\Common\Application\Dto\TestMapRequestDto;
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
@@ -72,5 +74,16 @@ class CommonController extends AbstractController
         $sentMessage = $chatter->send($message);
 
         return new JsonResponse(['messageId' => $sentMessage?->getMessageId()]);
+    }
+
+    /**
+     * @throws ExceptionInterface
+     */
+    #[Route('/api/test-map-request', name: 'test-map-request', methods: ['POST'])]
+    public function testMapRequest(
+        #[MapRequestPayload] TestMapRequestDto $dto,
+    ): JsonResponse {
+
+        return new JsonResponse($this->normalizer->normalize($dto));
     }
 }
