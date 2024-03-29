@@ -9,7 +9,6 @@ use App\Tests\TestEntityManager;
 use App\Tests\TestResponse;
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Exception\ORMException;
 use JsonException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,6 +38,9 @@ abstract class FeatureTestBaseCase extends KernelTestCase
         $connection->beginTransaction();
     }
 
+    /**
+     * @return array<string, string|boolean>
+     */
     protected static function getKernelConfig(): array
     {
         return [
@@ -72,6 +74,10 @@ abstract class FeatureTestBaseCase extends KernelTestCase
     }
 
     /**
+     * @param string $uri
+     * @param mixed[] $parameters
+     * @param mixed[] $headers
+     * @return TestResponse
      * @throws \Exception
      */
     public function getJson(string $uri, array $parameters = [], array $headers = []): TestResponse
@@ -87,6 +93,14 @@ abstract class FeatureTestBaseCase extends KernelTestCase
     }
 
     /**
+     * @param string $method
+     * @param string $uri
+     * @param mixed[] $parameters
+     * @param mixed[] $cookies
+     * @param mixed[] $files
+     * @param mixed[] $server
+     * @param string|null $content
+     * @return TestResponse
      * @throws \Exception
      */
     protected function apiCall(
@@ -114,8 +128,11 @@ abstract class FeatureTestBaseCase extends KernelTestCase
     }
 
     /**
+     * @param string $uri
+     * @param mixed[] $data
+     * @param mixed[] $headers
+     * @return TestResponse
      * @throws JsonException
-     * @throws \Exception
      */
     public function postJson(string $uri, array $data = [], array $headers = []): TestResponse
     {
@@ -141,6 +158,10 @@ abstract class FeatureTestBaseCase extends KernelTestCase
     }
 
     /**
+     * @param string $uri
+     * @param mixed[] $data
+     * @param mixed[] $headers
+     * @return TestResponse
      * @throws JsonException
      * @throws \Exception
      */
@@ -173,6 +194,9 @@ abstract class FeatureTestBaseCase extends KernelTestCase
         $this->currentUser = $user;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function getDefaultHeaders(): array
     {
         return [
@@ -180,6 +204,10 @@ abstract class FeatureTestBaseCase extends KernelTestCase
         ];
     }
 
+    /**
+     * @param mixed[] $headers
+     * @return mixed[]
+     */
     protected function transformHeadersToServerVars(array $headers): array
     {
         $transformed = [];
@@ -199,7 +227,8 @@ abstract class FeatureTestBaseCase extends KernelTestCase
     }
 
     /**
-     * @throws ORMException
+     * @param array<string, string>$overrides
+     * @return User
      * @throws \Exception
      */
     public function createUser(array $overrides = []): User

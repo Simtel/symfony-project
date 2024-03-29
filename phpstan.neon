@@ -10,4 +10,3 @@ parameters:
     level: max
     ignoreErrors:
     excludePaths:
-    checkMissingIterableValueType: false

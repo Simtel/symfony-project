@@ -33,6 +33,11 @@ readonly class CreateConfigDtoValueResolver implements
         );
     }
 
+    /**
+     * @param Request $request
+     * @param ArgumentMetadata $argument
+     * @return CreateConfigDto[]
+     */
     public function resolve(Request $request, ArgumentMetadata $argument): iterable
     {
         if ($argument->getType() !== CreateConfigDto::class) {

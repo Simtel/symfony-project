@@ -9,6 +9,11 @@ use App\Context\User\Domain\Entity\User;
 
 interface UserRepositoryInterface
 {
+    /**
+     * @param array<string,mixed> $criteria
+     * @param array<string, string>|null $orderBy
+     * @return User|null
+     */
     public function findOneBy(array $criteria, ?array $orderBy = null): ?User;
 
     public function find(int $id): ?User;

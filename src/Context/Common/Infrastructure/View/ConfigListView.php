@@ -19,6 +19,9 @@ readonly class ConfigListView
         $this->configs = $configs;
     }
 
+    /**
+     * @return ConfigView[]
+     */
     public function getConfigs(): array
     {
         return $this->configs;

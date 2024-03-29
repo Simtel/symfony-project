@@ -24,6 +24,10 @@ abstract class UnitTestBaseCase extends KernelTestCase
         $this->entityManager = $entityManager;
     }
 
+    /**
+     * @param string[] $overrides
+     * @return User
+     */
     public function createUser(array $overrides = []): User
     {
         $default = ['email' => 'test@mail.com', 'name' => 'Test', 'password' => '456', 'token' => '4444'];

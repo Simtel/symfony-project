@@ -53,6 +53,11 @@ class ExportUserCommand extends Command
         return Command::SUCCESS;
     }
 
+    /**
+     * @param string $fileName
+     * @param array<int, array<int|string>> $data
+     * @return void
+     */
     private function exportToFile(string $fileName, array $data): void
     {
         $uploadDir = $this->publicDir . '/upload';
