@@ -108,6 +108,8 @@ class UserTest extends FeatureTestBaseCase
 
         $this->loginAs($user);
 
+        $em->refresh($user);
+
         $this->putJson('/api/user/' . $user->getId() . '/location/' . $newLocation->getId());
 
         $repository = $em->getRepository(Log::class);

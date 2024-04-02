@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Context\User\Application\Command;
+namespace App\Context\User\Application\CQRS\Command;
 
 use App\Context\Common\Domain\Contract\CommandInterface;
-use App\Context\User\Application\CommandHandler\UpdateUserCommandHandler;
+use App\Context\User\Application\CQRS\Command\Handler\UpdateUserCommandHandler;
 use App\Context\User\Application\Dto\UpdateUserDto;
 
 /**

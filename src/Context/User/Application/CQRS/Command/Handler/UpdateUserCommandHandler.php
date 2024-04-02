@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Context\User\Application\CommandHandler;
+namespace App\Context\User\Application\CQRS\Command\Handler;
 
 use App\Context\Common\Infrastructure\Contract\CommandHandlerInterface;
-use App\Context\User\Application\Command\UpdateUserCommand;
+use App\Context\User\Application\CQRS\Command\UpdateUserCommand;
 use Psr\EventDispatcher\EventDispatcherInterface;
 
 readonly class UpdateUserCommandHandler implements CommandHandlerInterface

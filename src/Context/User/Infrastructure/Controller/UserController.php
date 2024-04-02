@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Context\User\Infrastructure\Controller;
 
-use App\Context\User\Application\Command\UpdateUserCommand;
+use App\Context\User\Application\CQRS\Command\UpdateUserCommand;
 use App\Context\User\Application\Dto\UpdateUserDto;
 use App\Context\User\Domain\Contract\UserServiceInterface;
 use App\Context\User\Domain\Entity\Location;
