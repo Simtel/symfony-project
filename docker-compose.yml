@@ -90,10 +90,13 @@ services:
 
   rabbitmq:
     container_name: dev-rabbitmq
+    hostname: rabbitmq
     image: rabbitmq:3.10.7-management-alpine
     ports:
       - "5673:5672"
       - "15673:15672"
+    networks:
+      - internal
 
 volumes:
   mysql:

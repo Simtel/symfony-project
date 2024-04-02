@@ -4,7 +4,7 @@ Content-Type: application/json
 X-AUTH-TOKEN: 123
 
 ###
-POST http://localhost/api/user/3/calculate-access
+POST http://localhost/api/user/1/calculate-access
 Content-Type: application/json
 X-AUTH-TOKEN: 123
 

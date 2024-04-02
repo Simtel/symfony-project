@@ -9,12 +9,14 @@ use App\Context\User\Application\Dto\UpdateUserDto;
 use App\Context\User\Domain\Contract\UserServiceInterface;
 use App\Context\User\Domain\Entity\Location;
 use App\Context\User\Domain\Entity\User;
+use App\Context\User\Domain\Event\LocationAddedEvent;
 use App\Context\User\Infrastructure\View\UserFullView;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\Bridge\Amqp\Transport\AmqpStamp;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
@@ -48,6 +50,7 @@ class UserController extends AbstractController
         $dto->addLocation($location);
 
         $bus->dispatch(new UpdateUserCommand($dto));
+        $bus->dispatch(new LocationAddedEvent('Location added'), [new AmqpStamp('user.events.add_location')]);
 
         $entityManager->flush();
 
