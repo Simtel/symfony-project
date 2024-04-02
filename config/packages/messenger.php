@@ -16,7 +16,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 ],
             ],
             'transports' => [
-                'sync' => 'sync://',
+                'async' => [
+                    'dsn' => '%env(RABBIT_DSN)%'
+                ]
             ],
             'routing' => null,
         ],

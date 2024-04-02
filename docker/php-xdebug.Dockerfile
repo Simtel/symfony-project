@@ -5,6 +5,12 @@ RUN apt-get update \
     && docker-php-ext-install mysqli pdo_mysql \
     && docker-php-ext-enable xdebug \
     && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
+    && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/* \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt update \
+    && apt-get -y install librabbitmq-dev \
+    && pecl install amqp \
+    && docker-php-ext-enable amqp
 
 RUN docker-php-ext-install gd
 

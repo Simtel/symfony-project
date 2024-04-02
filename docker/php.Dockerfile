@@ -3,7 +3,12 @@ FROM php:8.3-fpm
 RUN apt-get update \
     && apt-get install -y libwebp-dev libjpeg62-turbo-dev libpng-dev libxpm-dev libfreetype6-dev cron \
     && docker-php-ext-install mysqli pdo_mysql \
-    && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
+    && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/* \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt update \
+    && apt-get -y install librabbitmq-dev \
+    && pecl install amqp \
+    && docker-php-ext-enable amqp
 
 RUN docker-php-ext-install gd
 
