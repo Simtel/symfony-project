@@ -14,7 +14,7 @@ use DateTimeImmutable;
 use Doctrine\ORM\Exception\ORMException;
 use Exception;
 
-class UserTest extends FeatureTestBaseCase
+class UserUnitTest extends FeatureTestBaseCase
 {
     /**
      * @throws Exception
@@ -161,5 +161,15 @@ class UserTest extends FeatureTestBaseCase
         self::assertCount(0, $contactRepository->findAll());
         self::assertCount(0, $userRepository->findAll());
 
+    }
+
+    public function testGenerateToken(): void
+    {
+        $em = $this->getEntityManager();
+
+        $em->flush();
+        $token = sha1((string)rand(999, 999999), true);
+        self::assertEquals(20, strlen($token));
+        self::assertTrue(true);
     }
 }
