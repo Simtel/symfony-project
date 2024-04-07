@@ -47,6 +47,9 @@ rollback:
 test:
 	docker exec -it --user www-data dev-php vendor/bin/phpunit
 
+testf:
+	@docker exec -it --user www-data dev-php ./vendor/bin/phpunit --filter $(FILTER) --testdox
+
 xtest:
 	docker exec -it --user www-data dev-php-xdebug vendor/bin/phpunit
 

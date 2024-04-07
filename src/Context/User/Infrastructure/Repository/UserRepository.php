@@ -63,4 +63,13 @@ class UserRepository implements UserRepositoryInterface
 
         return $builder->getQuery()->getResult();
     }
+
+    /**
+     * @param int[] $ids
+     * @return User[]
+     */
+    public function findByIds(array $ids): array
+    {
+        return $this->repository->findBy(['id' => $ids]);
+    }
 }

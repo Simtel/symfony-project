@@ -6,6 +6,7 @@ namespace App\Context\User\Infrastructure\Controller;
 
 use App\Context\User\Application\CQRS\Command\UpdateUserCommand;
 use App\Context\User\Application\Dto\UpdateUserDto;
+use App\Context\User\Domain\Contract\UserRepositoryInterface;
 use App\Context\User\Domain\Contract\UserServiceInterface;
 use App\Context\User\Domain\Entity\Location;
 use App\Context\User\Domain\Entity\User;
@@ -60,7 +61,6 @@ class UserController extends AbstractController
     #[Route(path: '/api/user/{user}/calculate-access', name: 'calculate_access', methods: ['POST'])]
     public function calculateAccess(User $user, UserServiceInterface $userService): JsonResponse
     {
-
         $userService->calculateAccesses($user);
 
         return new JsonResponse([], Response::HTTP_CREATED);
@@ -75,5 +75,12 @@ class UserController extends AbstractController
         User $user,
     ): JsonResponse {
         return new JsonResponse($this->normalizer->normalize(new UserFullView($user)));
+    }
+
+    #[Route('/users/{location}', methods: ['GET'])]
+    public function userByLocation(Location $location, UserRepositoryInterface $userRepository): JsonResponse
+    {
+        $users = $userRepository->findByLocation($location);
+        return new JsonResponse($users, Response::HTTP_OK);
     }
 }
