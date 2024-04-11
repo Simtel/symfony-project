@@ -59,15 +59,15 @@ abstract class FeatureTestBaseCase extends KernelTestCase
 
         $entityManager = $this->getEntityManager();
         $connection = $entityManager->getConnection();
-
         if ($connection->isTransactionActive()) {
             $connection->rollBack();
+        } else {
+            $this->entityManager?->truncateEntityTables();
         }
 
         $entityManager->clear();
         $entityManager->close();
 
-        $this->entityManager?->truncateEntityTables();
         $this->entityManager = null;
 
         parent::tearDown();
