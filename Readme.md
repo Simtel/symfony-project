@@ -29,7 +29,7 @@ Start containers
 make up
 ```
 
-Create db and db_test databases in adminer in http://localhost:8085
+Create db and db_test databases in adminer in http://localhost:8080
 
 Install composer packages
 ```bash
