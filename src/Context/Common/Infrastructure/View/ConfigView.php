@@ -14,6 +14,11 @@ readonly class ConfigView
     ) {
     }
 
+    public function getUuid(): string
+    {
+        return $this->config->getId()->toRfc4122();
+    }
+
     public function getName(): string
     {
         return $this->config->getName();

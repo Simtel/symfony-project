@@ -7,14 +7,17 @@ namespace App\Context\Common\Domain\Entity;
 use App\Context\User\Domain\Entity\User;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Types\UuidType;
+use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity()]
 class Config
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private int $id;
+    #[ORM\Column(type: UuidType::NAME, unique: true)]
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
+    private Uuid $id;
 
     #[ORM\Column(length: 255)]
     private string $name;
@@ -25,7 +28,7 @@ class Config
     #[ORM\Column(type: 'datetime_immutable')]
     private DateTimeImmutable $updateAt;
 
-    #[ORM\OneToOne(targetEntity: User::class)]
+    #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id')]
     private User $createdBy;
 
@@ -39,7 +42,7 @@ class Config
         $this->updateAt = new DateTimeImmutable();
     }
 
-    public function getId(): int
+    public function getId(): Uuid
     {
         return $this->id;
     }

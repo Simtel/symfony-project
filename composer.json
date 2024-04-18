@@ -30,6 +30,7 @@
         "symfony/serializer": "^7",
         "symfony/telegram-notifier": "^7",
         "symfony/translation": "^7",
+        "symfony/uid": "^7",
         "symfony/validator": "^7",
         "symfony/yaml": "^7"
     },

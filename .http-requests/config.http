@@ -1,7 +1,7 @@
 ### Create config
 POST http://localhost/api/config
 Content-Type: application/json
-X-AUTH-TOKEN: 456
+X-AUTH-TOKEN: 123
 
 {
   "name": "logging_dev1",
