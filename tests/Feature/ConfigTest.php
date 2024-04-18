@@ -66,6 +66,7 @@ class ConfigTest extends FeatureTestBaseCase
         assertSame(
             [
                 [
+                    'uuid' => $config->getId()->toRfc4122(),
                     "name" => "app",
                     "value" => "Test App",
                     "updatedAt" => $config->getUpdateAt()->format('Y-m-d H:i:s'),
