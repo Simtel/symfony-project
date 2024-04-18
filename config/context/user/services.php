@@ -15,7 +15,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->bind('string $publicDir', '%kernel.project_dir%/public');
 
     $services->instanceof(CommandHandlerInterface::class)
-        ->tag('messenger.message_handler', ['bus'=> 'command.bus']);
+        ->tag('messenger.message_handler', ['bus' => 'command.bus']);
 
     $services->load('App\Context\User\\', __DIR__ . '/../../../src/Context/User/');
 

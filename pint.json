@@ -5,7 +5,6 @@
     ".github",
     "docker",
     "storage",
-    "config",
     "var"
   ]
 }

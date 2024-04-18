@@ -17,7 +17,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->autoconfigure();
 
     $services->instanceof(CommandHandlerInterface::class)
-        ->tag('messenger.message_handler', ['bus'=> 'command.bus']);
+        ->tag('messenger.message_handler', ['bus' => 'command.bus']);
 
     $services->load('App\\', __DIR__ . '/../src/')
         ->exclude([

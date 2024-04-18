@@ -5,8 +5,10 @@ parameters:
     doctrine:
         objectManagerLoader: phpstan-object-manager.php
     paths:
+        - config
         - src
         - tests
+        - migrations
     level: max
     ignoreErrors:
     excludePaths:
