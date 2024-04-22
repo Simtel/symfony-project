@@ -10,6 +10,7 @@
 - PHPUnit
 - PHPBench
 - GitHub Actions
+- GitVerse CI\CD
 
 ### Instruction
 Clone repository
