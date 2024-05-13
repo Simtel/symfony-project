@@ -54,8 +54,7 @@ class ConfigProviderTest extends FeatureTestBaseCase
      */
     public function providerReturnFillViewConfig(): void
     {
-        $user = new User('test@test.com', 'Test', '4444');
-        $user->setToken('3232323');
+        $user = new User('test@test.com', 'Test', '4444', '3232323');
         $config = new Config('app', 'Test Project', $user);
         $this->getEntityManager()->persist($config);
         $this->getEntityManager()->persist($user);

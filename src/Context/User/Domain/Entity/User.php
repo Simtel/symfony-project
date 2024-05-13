@@ -35,7 +35,7 @@ class User implements UserInterface
     private string $name;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private ?string $token;
+    private string $token;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $secretKey = null;
@@ -60,11 +60,12 @@ class User implements UserInterface
     #[OneToMany(mappedBy: 'user', targetEntity: Contact::class, fetch: 'EAGER', orphanRemoval: true, indexBy: 'code')]
     private Collection $contacts;
 
-    public function __construct(string $email, string $name, string $password)
+    public function __construct(string $email, string $name, string $password, string $token)
     {
         $this->email = $email;
         $this->name = $name;
         $this->password = $password;
+        $this->setToken($token);
 
         $this->block = new Block();
         $this->locations = new ArrayCollection();
@@ -112,12 +113,12 @@ class User implements UserInterface
         $this->name = $name;
     }
 
-    public function getToken(): ?string
+    public function getToken(): string
     {
         return $this->token;
     }
 
-    public function setToken(?string $token): void
+    public function setToken(string $token): void
     {
         $this->token = $token;
     }

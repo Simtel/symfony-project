@@ -12,8 +12,7 @@ class UserFixture extends Fixture
 
     public function load(ObjectManager $manager): void
     {
-        $user = new User('test@test.com', 'Test', '123456');
-        $user->setToken('123333');
+        $user = new User('test@test.com', 'Test', '123456', '123333');
         $manager->persist($user);
 
         $manager->flush();

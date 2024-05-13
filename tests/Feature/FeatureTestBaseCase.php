@@ -238,8 +238,7 @@ abstract class FeatureTestBaseCase extends KernelTestCase
 
         $em = $this->getEntityManager();
 
-        $user = new User($attributes['email'], $attributes['name'], $attributes['password']);
-        $user->setToken($attributes['token']);
+        $user = new User($attributes['email'], $attributes['name'], $attributes['password'], $attributes['token']);
         $em->persist($user);
 
         $em->flush();

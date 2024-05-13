@@ -9,6 +9,7 @@ use App\Context\User\Domain\Entity\Block;
 use App\Context\User\Domain\Entity\Contact;
 use App\Context\User\Domain\Entity\Location;
 use App\Context\User\Domain\Entity\User;
+use App\Context\User\Infrastructure\Repository\UserRepository;
 use App\Tests\Feature\FeatureTestBaseCase;
 use DateTimeImmutable;
 use Doctrine\ORM\Exception\ORMException;
@@ -21,7 +22,7 @@ class UserUnitTest extends FeatureTestBaseCase
      */
     public function testSecretKey(): void
     {
-        $user = new User('test@mail.com', 'Test', '123');
+        $user = new User('test@mail.com', 'Test', '123', '123');
 
         $this->getEntityManager()->persist($user);
 
@@ -33,8 +34,7 @@ class UserUnitTest extends FeatureTestBaseCase
      */
     public function testBlockedDateRange(): void
     {
-        $user = new User('test@mail.com', 'Test', '123');
-        $user->setToken('333');
+        $user = new User('test@mail.com', 'Test', '123', '333');
         $user->setBlock(
             new Block(
                 new DateTimeImmutable('2022-01-21 13:56:50'),
@@ -171,5 +171,26 @@ class UserUnitTest extends FeatureTestBaseCase
         $token = sha1((string)rand(999, 999999), true);
         self::assertEquals(20, strlen($token));
         self::assertTrue(true);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testFindByEmail(): void
+    {
+        $entityManager = $this->getEntityManager();
+        $userRepository = new UserRepository($entityManager);
+
+        $user = new User('test@example.com', 'test', 'test', '23323');
+
+        $entityManager->persist($user);
+        $entityManager->flush();
+
+        $foundUser = $userRepository->findByEmail('test@example.com');
+
+        $this->assertNotNull($foundUser);
+
+        $this->assertSame('test@example.com', $foundUser->getEmail());
+
     }
 }

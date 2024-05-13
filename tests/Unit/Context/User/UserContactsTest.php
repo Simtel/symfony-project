@@ -13,8 +13,7 @@ class UserContactsTest extends FeatureTestBaseCase
     public function testArrayContactsIncludeCodeAsKeys(): void
     {
         $em = $this->getEntityManager();
-        $user = new User('s@mail.com', 'Test', '134');
-        $user->setToken('33333');
+        $user = new User('s@mail.com', 'Test', '134', '33333');
 
         $contactFirst = new Contact($user, 'first', 'First', '1');
         $contactSecond = new Contact($user, 'second', 'second', '1');

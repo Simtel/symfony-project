@@ -33,7 +33,7 @@ abstract class UnitTestBaseCase extends KernelTestCase
         $default = ['email' => 'test@mail.com', 'name' => 'Test', 'password' => '456', 'token' => '4444'];
         $attributes = array_replace($default, $overrides);
 
-        $user = new User($attributes['email'], $attributes['name'], $attributes['password']);
+        $user = new User($attributes['email'], $attributes['name'], $attributes['password'], $attributes['token']);
         $user->setToken($attributes['token']);
         $this->entityManager->persist($user);
 

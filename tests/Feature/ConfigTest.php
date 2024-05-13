@@ -29,8 +29,7 @@ class ConfigTest extends FeatureTestBaseCase
     {
         $em = $this->getEntityManager();
 
-        $user = new User('test@mail.com', 'Test', '456');
-        $user->setToken('4444');
+        $user = new User('test@mail.com', 'Test', '456', '4444');
         $em->persist($user);
         $em->flush();
 
@@ -49,8 +48,7 @@ class ConfigTest extends FeatureTestBaseCase
     {
         $em = $this->getEntityManager();
 
-        $user = new User('test@mail.com', 'Test', '456');
-        $user->setToken('123');
+        $user = new User('test@mail.com', 'Test', '456', '123');
         $em->persist($user);
 
         $config = new Config('app', 'Test App', $user);
