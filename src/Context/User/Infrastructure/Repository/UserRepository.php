@@ -65,11 +65,20 @@ class UserRepository implements UserRepositoryInterface
     }
 
     /**
-     * @param int[] $ids
+     * @param  int[]  $ids
      * @return User[]
      */
     public function findByIds(array $ids): array
     {
         return $this->repository->findBy(['id' => $ids]);
+    }
+
+    /**
+     * @param string $email
+     * @return User|null
+     */
+    public function findByEmail(string $email): ?User
+    {
+        return $this->repository->findOneBy(['email' => $email]);
     }
 }

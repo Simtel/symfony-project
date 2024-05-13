@@ -10,9 +10,8 @@ use App\Context\User\Domain\Entity\User;
 interface UserRepositoryInterface
 {
     /**
-     * @param array<string,mixed> $criteria
-     * @param array<string, string>|null $orderBy
-     * @return User|null
+     * @param  array<string,mixed>  $criteria
+     * @param  array<string, string>|null  $orderBy
      */
     public function findOneBy(array $criteria, ?array $orderBy = null): ?User;
 
@@ -32,4 +31,12 @@ interface UserRepositoryInterface
      * @return User[]
      */
     public function findAllWithLocations(): array;
+
+    /**
+     * @param  int[]  $ids
+     * @return User[]
+     */
+    public function findByIds(array $ids): array;
+
+    public function findByEmail(string $email): ?User;
 }
