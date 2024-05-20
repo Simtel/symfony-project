@@ -12,6 +12,11 @@ class UpdateUserDto
     /** @var Location[] */
     private array $locations = [];
 
+    /**
+     * @var UserContactDto[]
+     */
+    private array $contacts = [];
+
     public function __construct(
         private readonly User $user
     ) {
@@ -33,5 +38,13 @@ class UpdateUserDto
     public function addLocation(Location $location): void
     {
         $this->locations[] = $location;
+    }
+
+    /**
+     * @return UserContactDto[]
+     */
+    public function getContacts(): array
+    {
+        return $this->contacts;
     }
 }

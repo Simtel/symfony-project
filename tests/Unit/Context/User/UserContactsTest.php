@@ -7,9 +7,13 @@ namespace App\Tests\Unit\Context\User;
 use App\Context\User\Domain\Entity\Contact;
 use App\Context\User\Domain\Entity\User;
 use App\Tests\Feature\FeatureTestBaseCase;
+use Exception;
 
 class UserContactsTest extends FeatureTestBaseCase
 {
+    /**
+     * @throws Exception
+     */
     public function testArrayContactsIncludeCodeAsKeys(): void
     {
         $em = $this->getEntityManager();
