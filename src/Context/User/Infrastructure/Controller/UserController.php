@@ -40,6 +40,9 @@ class UserController extends AbstractController
         return new JsonResponse($this->normalizer->normalize(new UserFullView($user)));
     }
 
+    /**
+     * @throws \Symfony\Component\Messenger\Exception\ExceptionInterface
+     */
     #[Route(path: '/api/user/{user}/location/{location}', name: 'add_location_to_user', methods: ['PUT'])]
     public function addLocation(
         User $user,
