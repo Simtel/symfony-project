@@ -27,7 +27,7 @@ services:
       context: ./
       dockerfile: docker/php.Dockerfile
     volumes:
-      -  ./:/var/www/
+      - ./:/var/www/
       - ./public:/var/www/html
       - ./docker/php:/usr/local/etc/php/custom.d
     networks:
@@ -95,6 +95,43 @@ services:
     ports:
       - "5673:5672"
       - "15673:15672"
+    networks:
+      - internal
+
+  zookeeper:
+    image: wurstmeister/zookeeper:latest
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    networks:
+      - internal
+
+  kafka:
+    image: wurstmeister/kafka:latest
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka:9093,OUTSIDE://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_LISTENERS: INSIDE://0.0.0.0:9093,OUTSIDE://0.0.0.0:9092
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+    volumes:
+      - ./docker/kafka/server_jaas.conf:/etc/kafka/server_jaas.conf
+    networks:
+      - internal
+
+  akhq:
+    image: tchiotludo/akhq:latest
+    container_name: akhq
+    ports:
+      - "8085:8080"
+    environment:
+      AKHQ_OPTS: "-Dakka.kafka.consumer.kafka-clients.bootstrap.servers=kafka:9092"
+    volumes:
+      - ./docker/akhq/application.yml:/app/application.yml
     networks:
       - internal
 

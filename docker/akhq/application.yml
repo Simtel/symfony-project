@@ -1,0 +1,6 @@
+akhq:
+  connections:
+    docker-kafka-server:
+      properties:
+        bootstrap.servers: "kafka:9092"
+        sasl.jaas.config: "org.apache.kafka.common.security.plain.PlainLoginModule required username=admin password=admin;"

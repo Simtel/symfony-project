@@ -86,4 +86,6 @@ class UserController extends AbstractController
         $users = $userRepository->findByLocation($location);
         return new JsonResponse($users, Response::HTTP_OK);
     }
+
+
 }
