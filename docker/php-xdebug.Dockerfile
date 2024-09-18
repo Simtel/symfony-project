@@ -1,36 +1,54 @@
-FROM php:8.3-fpm
+FROM php:8.3-fpm-alpine
 
-RUN apt-get update \
-    && apt-get install -y libwebp-dev libjpeg62-turbo-dev libpng-dev libxpm-dev libfreetype6-dev cron \
-    && docker-php-ext-install mysqli pdo_mysql \
-    && docker-php-ext-enable xdebug \
-    && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/* \
-    && rm -rf /var/lib/apt/lists/* \
-    && apt update \
-    && apt-get -y install librabbitmq-dev \
-    && pecl install amqp \
-    && docker-php-ext-enable amqp
+RUN apk --no-cache add shadow sudo
 
-RUN docker-php-ext-install gd
+RUN apk update && apk add --no-cache \
+    $PHPIZE_DEPS \
+    bash \
+    git \
+    libmcrypt-dev \
+    libpng-dev \
+    libwebp-dev \
+    libzip-dev \
+    nodejs \
+    npm \
+    openssl \
+    unzip \
+    vim \
+    wget \
+    zip \
+    icu-dev \
+    rabbitmq-c-dev \
+    linux-headers
 
-RUN docker-php-ext-configure gd --with-jpeg --with-freetype
+RUN docker-php-ext-install \
+    bcmath \
+    gd \
+    pdo \
+    mysqli \
+    pdo_mysql \
+    zip \
+    intl
 
-RUN apt-get update && apt-get install -y \
-    zlib1g-dev \
-    libzip-dev
-RUN docker-php-ext-install zip
-RUN docker-php-ext-install opcache
-RUN apt update && apt install -y libicu-dev && rm -rf /var/lib/apt/lists/*
-RUN docker-php-ext-configure intl
-RUN docker-php-ext-install intl
 
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer
+# Установка расширения AMQP
+RUN pecl install amqp && \
+    docker-php-ext-enable amqp
 
-RUN yes | pecl install xdebug \
-    && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini
+# Установка Xdebug
+RUN pecl install xdebug && \
+    docker-php-ext-enable xdebug
 
+# Установка Composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/cache/*
 RUN usermod -u 1000 www-data
+RUN chown -R www-data:www-data /var/www/html
 
+# Установка рабочей директории
 WORKDIR /var/www
 
+# Переход на пользователя www-data
 USER www-data
+
