@@ -11,7 +11,6 @@ use App\Context\Common\Domain\Entity\Config;
 use App\Context\Common\Infrastructure\View\ConfigView;
 use App\Context\User\Domain\Entity\User;
 use App\Tests\Feature\FeatureTestBaseCase;
-
 use Exception;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Cache\InvalidArgumentException;
