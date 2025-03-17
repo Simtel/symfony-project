@@ -13,7 +13,7 @@ class ConfigFixture extends Fixture implements DependentFixtureInterface
     public function load(ObjectManager $manager): void
     {
         /** @var User $user */
-        $user =  $this->getReference(UserFixture::USER_REFERENCE);
+        $user =  $this->getReference(UserFixture::USER_REFERENCE, User::class);
         $config = new Config('app', 'Test Project', $user);
         $manager->persist($config);
 
