@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Context\Common\Infrastructure\Service;
 
-use Doctrine\DBAL\Logging\SQLLogger;
+
 use Symfony\Component\Console\Output\OutputInterface;
 
-class DoctrineConsoleLogger implements SQLLogger
+class DoctrineConsoleLogger
 {
     private OutputInterface $output;
     private bool $showParams;

@@ -6,6 +6,7 @@ namespace App\Tests;
 
 use Doctrine\Common\EventManager;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\Cache;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,6 +24,9 @@ use Doctrine\ORM\UnitOfWork;
 use Doctrine\Persistence\ObjectRepository;
 use Exception;
 
+/**
+ * @method bool isUninitializedObject(mixed $value)
+ */
 class TestEntityManager implements EntityManagerInterface
 {
     /**
@@ -40,7 +44,7 @@ class TestEntityManager implements EntityManagerInterface
     ) {
     }
 
-    public function getRepository($className): EntityRepository|ObjectRepository
+    public function getRepository($className): EntityRepository
     {
         return $this->wrappedEntityManager->getRepository($className);
     }
@@ -106,7 +110,7 @@ class TestEntityManager implements EntityManagerInterface
         return $this->wrappedEntityManager->createQueryBuilder();
     }
 
-    public function getReference($entityName, $id)
+    public function getReference($entityName, $id): ?object
     {
         return $this->wrappedEntityManager->getReference($entityName, $id);
     }
@@ -187,7 +191,7 @@ class TestEntityManager implements EntityManagerInterface
         return $this->wrappedEntityManager->getClassMetadata($className);
     }
 
-    public function find($className, $id)
+    public function find($className, $id, LockMode|int|null $lockMode = null, int|null $lockVersion = null): ?object
     {
         return $this->wrappedEntityManager->find($className, $id);
     }
@@ -213,7 +217,7 @@ class TestEntityManager implements EntityManagerInterface
         $this->wrappedEntityManager->detach($object);
     }
 
-    public function refresh($object): void
+    public function refresh($object, LockMode|int|null $lockMode = null): void
     {
         $this->wrappedEntityManager->refresh($object);
     }
@@ -282,11 +286,21 @@ class TestEntityManager implements EntityManagerInterface
     }
 
     /**
-     * @return \Doctrine\Persistence\Mapping\ClassMetadataFactory<\Doctrine\Persistence\Mapping\ClassMetadata<object>>
+     * @return \Doctrine\ORM\Mapping\ClassMetadataFactory
      */
-    public function getMetadataFactory(): \Doctrine\Persistence\Mapping\ClassMetadataFactory
+    public function getMetadataFactory(): \Doctrine\ORM\Mapping\ClassMetadataFactory
     {
         /** @phpstan-ignore-next-line */
         return $this->wrappedEntityManager->getMetadataFactory();
+    }
+
+    public function wrapInTransaction(callable $func): mixed
+    {
+        // TODO: Implement wrapInTransaction() method.
+    }
+
+    public function __call(string $name, array $arguments)
+    {
+        // TODO: Implement @method bool isUninitializedObject(mixed $value)
     }
 }
