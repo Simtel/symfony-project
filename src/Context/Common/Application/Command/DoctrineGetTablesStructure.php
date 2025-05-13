@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Context\Common\Application\Command;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Utility\PersisterHelper;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -30,7 +31,7 @@ class DoctrineGetTablesStructure extends Command
 
             $rows = [];
             foreach ($metaData->getColumnNames() as $columnName) {
-                $rows[] = [$columnName, $metaData->getTypeOfColumn($columnName)];
+                $rows[] = [$columnName, PersisterHelper::getTypeOfColumn($columnName, $metaData, $this->entityManager)];
             }
             $io->table($headers, $rows);
         }

@@ -21,8 +21,6 @@ use Doctrine\ORM\Query\FilterCollection;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\UnitOfWork;
-use Doctrine\Persistence\ObjectRepository;
-use Exception;
 
 /**
  * @method bool isUninitializedObject(mixed $value)
@@ -44,6 +42,10 @@ class TestEntityManager implements EntityManagerInterface
     ) {
     }
 
+    /**
+     * @param $className
+     * @return EntityRepository<>
+     */
     public function getRepository($className): EntityRepository
     {
         return $this->wrappedEntityManager->getRepository($className);
@@ -69,10 +71,7 @@ class TestEntityManager implements EntityManagerInterface
         $this->wrappedEntityManager->beginTransaction();
     }
 
-    public function transactional($func)
-    {
-        return $this->wrappedEntityManager->transactional($func);
-    }
+
 
     public function commit(): void
     {
@@ -90,20 +89,12 @@ class TestEntityManager implements EntityManagerInterface
         return $this->wrappedEntityManager->createQuery($dql);
     }
 
-    public function createNamedQuery($name): Query
-    {
-        return $this->wrappedEntityManager->createNamedQuery($name);
-    }
 
     public function createNativeQuery($sql, ResultSetMapping $rsm): NativeQuery
     {
         return $this->wrappedEntityManager->createNativeQuery($sql, $rsm);
     }
 
-    public function createNamedNativeQuery($name): NativeQuery
-    {
-        return $this->wrappedEntityManager->createNamedNativeQuery($name);
-    }
 
     public function createQueryBuilder(): QueryBuilder
     {
@@ -115,10 +106,6 @@ class TestEntityManager implements EntityManagerInterface
         return $this->wrappedEntityManager->getReference($entityName, $id);
     }
 
-    public function getPartialReference($entityName, $identifier)
-    {
-        return $this->wrappedEntityManager->getPartialReference($entityName, $identifier);
-    }
 
     public function close(): void
     {
@@ -261,17 +248,7 @@ class TestEntityManager implements EntityManagerInterface
         $this->entityClassesToTruncate = [];
     }
 
-    /**
-     * @throws Exception
-     */
-    public function persistAndCommit(object $entity): void
-    {
-        $this->wrappedEntityManager->persist($entity);
-        $this->wrappedEntityManager->getUnitOfWork()->commit($entity);
-        $this->wrappedEntityManager->refresh($entity);
 
-        $this->addEntityToTruncate($entity);
-    }
 
     private function addEntityToTruncate(object $entity): void
     {

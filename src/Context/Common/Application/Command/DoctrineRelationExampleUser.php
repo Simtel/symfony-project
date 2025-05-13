@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Context\Common\Application\Command;
 
-use App\Context\Common\Infrastructure\Service\DoctrineConsoleLogger;
 use App\Context\User\Domain\Contract\UserRepositoryInterface;
 use App\Context\User\Domain\Entity\Contact;
 use App\Context\User\Domain\Entity\Location;
@@ -29,9 +28,6 @@ class DoctrineRelationExampleUser extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->entityManager->getConnection()->getConfiguration()->setSQLLogger(
-            new DoctrineConsoleLogger($output, true)
-        );
 
         $io = new SymfonyStyle($input, $output);
 
