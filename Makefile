@@ -35,11 +35,11 @@ composer-install: ##Install composer packages
 	docker exec -it --user www-data dev-php sh -c "composer install"
 
 to-migration:
-	@docker exec -it --user www-data dev-php  bin/console doctrine:migrations:diff --no-interaction --formatted
+	@docker exec -it --user www-data dev-php  php bin/console doctrine:migrations:diff --no-interaction --formatted
 
 migrate:
-	@docker exec -it --user www-data dev-php bin/console doctrine:migrations:migrate
-	@docker exec -it --user www-data dev-php bin/console --env=test doctrine:migrations:migrate
+	@docker exec -it --user www-data dev-php php bin/console doctrine:migrations:migrate
+	@docker exec -it --user www-data dev-php php bin/console --env=test doctrine:migrations:migrate
 
 rollback:
 	@docker exec -it --user www-data dev-php bin/console doctrine:migrations:migrate prev
