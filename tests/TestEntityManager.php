@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests;
 
+use DateTimeInterface;
 use Doctrine\Common\EventManager;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\LockMode;
@@ -13,6 +14,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Internal\Hydration\AbstractHydrator;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\ORM\Mapping\ClassMetadataFactory;
 use Doctrine\ORM\NativeQuery;
 use Doctrine\ORM\Proxy\ProxyFactory;
 use Doctrine\ORM\Query;
@@ -43,8 +45,7 @@ class TestEntityManager implements EntityManagerInterface
     }
 
     /**
-     * @param $className
-     * @return EntityRepository<>
+     * @phpstan-ignore-next-line
      */
     public function getRepository($className): EntityRepository
     {
@@ -90,7 +91,7 @@ class TestEntityManager implements EntityManagerInterface
     }
 
 
-    public function createNativeQuery($sql, ResultSetMapping $rsm): NativeQuery
+    public function createNativeQuery(string $sql, ResultSetMapping $rsm): NativeQuery
     {
         return $this->wrappedEntityManager->createNativeQuery($sql, $rsm);
     }
@@ -112,13 +113,8 @@ class TestEntityManager implements EntityManagerInterface
         $this->wrappedEntityManager->close();
     }
 
-    /** @noinspection ParameterDefaultValueIsNotNullInspection */
-    public function copy($entity, $deep = false): object
-    {
-        return $this->wrappedEntityManager->copy($entity, $deep);
-    }
 
-    public function lock($entity, $lockMode, $lockVersion = null): void
+    public function lock(object $entity, LockMode|int $lockMode, DateTimeInterface|int|null $lockVersion = null): void
     {
         $this->wrappedEntityManager->lock($entity, $lockMode, $lockVersion);
     }
@@ -143,10 +139,6 @@ class TestEntityManager implements EntityManagerInterface
         return $this->wrappedEntityManager->getUnitOfWork();
     }
 
-    public function getHydrator($hydrationMode): AbstractHydrator
-    {
-        return $this->wrappedEntityManager->getHydrator($hydrationMode);
-    }
 
     public function newHydrator($hydrationMode): AbstractHydrator
     {
@@ -262,22 +254,14 @@ class TestEntityManager implements EntityManagerInterface
         $this->entityClassesToTruncate[] = $className;
     }
 
-    /**
-     * @return \Doctrine\ORM\Mapping\ClassMetadataFactory
-     */
-    public function getMetadataFactory(): \Doctrine\ORM\Mapping\ClassMetadataFactory
+    /** @phpstan-ignore-next-line  */
+    public function getMetadataFactory(): ClassMetadataFactory
     {
-        /** @phpstan-ignore-next-line */
         return $this->wrappedEntityManager->getMetadataFactory();
     }
 
     public function wrapInTransaction(callable $func): mixed
     {
-        // TODO: Implement wrapInTransaction() method.
-    }
-
-    public function __call(string $name, array $arguments)
-    {
-        // TODO: Implement @method bool isUninitializedObject(mixed $value)
+        return $this->wrappedEntityManager->wrapInTransaction($func);
     }
 }
