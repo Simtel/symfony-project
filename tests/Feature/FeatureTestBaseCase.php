@@ -34,7 +34,6 @@ abstract class FeatureTestBaseCase extends KernelTestCase
 
         $connection = $entityManager->getConnection();
 
-        $connection->setNestTransactionsWithSavepoints(true);
         $connection->beginTransaction();
     }
 
