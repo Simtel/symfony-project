@@ -128,6 +128,7 @@ class User implements UserInterface
         return ['ROLE_USER'];
     }
 
+    #[\Deprecated]
     public function eraseCredentials(): void
     {
         /* do nothing */

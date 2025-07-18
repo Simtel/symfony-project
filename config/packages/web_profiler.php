@@ -13,7 +13,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         $containerConfigurator->extension('framework', [
             'profiler' => [
                 'only_exceptions' => false,
-                'collect_serializer_data' => true,
             ],
         ]);
     }
@@ -21,11 +20,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         $containerConfigurator->extension('web_profiler', [
             'toolbar' => false,
             'intercept_redirects' => false,
-        ]);
-        $containerConfigurator->extension('framework', [
-            'profiler' => [
-                'collect' => false,
-            ],
         ]);
     }
 };
