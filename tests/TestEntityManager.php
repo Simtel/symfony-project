@@ -84,7 +84,10 @@ class TestEntityManager implements EntityManagerInterface
         $this->wrappedEntityManager->rollback();
     }
 
-    /** @noinspection ParameterDefaultValueIsNotNullInspection */
+    /**
+     * @param $dql
+     * @return Query<mixed,mixed>
+     */
     public function createQuery($dql = ''): Query
     {
         return $this->wrappedEntityManager->createQuery($dql);

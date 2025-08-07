@@ -44,6 +44,9 @@ readonly class CreateConfigDtoValueResolver implements
             return [];
         }
 
+        /**
+         * @var array{name:string,value:string} $payload
+         */
         $payload = $request->toArray();
 
         $errors = $this->validator->validate($payload, $this->prepareConstraintCollection());
@@ -52,7 +55,7 @@ readonly class CreateConfigDtoValueResolver implements
             throw new ValidationFailedException(null, $errors);
         }
 
-        $dto = new CreateConfigDto($payload['name'], (string)$payload['value']);
+        $dto = new CreateConfigDto($payload['name'], $payload['value']);
 
         return[$dto];
     }

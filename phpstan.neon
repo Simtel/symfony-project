@@ -1,6 +1,5 @@
 includes:
     - vendor/phpstan/phpstan-doctrine/extension.neon
-    - vendor/simtel/phpstan-rules/rules.neon
 parameters:
     doctrine:
         objectManagerLoader: phpstan-object-manager.php

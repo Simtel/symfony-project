@@ -10,7 +10,6 @@ use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\Validator\Exception\ValidationFailedException;
 
-/** @phpstan-ignore-next-line */
 class ApiExceptionEventListener
 {
     public function onKernelException(ExceptionEvent $event): void

@@ -163,6 +163,9 @@ class UserUnitTest extends FeatureTestBaseCase
 
     }
 
+    /**
+     * @throws Exception
+     */
     public function testGenerateToken(): void
     {
         $em = $this->getEntityManager();
@@ -170,7 +173,6 @@ class UserUnitTest extends FeatureTestBaseCase
         $em->flush();
         $token = sha1((string)rand(999, 999999), true);
         self::assertEquals(20, strlen($token));
-        self::assertTrue(true);
     }
 
     /**
