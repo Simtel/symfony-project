@@ -10,8 +10,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             'url' => '%env(resolve:DATABASE_URL)%',
         ],
         'orm' => [
-            'auto_generate_proxy_classes' => true,
-            'enable_lazy_ghost_objects' => true,
             'naming_strategy' => 'doctrine.orm.naming_strategy.underscore_number_aware',
             'auto_mapping' => true,
             'report_fields_where_declared' => true,
@@ -44,7 +42,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     if ($containerConfigurator->env() === 'prod') {
         $containerConfigurator->extension('doctrine', [
             'orm' => [
-                'auto_generate_proxy_classes' => false,
                 'query_cache_driver' => [
                     'type' => 'pool',
                     'pool' => 'doctrine.system_cache_pool',
@@ -69,3 +66,4 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ]);
     }
 };
+
