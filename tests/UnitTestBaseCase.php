@@ -15,6 +15,7 @@ abstract class UnitTestBaseCase extends KernelTestCase
 
     protected function setUp(): void
     {
+
         $kernel = self::bootKernel();
 
         /** @var ManagerRegistry $manager */

@@ -26,6 +26,9 @@ abstract class FeatureTestBaseCase extends KernelTestCase
      */
     protected function setUp(): void
     {
+        $config = new \Doctrine\ORM\Configuration();
+        $config->enableNativeLazyObjects(true);
+
         parent::setUp();
 
         static::bootKernel(static::getKernelConfig());

@@ -16,6 +16,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             'controller_resolver' => [
                 'auto_mapping' => false,
             ],
+            'enable_native_lazy_objects' => true,
             'mappings' => [
                 'Common' => [
                     'is_bundle' => false,

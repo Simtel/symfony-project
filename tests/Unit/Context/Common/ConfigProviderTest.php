@@ -24,7 +24,7 @@ class ConfigProviderTest extends FeatureTestBaseCase
      * @throws InvalidArgumentException
      * @throws Exception
      */
-    public function providerCanReturnEmptyView(): void
+    public function testProviderCanReturnEmptyView(): void
     {
         $repositoryMock = $this->getMockBuilder(ConfigRepositoryInterface::class)
             ->disableOriginalConstructor()
@@ -51,7 +51,7 @@ class ConfigProviderTest extends FeatureTestBaseCase
      *
      * @throws Exception
      */
-    public function providerReturnFillViewConfig(): void
+    public function testProviderReturnFillViewConfig(): void
     {
         $user = new User('test@test.com', 'Test', '4444', '3232323');
         $config = new Config('app', 'Test Project', $user);
