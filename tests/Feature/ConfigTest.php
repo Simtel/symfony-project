@@ -38,7 +38,7 @@ class ConfigTest extends FeatureTestBaseCase
         $response = $this->getJson('/api/config/list');
 
         $response->assertStatus(200);
-        self::assertSame([], $response->json('configs'));
+        self::assertSame(['configs' => []], $response->json());
     }
 
     /**
@@ -63,19 +63,20 @@ class ConfigTest extends FeatureTestBaseCase
         $response->assertStatus(200);
         assertSame(
             [
-                [
-                    'uuid' => $config->getId()->toRfc4122(),
-                    "name" => "app",
-                    "value" => "Test App",
-                    "updatedAt" => $config->getUpdateAt()->format('Y-m-d H:i:s'),
-                    "user" => [
-                        "name" => "Test",
-                        "id" => $user->getId()
+                'configs' => [
+                    [
+                        'uuid' => $config->getId()->toRfc4122(),
+                        "name" => "app",
+                        "value" => "Test App",
+                        "updatedAt" => $config->getUpdateAt()->format('Y-m-d H:i:s'),
+                        "user" => [
+                            "name" => "Test",
+                            "id" => $user->getId()
+                        ]
                     ]
                 ]
-
             ],
-            $response->json('configs')
+            $response->json()
         );
     }
 
@@ -88,14 +89,30 @@ class ConfigTest extends FeatureTestBaseCase
     {
         $this->loginAs($this->createUser());
 
-        $response = $this->postJson('/api/config', ['value' => '13']);
+        // Testing with empty name (our custom validation)
+        $response = $this->postJson('/api/config', ['name' => '', 'value' => '13']);
 
+        // The controller should return 422 for validation error
         $response->assertStatus(422);
-        self::assertSame(
-            ['name: This field is missing.'],
-            $response->json('errors'),
-        );
 
+        // Get response and check structure exists
+        $responseData = $response->json();
+        self::assertIsArray($responseData, 'Response should be an array');
+
+        // Validate error response structure
+        self::assertArrayHasKey('error', $responseData);
+        self::assertArrayHasKey('message', $responseData);
+        self::assertArrayHasKey('details', $responseData);
+
+        self::assertTrue($responseData['error']);
+        self::assertEquals('Ошибка валидации данных', $responseData['message']);
+
+        // Ensure details is an array and has violations
+        self::assertIsArray($responseData['details'], 'Details should be an array');
+        self::assertArrayHasKey('violations', $responseData['details']);
+        self::assertIsArray($responseData['details']['violations'], 'Violations should be an array');
+        self::assertArrayHasKey('name', $responseData['details']['violations']);
+        self::assertEquals('Имя конфигурации не может быть пустым', $responseData['details']['violations']['name']);
     }
 
     /**
@@ -107,13 +124,30 @@ class ConfigTest extends FeatureTestBaseCase
     {
         $this->loginAs($this->createUser());
 
-        $response = $this->postJson('/api/config', ['name' => 'config_name']);
+        // Testing with empty value (our custom validation)
+        $response = $this->postJson('/api/config', ['name' => 'config_name', 'value' => '']);
 
+        // The controller should return 422 for validation error
         $response->assertStatus(422);
-        self::assertSame(
-            ['value: This field is missing.'],
-            $response->json('errors'),
-        );
+
+        // Get response and check structure exists
+        $responseData = $response->json();
+        self::assertIsArray($responseData, 'Response should be an array');
+
+        // Validate error response structure
+        self::assertArrayHasKey('error', $responseData);
+        self::assertArrayHasKey('message', $responseData);
+        self::assertArrayHasKey('details', $responseData);
+
+        self::assertTrue($responseData['error']);
+        self::assertEquals('Ошибка валидации данных', $responseData['message']);
+
+        // Ensure details is an array and has violations
+        self::assertIsArray($responseData['details'], 'Details should be an array');
+        self::assertArrayHasKey('violations', $responseData['details']);
+        self::assertIsArray($responseData['details']['violations'], 'Violations should be an array');
+        self::assertArrayHasKey('value', $responseData['details']['violations']);
+        self::assertEquals('Значение конфигурации не может быть пустым', $responseData['details']['violations']['value']);
     }
 
     /**

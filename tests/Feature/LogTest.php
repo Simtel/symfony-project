@@ -37,7 +37,7 @@ Created at: '.$log->getCreatedAt()->format('Y-m-d H:i:s').'
 Url: /api/log/'.$log->getId().'
 '
         ];
-        self::assertSame($expected, $response->json());
+        self::assertSame($expected, $response->json('logs'));
     }
 
     /**

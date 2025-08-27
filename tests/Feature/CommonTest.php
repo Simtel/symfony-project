@@ -23,7 +23,13 @@ class CommonTest extends FeatureTestBaseCase
 
         $response->assertStatus(200);
 
-        self::assertEquals(1, $response->json('id'));
-        self::assertEquals('Custom name', $response->json('name'));
+        // Get the full response and use array access for reliability
+        $responseData = $response->json();
+        self::assertIsArray($responseData, 'Response should be an array');
+        self::assertIsArray($responseData['data'], 'Data should be an array');
+
+        self::assertEquals(1, $responseData['data']['id']);
+        self::assertEquals('Custom name', $responseData['data']['name']);
+        self::assertEquals('Маппинг запроса выполнен успешно', $responseData['message']);
     }
 }

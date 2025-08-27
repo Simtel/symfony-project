@@ -6,84 +6,61 @@ namespace App\Context\Common\Infrastructure\Controller;
 
 use App\Context\Common\Application\Dto\TestMapRequestDto;
 use DateTimeImmutable;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
-use Symfony\Component\Notifier\ChatterInterface;
-use Symfony\Component\Notifier\Message\ChatMessage;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class CommonController extends AbstractController
+/**
+ * Общие тестовые методы API
+ */
+class CommonController extends BaseApiController
 {
     public function __construct(
-        private readonly NormalizerInterface $normalizer,
-        private readonly MailerInterface $mailer
+        NormalizerInterface $normalizer,
     ) {
+        parent::__construct($normalizer);
     }
 
     /**
+     * Общий тестовый endpoint
+     *
+     * @return JsonResponse
      * @throws ExceptionInterface
      */
     #[Route('/api/test', name: 'test', methods: ['GET'])]
     public function test(): JsonResponse
     {
-        return $this->json(
-            $this->normalizer->normalize(
-                ['test' => true, 'time' => new DateTimeImmutable()]
-            )
-        );
+        try {
+            return $this->success([
+                'test' => true,
+                'time' => new DateTimeImmutable(),
+                'message' => 'API работает корректно'
+            ]);
+        } catch (\Exception $e) {
+            return $this->error('Ошибка при выполнении теста: ' . $e->getMessage());
+        }
     }
 
     /**
-     * @throws ExceptionInterface
-     * @throws TransportExceptionInterface
-     */
-    #[Route('/api/test-email', name: 'test-email', methods: ['GET'])]
-    public function testEmail(): JsonResponse
-    {
-        $email = (new Email())
-            ->from('noreply@mail.com')
-            ->to('simtel@example.com')
-            ->subject('Test Email!')
-            ->text('Send test email for me!')
-            ->html('<p>Send html email!</p>');
-
-        $this->mailer->send($email);
-
-        return $this->json(
-            $this->normalizer->normalize(
-                ['test-email' => true, 'time' => new DateTimeImmutable()]
-            )
-        );
-    }
-
-    /**
-     * @throws \Symfony\Component\Notifier\Exception\TransportExceptionInterface
-     */
-    #[Route('/api/test-notify', name: 'test-notify', methods: ['GET'])]
-    public function testNotify(ChatterInterface $chatter): JsonResponse
-    {
-        $message = (new ChatMessage('Notification from symfony project'))
-            ->transport('telegram');
-
-        $sentMessage = $chatter->send($message);
-
-        return new JsonResponse(['messageId' => $sentMessage?->getMessageId()]);
-    }
-
-    /**
+     * Тестирование маппинга запроса
+     *
+     * @param TestMapRequestDto $dto DTO запроса
+     * @return JsonResponse
      * @throws ExceptionInterface
      */
-    #[Route('/api/test-map-request', name: 'test-map-request', methods: ['POST'])]
+    #[Route('/api/test-map-request', name: 'test_map_request', methods: ['POST'])]
     public function testMapRequest(
         #[MapRequestPayload] TestMapRequestDto $dto,
     ): JsonResponse {
-
-        return new JsonResponse($this->normalizer->normalize($dto));
+        try {
+            return $this->success([
+                'message' => 'Маппинг запроса выполнен успешно',
+                'data' => $dto
+            ]);
+        } catch (\Exception $e) {
+            return $this->error('Ошибка при маппинге запроса: ' . $e->getMessage());
+        }
     }
 }
