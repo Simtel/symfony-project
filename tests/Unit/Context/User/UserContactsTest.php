@@ -9,7 +9,7 @@ use App\Context\User\Domain\Entity\User;
 use App\Tests\Feature\FeatureTestBaseCase;
 use Exception;
 
-class UserContactsTest extends FeatureTestBaseCase
+final class UserContactsTest extends FeatureTestBaseCase
 {
     /**
      * @throws Exception

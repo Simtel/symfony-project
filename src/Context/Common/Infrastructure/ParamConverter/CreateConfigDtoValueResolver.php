@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints\Type;
 use Symfony\Component\Validator\Exception\ValidationFailedException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-readonly class CreateConfigDtoValueResolver implements
+final readonly class CreateConfigDtoValueResolver implements
     ValueResolverInterface
 {
     public function __construct(

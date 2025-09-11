@@ -8,7 +8,7 @@ use App\Context\User\Domain\Contract\UserProviderInterface;
 use App\Context\User\Domain\Entity\User;
 use Symfony\Bundle\SecurityBundle\Security;
 
-readonly class UserProvider implements UserProviderInterface
+final readonly class UserProvider implements UserProviderInterface
 {
     public function __construct(private Security $security)
     {

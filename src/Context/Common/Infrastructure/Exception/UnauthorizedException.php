@@ -6,6 +6,6 @@ namespace App\Context\Common\Infrastructure\Exception;
 
 use Exception;
 
-class UnauthorizedException extends Exception
+final class UnauthorizedException extends Exception
 {
 }

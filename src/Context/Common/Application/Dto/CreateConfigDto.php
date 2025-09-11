@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Context\Common\Application\Dto;
 
-readonly class CreateConfigDto
+final readonly class CreateConfigDto
 {
     public function __construct(
         private string $name,

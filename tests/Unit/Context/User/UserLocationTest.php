@@ -7,7 +7,7 @@ namespace App\Tests\Unit\Context\User;
 use App\Context\User\Domain\Entity\Location;
 use App\Tests\Feature\FeatureTestBaseCase;
 
-class UserLocationTest extends FeatureTestBaseCase
+final class UserLocationTest extends FeatureTestBaseCase
 {
     public function testOrderLocations(): void
     {

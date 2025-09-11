@@ -11,7 +11,7 @@ use JsonException as JsonExceptionAlias;
 
 use function PHPUnit\Framework\assertSame;
 
-class ConfigTest extends FeatureTestBaseCase
+final class ConfigTest extends FeatureTestBaseCase
 {
     /**
      * @throws Exception

@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 use function json_decode;
 
-class TestResponse
+final class TestResponse
 {
     private mixed $jsonCache = null;
 

@@ -8,7 +8,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
-class DebugSubscriber implements EventSubscriberInterface
+final class DebugSubscriber implements EventSubscriberInterface
 {
     public function onKernelResponse(ResponseEvent $event): void
     {

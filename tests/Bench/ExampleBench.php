@@ -7,7 +7,7 @@ namespace App\Tests\Bench;
 use PhpBench\Benchmark\Metadata\Annotations\Iterations;
 use PhpBench\Benchmark\Metadata\Annotations\Revs;
 
-class ExampleBench
+final class ExampleBench
 {
     /**
      * @Revs(1000)

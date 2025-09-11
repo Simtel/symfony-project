@@ -12,7 +12,7 @@ use App\Context\User\Infrastructure\EventListener\AddLocationToUserEventListener
 /**
  * @see AddLocationToUserEventListener
  */
-readonly class AddLocationToUserEvent implements EntityEventInterface
+final readonly class AddLocationToUserEvent implements EntityEventInterface
 {
     public function __construct(
         private User $user,

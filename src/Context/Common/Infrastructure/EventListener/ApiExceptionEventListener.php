@@ -10,7 +10,7 @@ use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\Validator\Exception\ValidationFailedException;
 
-class ApiExceptionEventListener
+final class ApiExceptionEventListener
 {
     public function onKernelException(ExceptionEvent $event): void
     {

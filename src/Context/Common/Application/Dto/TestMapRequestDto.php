@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Context\Common\Application\Dto;
 
-readonly class TestMapRequestDto
+final readonly class TestMapRequestDto
 {
     public function __construct(
         private int $id,

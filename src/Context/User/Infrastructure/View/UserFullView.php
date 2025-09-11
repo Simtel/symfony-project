@@ -7,7 +7,7 @@ namespace App\Context\User\Infrastructure\View;
 use App\Context\User\Domain\Entity\Location;
 use App\Context\User\Domain\Entity\User;
 
-readonly class UserFullView
+final readonly class UserFullView
 {
     public function __construct(private User $user)
     {
@@ -18,7 +18,7 @@ readonly class UserFullView
         return $this->user->getName();
     }
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->user->getId();
     }

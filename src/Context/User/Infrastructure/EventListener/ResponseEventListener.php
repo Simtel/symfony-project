@@ -7,7 +7,7 @@ use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 
 #[AsEventListener]
-class ResponseEventListener
+final class ResponseEventListener
 {
     /**
      * @throws JsonException

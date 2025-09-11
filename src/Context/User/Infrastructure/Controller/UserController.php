@@ -25,7 +25,7 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 /**
  * Контроллер для управления пользователями
  */
-class UserController extends BaseApiController
+final class UserController extends BaseApiController
 {
     public function __construct(
         NormalizerInterface $normalizer,

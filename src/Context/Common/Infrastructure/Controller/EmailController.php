@@ -16,7 +16,7 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 /**
  * Контроллер для работы с email сообщениями
  */
-class EmailController extends BaseApiController
+final class EmailController extends BaseApiController
 {
     public function __construct(
         NormalizerInterface $normalizer,

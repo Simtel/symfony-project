@@ -10,7 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityNotFoundException;
 use Doctrine\ORM\EntityRepository;
 
-class ConfigRepository implements ConfigRepositoryInterface
+final class ConfigRepository implements ConfigRepositoryInterface
 {
     /**
      * @var EntityRepository<Config>

@@ -14,7 +14,7 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 /**
  * Контроллер для работы с уведомлениями
  */
-class NotificationController extends BaseApiController
+final class NotificationController extends BaseApiController
 {
     public function __construct(
         NormalizerInterface $normalizer,

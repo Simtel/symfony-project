@@ -18,7 +18,7 @@ use Twig\Error\SyntaxError;
 /**
  * Контроллер для управления логами
  */
-class LogController extends BaseApiController
+final class LogController extends BaseApiController
 {
     public function __construct(
         NormalizerInterface $normalizer,

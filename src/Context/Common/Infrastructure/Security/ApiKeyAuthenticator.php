@@ -16,14 +16,14 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 
-class ApiKeyAuthenticator extends AbstractAuthenticator
+final class ApiKeyAuthenticator extends AbstractAuthenticator
 {
     public function __construct(
         private readonly UserRepositoryInterface $userRepository,
     ) {
     }
 
-    public function supports(Request $request): ?bool
+    public function supports(Request $request): bool
     {
         return $request->headers->has('X-AUTH-TOKEN');
     }
@@ -48,7 +48,7 @@ class ApiKeyAuthenticator extends AbstractAuthenticator
         return null;
     }
 
-    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
+    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): Response
     {
         $data = [
             // you may want to customize or obfuscate the message first

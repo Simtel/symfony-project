@@ -13,7 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand('example:doctrine-get-sql-create-tables')]
-class DoctrineGetSqlCreateTables extends Command
+final class DoctrineGetSqlCreateTables extends Command
 {
     public function __construct(
         private readonly EntityManagerInterface $entityManager,

@@ -18,7 +18,7 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 /**
  * Контроллер для управления конфигурациями
  */
-class ConfigController extends BaseApiController
+final class ConfigController extends BaseApiController
 {
     public function __construct(
         NormalizerInterface $normalizer,

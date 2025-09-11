@@ -11,7 +11,7 @@ use App\Context\Common\Infrastructure\View\ConfigView;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Cache\InvalidArgumentException;
 
-readonly class ConfigProvider implements ConfigProviderInterface
+final readonly class ConfigProvider implements ConfigProviderInterface
 {
     public function __construct(
         private ConfigRepositoryInterface $configRepository,

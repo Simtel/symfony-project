@@ -15,7 +15,7 @@ use Exception;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Cache\InvalidArgumentException;
 
-class ConfigProviderTest extends FeatureTestBaseCase
+final class ConfigProviderTest extends FeatureTestBaseCase
 {
     /**
      * @test

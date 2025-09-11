@@ -7,7 +7,7 @@ namespace App\Tests\Feature;
 use Doctrine\ORM\Exception\ORMException;
 use JsonException;
 
-class CommonTest extends FeatureTestBaseCase
+final class CommonTest extends FeatureTestBaseCase
 {
     /**
      * @throws JsonException

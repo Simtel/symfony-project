@@ -7,7 +7,7 @@ namespace App\Context\User\Application\Dto;
 use App\Context\User\Domain\Entity\Location;
 use App\Context\User\Domain\Entity\User;
 
-class UpdateUserDto
+final class UpdateUserDto
 {
     /** @var Location[] */
     private array $locations = [];

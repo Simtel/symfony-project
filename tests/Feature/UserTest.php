@@ -10,7 +10,7 @@ use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 use Exception;
 
-class UserTest extends FeatureTestBaseCase
+final class UserTest extends FeatureTestBaseCase
 {
     /**
      * @throws ORMException

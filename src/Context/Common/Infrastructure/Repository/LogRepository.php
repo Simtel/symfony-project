@@ -9,7 +9,7 @@ use App\Context\Common\Domain\Entity\Log;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 
-class LogRepository implements LogRepositoryInterface
+final class LogRepository implements LogRepositoryInterface
 {
     /**
      * @var EntityRepository<Log>

@@ -7,7 +7,7 @@ namespace App\Context\Common\Infrastructure\View;
 use App\Context\Common\Domain\Entity\Config;
 use App\Context\User\Infrastructure\View\UserView;
 
-readonly class ConfigView
+final readonly class ConfigView
 {
     public function __construct(
         private Config $config,

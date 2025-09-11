@@ -17,7 +17,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  * @see ListUserCommandHandler
  */
 #[AsCommand(name: 'users:list')]
-class ListUserCommand extends Command
+final class ListUserCommand extends Command
 {
     public function __construct(
         private readonly UserRepositoryInterface $userRepository,

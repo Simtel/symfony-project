@@ -11,7 +11,7 @@ use App\Context\User\Application\Dto\UpdateUserDto;
 /**
  * @see UpdateUserCommandHandler
  */
-readonly class UpdateUserCommand implements CommandInterface
+final readonly class UpdateUserCommand implements CommandInterface
 {
     public function __construct(private UpdateUserDto $dto)
     {

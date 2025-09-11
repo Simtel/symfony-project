@@ -15,7 +15,7 @@ use DateTimeImmutable;
 use Doctrine\ORM\Exception\ORMException;
 use Exception;
 
-class UserUnitTest extends FeatureTestBaseCase
+final class UserUnitTest extends FeatureTestBaseCase
 {
     /**
      * @throws Exception

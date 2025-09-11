@@ -24,10 +24,7 @@ use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\UnitOfWork;
 
-/**
- * @method bool isUninitializedObject(mixed $value)
- */
-class TestEntityManager implements EntityManagerInterface
+final class TestEntityManager implements EntityManagerInterface
 {
     /**
      * @var class-string[]
@@ -266,5 +263,10 @@ class TestEntityManager implements EntityManagerInterface
     public function wrapInTransaction(callable $func): mixed
     {
         return $this->wrappedEntityManager->wrapInTransaction($func);
+    }
+
+    public function isUninitializedObject(mixed $value): bool
+    {
+        return $this->wrappedEntityManager->isUninitializedObject($value);
     }
 }

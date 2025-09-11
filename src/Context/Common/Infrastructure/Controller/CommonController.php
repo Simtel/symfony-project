@@ -15,7 +15,7 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 /**
  * Общие тестовые методы API
  */
-class CommonController extends BaseApiController
+final class CommonController extends BaseApiController
 {
     public function __construct(
         NormalizerInterface $normalizer,

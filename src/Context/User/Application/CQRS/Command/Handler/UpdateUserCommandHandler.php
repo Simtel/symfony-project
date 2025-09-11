@@ -10,7 +10,7 @@ use App\Context\User\Domain\Entity\Contact;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 
-readonly class UpdateUserCommandHandler implements CommandHandlerInterface
+final readonly class UpdateUserCommandHandler implements CommandHandlerInterface
 {
     public function __construct(
         private EventDispatcherInterface $dispatcher,

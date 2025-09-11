@@ -7,7 +7,7 @@ use App\Context\User\Domain\Entity\Location;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 
-class LocationRepository implements LocationRepositoryInterface
+final class LocationRepository implements LocationRepositoryInterface
 {
     /**
      * @var EntityRepository<Location>

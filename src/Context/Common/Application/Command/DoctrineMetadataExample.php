@@ -12,7 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand('example:doctrine-metadata')]
-class DoctrineMetadataExample extends Command
+final class DoctrineMetadataExample extends Command
 {
     public function __construct(
         private readonly EntityManagerInterface $entityManager,

@@ -6,7 +6,7 @@ namespace App\Context\User\Infrastructure\View;
 
 use App\Context\User\Domain\Entity\Location;
 
-readonly class LocationView
+final readonly class LocationView
 {
     public function __construct(private Location $location)
     {

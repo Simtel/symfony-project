@@ -17,7 +17,7 @@ use Symfony\Component\Filesystem\Filesystem;
  * @see ListUserCommandHandler
  */
 #[AsCommand(name: 'users:export')]
-class ExportUserCommand extends Command
+final class ExportUserCommand extends Command
 {
     public function __construct(
         private readonly UserRepositoryInterface $userRepository,

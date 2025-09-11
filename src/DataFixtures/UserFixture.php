@@ -6,7 +6,7 @@ use App\Context\User\Domain\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
-class UserFixture extends Fixture
+final class UserFixture extends Fixture
 {
     public const string USER_REFERENCE = 'admin-user';
 

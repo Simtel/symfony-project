@@ -11,7 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 
 #[AsEventListener]
-readonly class AddLocationToUserEventListener
+final readonly class AddLocationToUserEventListener
 {
     public function __construct(
         private EntityManagerInterface $entityManager,

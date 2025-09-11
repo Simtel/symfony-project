@@ -9,7 +9,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
-readonly class AddLocationMessageHandler
+final readonly class AddLocationMessageHandler
 {
     public function __construct(
         private LoggerInterface $logger

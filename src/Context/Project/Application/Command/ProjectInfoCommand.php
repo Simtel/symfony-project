@@ -22,7 +22,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
  * @see ProjectInfoCommandHandler
  */
 #[AsCommand(name: 'project:git-repo-info')]
-class ProjectInfoCommand extends Command
+final class ProjectInfoCommand extends Command
 {
     public function __construct(private readonly HttpClientInterface $httpClient)
     {
