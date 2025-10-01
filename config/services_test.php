@@ -6,6 +6,9 @@ use App\Tests\TestEntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
+use Symfony\Component\Mailer\DataCollector\MessageDataCollector;
+use Symfony\Component\Mailer\EventListener\MessageLoggerListener;
+
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -36,4 +39,22 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     ]);
 
     $services->alias(EntityManagerInterface::class, 'test_entity_manager');
+
+    $services
+        ->set('mailer.message_logger_listener', MessageLoggerListener::class)
+        ->args([
+            service('profiler.is_disabled_state_checker')->nullOnInvalid(),
+        ])
+        ->tag('kernel.event_subscriber')
+        ->tag('kernel.reset', ['method' => 'reset'])
+
+        ->set('mailer.data_collector', MessageDataCollector::class)
+        ->args([
+            service('mailer.message_logger_listener'),
+        ])
+        ->tag('data_collector', [
+            'template' => '@WebProfiler/Collector/mailer.html.twig',
+            'id' => 'mailer',
+        ])
+    ;
 };

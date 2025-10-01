@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Tests\Feature;
 
-use Doctrine\ORM\Exception\ORMException;
+use Exception;
 
 final class MailTest extends FeatureTestBaseCase
 {
     /**
-     * @throws ORMException
+     * @throws Exception
      */
     public function testSendEmail(): void
     {
