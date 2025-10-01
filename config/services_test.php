@@ -5,7 +5,6 @@ declare(strict_types=1);
 use App\Tests\TestEntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
 use Symfony\Component\Mailer\DataCollector\MessageDataCollector;
 use Symfony\Component\Mailer\EventListener\MessageLoggerListener;
 
