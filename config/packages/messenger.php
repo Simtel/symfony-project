@@ -18,25 +18,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ],
             'transports' => [
                 'sync' => 'sync://',
-                'user_events_transport' => [
-                    'dsn' => '%env(RABBIT_DSN)%',
-                    'options' => [
-                        'exchange' => [
-                            'name' => 'user.events',
-                            'type' => 'topic',
-                        ],
-                        'queues' => [
-                            'user.events' => [
-                                'binding_keys' => [
-                                    'user.events.add_location',
-                                ]
-                            ]
-                        ]
-                    ]
-                ],
             ],
             'routing' => [
-                LocationAddedEvent::class => 'user_events_transport'
+                LocationAddedEvent::class => 'sync'
             ],
         ],
     ]);

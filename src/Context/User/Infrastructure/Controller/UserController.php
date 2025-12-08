@@ -14,9 +14,9 @@ use App\Context\User\Domain\Entity\User;
 use App\Context\User\Domain\Event\LocationAddedEvent;
 use App\Context\User\Infrastructure\View\UserFullView;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Messenger\Bridge\Amqp\Transport\AmqpStamp;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
@@ -50,7 +50,7 @@ final class UserController extends BaseApiController
         try {
             $userView = new UserFullView($user);
             return $this->success($userView);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $this->error('Ошибка при получении информации о пользователе: ' . $e->getMessage());
         }
     }
@@ -61,6 +61,8 @@ final class UserController extends BaseApiController
      * @param User $user Пользователь
      * @param Location $location Локация
      * @return JsonResponse
+     * @throws ExceptionInterface
+     * @throws \Symfony\Component\Messenger\Exception\ExceptionInterface
      */
     #[Route(path: '/api/user/{user}/location/{location}', name: 'add_location_to_user', methods: ['PUT'])]
     public function addLocation(User $user, Location $location): JsonResponse
@@ -72,13 +74,12 @@ final class UserController extends BaseApiController
             $this->messageBus->dispatch(new UpdateUserCommand($dto));
             $this->messageBus->dispatch(
                 new LocationAddedEvent('Location added'),
-                [new AmqpStamp('user.events.add_location')]
             );
 
             $this->entityManager->flush();
 
             return $this->success(['message' => 'Локация успешно добавлена к пользователю']);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $this->error('Ошибка при добавлении локации: ' . $e->getMessage());
         }
     }
@@ -88,6 +89,7 @@ final class UserController extends BaseApiController
      *
      * @param User $user Пользователь
      * @return JsonResponse
+     * @throws ExceptionInterface
      */
     #[Route(path: '/api/user/{user}/calculate-access', name: 'calculate_access', methods: ['POST'])]
     public function calculateAccess(User $user): JsonResponse
@@ -96,7 +98,7 @@ final class UserController extends BaseApiController
             $this->userService->calculateAccesses($user);
 
             return $this->created(['message' => 'Доступы пользователя успешно рассчитаны']);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $this->error('Ошибка при расчете доступов: ' . $e->getMessage());
         }
     }
@@ -116,7 +118,7 @@ final class UserController extends BaseApiController
         try {
             $userView = new UserFullView($user);
             return $this->success($userView);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $this->error('Ошибка при поиске пользователя: ' . $e->getMessage());
         }
     }
@@ -138,7 +140,7 @@ final class UserController extends BaseApiController
             }
 
             return $this->success(['users' => $users]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $this->error('Ошибка при поиске пользователей по локации: ' . $e->getMessage());
         }
     }
