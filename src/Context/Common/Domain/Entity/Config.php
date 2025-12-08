@@ -19,26 +19,16 @@ class Config
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
     private Uuid $id;
 
-    #[ORM\Column(length: 255)]
-    private string $name;
-
-    #[ORM\Column(type: 'text')]
-    private ?string $value;
-
     #[ORM\Column(type: 'datetime_immutable')]
     private DateTimeImmutable $updateAt;
 
-    #[ORM\ManyToOne(targetEntity: User::class)]
-    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id')]
-    private User $createdBy;
 
-
-    public function __construct(string $name, ?string $value, User $user)
+    public function __construct(#[ORM\Column(length: 255)]
+        private string $name, #[ORM\Column(type: 'text')]
+        private ?string $value, #[ORM\ManyToOne(targetEntity: User::class)]
+        #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id')]
+        private User $createdBy)
     {
-        $this->name = $name;
-        $this->value = $value;
-        $this->createdBy = $user;
-
         $this->updateAt = new DateTimeImmutable();
     }
 

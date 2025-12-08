@@ -37,9 +37,7 @@ final class ApiKeyAuthenticator extends AbstractAuthenticator
         }
 
         return new SelfValidatingPassport(
-            new UserBadge($apiToken, function (string $userIdentifier) {
-                return $this->userRepository->findOneBy(['token' => $userIdentifier]);
-            })
+            new UserBadge($apiToken, fn (string $userIdentifier) => $this->userRepository->findOneBy(['token' => $userIdentifier]))
         );
     }
 

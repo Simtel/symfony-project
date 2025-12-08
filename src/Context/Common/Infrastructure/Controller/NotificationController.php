@@ -32,7 +32,7 @@ final class NotificationController extends BaseApiController
     public function testNotify(ChatterInterface $chatter): JsonResponse
     {
         try {
-            $message = (new ChatMessage('Notification from symfony project'))
+            $message = new ChatMessage('Notification from symfony project')
                 ->transport('telegram');
 
             $sentMessage = $chatter->send($message);

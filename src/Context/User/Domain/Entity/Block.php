@@ -11,16 +11,12 @@ use Doctrine\ORM\Mapping\Embeddable;
 #[Embeddable]
 class Block
 {
-    #[Column(type: "date_immutable", nullable:  true)]
-    private ?DateTimeImmutable $startDate;
-
-    #[Column(type: "date_immutable", nullable: true)]
-    private ?DateTimeImmutable $endDate;
-
-    public function __construct(?DateTimeImmutable $startDate = null, ?DateTimeImmutable $endDate = null)
-    {
-        $this->startDate = $startDate;
-        $this->endDate = $endDate;
+    public function __construct(
+        #[Column(type: "date_immutable", nullable:  true)]
+        private ?DateTimeImmutable $startDate = null,
+        #[Column(type: "date_immutable", nullable: true)]
+        private ?DateTimeImmutable $endDate = null
+    ) {
     }
 
 

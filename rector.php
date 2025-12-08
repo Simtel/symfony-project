@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use Rector\CodeQuality\Rector\Class_\InlineConstructorDefaultToPropertyRector;
 use Rector\Config\RectorConfig;
-use Rector\Set\ValueObject\LevelSetList;
 
 return RectorConfig::configure()
     ->withPaths([
@@ -14,10 +13,9 @@ return RectorConfig::configure()
         __DIR__ . '/src',
         __DIR__ . '/tests',
     ])
+    ->withPhpSets(php85: true)
     ->withRules([
         InlineConstructorDefaultToPropertyRector::class,
     ])
     ->withSets([
-        // define sets of rules
-        // LevelSetList::UP_TO_PHP_83
     ]);

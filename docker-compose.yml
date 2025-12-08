@@ -37,25 +37,6 @@ services:
       - memcached
     environment:
       PHP_INI_SCAN_DIR: "/usr/local/etc/php/custom.d:/usr/local/etc/php/conf.d"
-  php-xdebug:
-    container_name: dev-php-xdebug
-    build:
-      context: ./
-      dockerfile: .docker/php-xdebug.Dockerfile
-    volumes:
-      - ./:/var/www/
-      - ./public:/var/www/html
-      - ./.docker/php-xdebug:/usr/local/etc/php/custom.d
-    networks:
-      - internal
-    links:
-      - db
-      - memcached
-    environment:
-      #XDEBUG_CONFIG: "client_host=172.17.0.1 idekey=PHPSTORM"
-      XDEBUG_CONFIG: "client_host=host.docker.internal idekey=PHPSTORM"
-      PHP_IDE_CONFIG: "serverName=Docker"
-      PHP_INI_SCAN_DIR: "/usr/local/etc/php/custom.d:/usr/local/etc/php/conf.d"
 
   nginx:
     container_name: dev-nginx
@@ -69,7 +50,6 @@ services:
       - ./.docker/nginx/nginx.conf:/etc/nginx/nginx.conf
     depends_on:
       - php
-      - php-xdebug
     networks:
       - internal
 
@@ -85,16 +65,6 @@ services:
     ports:
       - "1025:1025"
       - "8025:8025"
-    networks:
-      - internal
-
-  rabbitmq:
-    container_name: dev-rabbitmq
-    hostname: rabbitmq
-    image: rabbitmq:3.10.7-management-alpine
-    ports:
-      - "5673:5672"
-      - "15673:15672"
     networks:
       - internal
 

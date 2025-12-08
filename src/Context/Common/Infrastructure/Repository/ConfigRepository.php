@@ -10,7 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityNotFoundException;
 use Doctrine\ORM\EntityRepository;
 
-final class ConfigRepository implements ConfigRepositoryInterface
+final readonly class ConfigRepository implements ConfigRepositoryInterface
 {
     /**
      * @var EntityRepository<Config>
@@ -18,7 +18,7 @@ final class ConfigRepository implements ConfigRepositoryInterface
     private EntityRepository $repository;
 
     public function __construct(
-        private readonly EntityManagerInterface $entityManager
+        private EntityManagerInterface $entityManager
     ) {
         $this->repository = new EntityRepository(
             $this->entityManager,

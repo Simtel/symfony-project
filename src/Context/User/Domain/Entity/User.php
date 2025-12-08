@@ -25,15 +25,6 @@ class User implements UserInterface
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: 'string', length: 180, unique: true)]
-    private string $email;
-
-    #[ORM\Column(type: 'string')]
-    private string $password;
-
-    #[ORM\Column(type: 'string', length: 255)]
-    private string $name;
-
     #[ORM\Column(type: 'string', length: 255)]
     private string $token;
 
@@ -60,11 +51,11 @@ class User implements UserInterface
     #[OneToMany(mappedBy: 'user', targetEntity: Contact::class, fetch: 'EXTRA_LAZY', orphanRemoval: true, indexBy: 'code')]
     private Collection $contacts;
 
-    public function __construct(string $email, string $name, string $password, string $token)
+    public function __construct(#[ORM\Column(type: 'string', length: 180, unique: true)]
+        private string $email, #[ORM\Column(type: 'string', length: 255)]
+        private string $name, #[ORM\Column(type: 'string')]
+        private string $password, string $token)
     {
-        $this->email = $email;
-        $this->name = $name;
-        $this->password = $password;
         $this->setToken($token);
 
         $this->block = new Block();

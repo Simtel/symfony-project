@@ -14,25 +14,17 @@ class Contact
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: User::class, cascade: ['persist'], inversedBy: 'contacts')]
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE', options: [])]
-    private User $user;
-
-    #[ORM\Column(type: 'string', length: 180)]
-    private string $code;
-
-    #[ORM\Column(type: 'string', length: 180)]
-    private string $name;
-
-    #[ORM\Column(type: 'string', length: 180, nullable: true)]
-    private ?string $value;
-
-    public function __construct(User $user, string $code, string $name, ?string $value)
-    {
-        $this->user = $user;
-        $this->code = $code;
-        $this->name = $name;
-        $this->value = $value;
+    public function __construct(
+        #[ORM\ManyToOne(targetEntity: User::class, cascade: ['persist'], inversedBy: 'contacts')]
+        #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE', options: [])]
+        private User $user,
+        #[ORM\Column(type: 'string', length: 180)]
+        private string $code,
+        #[ORM\Column(type: 'string', length: 180)]
+        private string $name,
+        #[ORM\Column(type: 'string', length: 180, nullable: true)]
+        private ?string $value
+    ) {
     }
 
     public function getId(): ?int

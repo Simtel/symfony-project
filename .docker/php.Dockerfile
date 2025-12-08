@@ -1,4 +1,4 @@
-FROM php:8.4-fpm-alpine
+FROM php:8.5-fpm-alpine
 
 RUN apk --no-cache add shadow sudo
 
@@ -29,9 +29,6 @@ RUN docker-php-ext-install \
     zip \
     intl
 
-# Установка расширения AMQP через PECL
-RUN pecl install amqp && \
-    docker-php-ext-enable amqp
 
 # Установка Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer

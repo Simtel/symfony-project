@@ -16,24 +16,18 @@ class Log
     #[ORM\Column]
     private int $id;
 
-    #[ORM\Column(type: 'text')]
-    private ?string $action;
-
     #[ORM\Column(type: 'datetime_immutable')]
     private DateTimeImmutable $createdAt;
-
-    #[ORM\ManyToOne(targetEntity: User::class, )]
-    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id')]
-    private User $author;
 
     /**
      * @param string|null $action
      * @param User $author
      */
-    public function __construct(?string $action, User $author)
+    public function __construct(#[ORM\Column(type: 'text')]
+        private ?string $action, #[ORM\ManyToOne(targetEntity: User::class, )]
+        #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id')]
+        private User $author)
     {
-        $this->action = $action;
-        $this->author = $author;
         $this->createdAt = new DateTimeImmutable();
     }
 

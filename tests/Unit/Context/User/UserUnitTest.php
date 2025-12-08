@@ -171,7 +171,7 @@ final class UserUnitTest extends FeatureTestBaseCase
         $em = $this->getEntityManager();
 
         $em->flush();
-        $token = sha1((string)rand(999, 999999), true);
+        $token = sha1((string)random_int(999, 999999), true);
         self::assertEquals(20, strlen($token));
     }
 

@@ -7,16 +7,10 @@ namespace App\Context\Common\Infrastructure\View;
 final readonly class ConfigListView
 {
     /**
-     * @var ConfigView[]
-     */
-    private array $configs;
-
-    /**
      * @param ConfigView[] $configs
      */
-    public function __construct(array $configs)
+    public function __construct(private array $configs)
     {
-        $this->configs = $configs;
     }
 
     /**

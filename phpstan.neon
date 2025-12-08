@@ -11,3 +11,4 @@ parameters:
     level: max
     ignoreErrors:
     excludePaths:
+        - config/reference.php

@@ -55,6 +55,7 @@ abstract class FeatureTestBaseCase extends KernelTestCase
      * @throws Exception
      * @throws \Exception
      */
+    #[\Override]
     protected function tearDown(): void
     {
         $this->currentUser = null;
@@ -214,7 +215,7 @@ abstract class FeatureTestBaseCase extends KernelTestCase
     {
         $transformed = [];
         foreach ($headers as $key => $value) {
-            $name = str_replace('-', '_', strtoupper($key));
+            $name = str_replace('-', '_', strtoupper((string) $key));
             $transformed[$this->formatServerHeaderKey($name)] = $value;
         }
         return $transformed;

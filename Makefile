@@ -73,3 +73,6 @@ deptrac:
 
 bench:
 	@docker exec -it --user www-data dev-php vendor/bin/phpbench run tests/Bench --report=default
+
+rector:
+	docker exec -it --user www-data dev-php sh -c "./vendor/bin/rector process"

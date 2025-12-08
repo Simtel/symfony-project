@@ -52,7 +52,7 @@ final class LogController extends BaseApiController
                         'createdAt' => $log->getCreatedAt()->format('Y-m-d H:i:s'),
                         'url' => $this->generateUrl('log_view', ['log' => $log->getId()]),
                     ]);
-                } catch (LoaderError|RuntimeError|SyntaxError $e) {
+                } catch (LoaderError|RuntimeError|SyntaxError) {
                     // Если ошибка рендеринга, возвращаем простые данные
                     $renderedLogs[] = [
                         'id' => $log->getId(),

@@ -37,7 +37,7 @@ A modern, Docker-based Symfony 7 demo project designed for scalable PHP applicat
 
 ### Backend Framework
 - **[Symfony 7](https://symfony.com/)** - The leading PHP framework for web applications
-- **[PHP 8.4+](https://www.php.net/)** - Latest PHP version with modern features
+- **[PHP 8.5+](https://www.php.net/)** - Latest PHP version with modern features
 
 ### Database & ORM
 - **[Doctrine ORM](https://www.doctrine-project.org/)** - Object-relational mapping for PHP

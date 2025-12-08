@@ -73,13 +73,11 @@ final class ConfigProviderTest extends FeatureTestBaseCase
                 ]
             ],
             array_map(
-                static function (ConfigView $configView) {
-                    return [
-                        'name' => $configView->getName(),
-                        'value' => $configView->getValue(),
-                        'updatedAt' => $configView->getUpdatedAt()
-                    ];
-                },
+                static fn (ConfigView $configView) => [
+                    'name' => $configView->getName(),
+                    'value' => $configView->getValue(),
+                    'updatedAt' => $configView->getUpdatedAt()
+                ],
                 $result->getConfigs()
             )
         );

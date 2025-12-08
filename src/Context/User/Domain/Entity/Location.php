@@ -12,15 +12,13 @@ class Location
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(name: 'name', type: 'string', length: 255, nullable: false)]
-    private string $name;
-
     /**
      * @param string $name
      */
-    public function __construct(string $name)
-    {
-        $this->name = $name;
+    public function __construct(
+        #[ORM\Column(name: 'name', type: 'string', length: 255, nullable: false)]
+        private string $name
+    ) {
     }
 
     public function getId(): ?int

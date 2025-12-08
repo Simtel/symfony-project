@@ -9,7 +9,7 @@ use App\Context\Common\Domain\Entity\Log;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 
-final class LogRepository implements LogRepositoryInterface
+final readonly class LogRepository implements LogRepositoryInterface
 {
     /**
      * @var EntityRepository<Log>
@@ -17,7 +17,7 @@ final class LogRepository implements LogRepositoryInterface
     private EntityRepository $repository;
 
     public function __construct(
-        private readonly EntityManagerInterface $entityManager
+        private EntityManagerInterface $entityManager
     ) {
         $this->repository = new EntityRepository(
             $this->entityManager,

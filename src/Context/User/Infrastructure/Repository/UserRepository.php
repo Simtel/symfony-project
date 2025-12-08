@@ -8,7 +8,7 @@ use App\Context\User\Domain\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 
-final class UserRepository implements UserRepositoryInterface
+final readonly class UserRepository implements UserRepositoryInterface
 {
     /**
      * @var EntityRepository<User>
@@ -16,7 +16,7 @@ final class UserRepository implements UserRepositoryInterface
     private EntityRepository $repository;
 
     public function __construct(
-        private readonly EntityManagerInterface $entityManager
+        private EntityManagerInterface $entityManager
     ) {
         $this->repository = new EntityRepository(
             $this->entityManager,

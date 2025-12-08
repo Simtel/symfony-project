@@ -36,7 +36,7 @@ final class EmailController extends BaseApiController
     public function testEmail(): JsonResponse
     {
         try {
-            $email = (new Email())
+            $email = new Email()
                 ->from('noreply@mail.com')
                 ->to('simtel@example.com')
                 ->subject('Test Email!')
