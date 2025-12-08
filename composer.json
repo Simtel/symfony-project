@@ -11,7 +11,6 @@
         "doctrine/doctrine-migrations-bundle": "^3",
         "doctrine/orm": "^3",
         "doctrine/persistence": "^4.0",
-        "symfony/amqp-messenger": "^7",
         "symfony/cache": "^7",
         "symfony/console": "^7",
         "symfony/dotenv": "^7",
