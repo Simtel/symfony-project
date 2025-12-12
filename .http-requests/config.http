@@ -20,3 +20,18 @@ Content-Type: application/json
 GET http://localhost/api/config/list
 Content-Type: application/json
 X-AUTH-TOKEN: 123
+
+### Delete config
+DELETE http://localhost/api/config/{config-uuid}
+Content-Type: application/json
+X-AUTH-TOKEN: 123
+
+### Delete config with invalid UUID
+DELETE http://localhost/api/config/invalid-uuid
+Content-Type: application/json
+X-AUTH-TOKEN: 123
+
+### Delete non-existent config
+DELETE http://localhost/api/config/00000000-0000-0000-0000-000000000000
+Content-Type: application/json
+X-AUTH-TOKEN: 123

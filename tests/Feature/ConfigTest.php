@@ -152,7 +152,6 @@ final class ConfigTest extends FeatureTestBaseCase
 
     /**
      * @throws ORMException
-     * @throws JsonExceptionAlias
      * @throws Exception
      */
     public function testCreateConfig(): void
@@ -171,4 +170,92 @@ final class ConfigTest extends FeatureTestBaseCase
         self::assertSame('name', $config->getValue());
         self::assertSame($user->getId(), $config->getCreatedBy()->getId());
     }
+
+    /**
+     * @throws ORMException
+     * @throws JsonExceptionAlias
+     * @throws Exception
+     */
+    public function testDeleteConfig(): void
+    {
+        $em = $this->getEntityManager();
+        $user = $this->createUser();
+        $this->loginAs($user);
+
+        // Создаем конфигурацию для удаления
+        $config = new Config('test_config', 'test_value', $user);
+        $em->persist($config);
+        $em->flush();
+
+        $configId = $config->getId()->toString();
+
+        // Удаляем конфигурацию
+        $response = $this->deleteJson('/api/config/' . $configId);
+
+        $response->assertStatus(200);
+        $responseData = $response->json();
+        self::assertIsArray($responseData);
+        self::assertArrayHasKey('message', $responseData);
+        self::assertSame('Конфигурация успешно удалена', $responseData['message']);
+
+        // Проверяем, что конфигурация действительно удалена
+        $this->expectException(\Throwable::class);
+        $repository = self::getContainer()->get(ConfigRepositoryInterface::class);
+        $repository->findById($config->getId());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testDeleteNonExistentConfig(): void
+    {
+        $user = $this->createUser();
+        $this->loginAs($user);
+
+        // Пытаемся удалить несуществующую конфигурацию
+        $nonExistentId = '00000000-0000-0000-0000-000000000000';
+        $response = $this->deleteJson('/api/config/' . $nonExistentId);
+
+        $response->assertStatus(404);
+        $responseData = $response->json();
+        self::assertIsArray($responseData);
+        self::assertArrayHasKey('message', $responseData);
+        self::assertSame('Конфигурация с указанным ID не найдена', $responseData['message']);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testDeleteConfigWithInvalidUuid(): void
+    {
+        $user = $this->createUser();
+        $this->loginAs($user);
+
+        // Пытаемся удалить с некорректным UUID
+        $invalidId = 'invalid-uuid-format';
+        $response = $this->deleteJson('/api/config/' . $invalidId);
+
+        $response->assertStatus(422);
+        $responseData = $response->json();
+        self::assertIsArray($responseData);
+        self::assertArrayHasKey('error', $responseData);
+        self::assertArrayHasKey('message', $responseData);
+        self::assertArrayHasKey('details', $responseData);
+        self::assertSame('Ошибка валидации данных', $responseData['message']);
+        self::assertArrayHasKey('violations', $responseData['details']);
+        self::assertArrayHasKey('id', $responseData['details']['violations']);
+        self::assertSame('Некорректный формат ID конфигурации', $responseData['details']['violations']['id']);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testDeleteConfigWithoutAccess(): void
+    {
+        // Удаляем конфигурацию без авторизации
+        $response = $this->deleteJson('/api/config/123');
+
+        $response->assertStatus(403);
+    }
+
 }

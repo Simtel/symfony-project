@@ -311,7 +311,7 @@ GET /api/config/list
 
 #### Create Configuration
 ```http
-POST /api/config
+POST http://localhost:8000/api/config
 Content-Type: application/json
 
 {
@@ -330,6 +330,25 @@ Content-Type: application/json
   }
 }
 ```
+
+#### Delete Configuration
+```http
+DELETE http://localhost:8000/api/config/{id}
+```
+**Response:**
+```json
+{
+  "message": "Конфигурация успешно удалена"
+}
+```
+
+#### Error Responses for Delete Operation
+
+| Status Code | Description | Response |
+|-------------|-------------|----------|
+| `422 Unprocessable Entity` | Invalid UUID format | ```json {"error": true, "message": "Ошибка валидации данных", "details": {"violations": {"id": "Некорректный формат ID конфигурации"}}}``` |
+| `404 Not Found` | Configuration not found | ```json {"message": "Конфигурация с указанным ID не найдена"}``` |
+| `403 Forbidden` | Access denied | Unauthorized access |
 
 ### Log Management
 

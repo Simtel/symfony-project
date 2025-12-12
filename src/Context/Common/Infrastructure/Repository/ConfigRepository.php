@@ -9,6 +9,7 @@ use App\Context\Common\Domain\Entity\Config;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityNotFoundException;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\Uid\Uuid;
 
 final readonly class ConfigRepository implements ConfigRepositoryInterface
 {
@@ -42,5 +43,24 @@ final readonly class ConfigRepository implements ConfigRepositoryInterface
         }
 
         return $config;
+    }
+
+    /**
+     * @throws EntityNotFoundException
+     */
+    public function findById(Uuid $id): Config
+    {
+        $config = $this->repository->find($id);
+        if ($config === null) {
+            throw new EntityNotFoundException('Config with id ' . $id->toString() . ' not found');
+        }
+
+        return $config;
+    }
+
+    public function delete(Config $config): void
+    {
+        $this->entityManager->remove($config);
+        $this->entityManager->flush();
     }
 }

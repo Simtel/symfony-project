@@ -9,11 +9,13 @@ use App\Context\Common\Application\Dto\CreateConfigDto;
 use App\Context\Common\Domain\Entity\Config;
 use App\Context\User\Domain\Contract\UserProviderInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * Контроллер для управления конфигурациями
@@ -21,12 +23,12 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 final class ConfigController extends BaseApiController
 {
     public function __construct(
-        NormalizerInterface $normalizer,
+        SerializerInterface $serializer,
         private readonly ConfigProviderInterface $configProvider,
         private readonly EntityManagerInterface $entityManager,
         private readonly UserProviderInterface $userProvider,
     ) {
-        parent::__construct($normalizer);
+        parent::__construct($serializer);
     }
 
     /**
@@ -93,6 +95,39 @@ final class ConfigController extends BaseApiController
             ]);
         } catch (\Exception $e) {
             return $this->error('Ошибка при создании конфигурации: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Удаление конфигурации по ID
+     *
+     * @param string $id UUID конфигурации для удаления
+     * @return JsonResponse
+     */
+    #[Route(path: '/api/config/{id}', name: 'delete_config', methods: ['DELETE'])]
+    public function delete(string $id): JsonResponse
+    {
+        try {
+            // Проверяем формат UUID
+            if (!Uuid::isValid($id)) {
+                return $this->validationError(
+                    ['id' => 'Некорректный формат ID конфигурации'],
+                    'Ошибка валидации данных'
+                );
+            }
+
+            try {
+                $uuid = Uuid::fromString($id);
+                $this->configProvider->delete($uuid);
+
+                return $this->success([
+                    'message' => 'Конфигурация успешно удалена'
+                ]);
+            } catch (EntityNotFoundException $e) {
+                return $this->notFound('Конфигурация с указанным ID не найдена');
+            }
+        } catch (\Exception $e) {
+            return $this->error('Ошибка при удалении конфигурации: ' . $e->getMessage());
         }
     }
 }
