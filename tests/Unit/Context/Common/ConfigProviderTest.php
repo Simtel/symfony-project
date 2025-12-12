@@ -28,10 +28,9 @@ final class ConfigProviderTest extends FeatureTestBaseCase
     {
         $repositoryMock = $this->getMockBuilder(ConfigRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['findAll','getByName'])
             ->getMock();
 
-        $repositoryMock->expects(self::once())
+        $repositoryMock->expects($this->once())
             ->method('findAll')
             ->willReturn([]);
 

@@ -76,3 +76,5 @@ bench:
 
 rector:
 	docker exec -it --user www-data dev-php sh -c "./vendor/bin/rector process"
+
+pre-commit: pint phpstan test

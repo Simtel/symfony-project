@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
-use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -23,7 +23,7 @@ use Symfony\Component\Uid\Uuid;
 final class ConfigController extends BaseApiController
 {
     public function __construct(
-        SerializerInterface $serializer,
+        NormalizerInterface $serializer,
         private readonly ConfigProviderInterface $configProvider,
         private readonly EntityManagerInterface $entityManager,
         private readonly UserProviderInterface $userProvider,

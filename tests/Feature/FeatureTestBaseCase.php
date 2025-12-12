@@ -261,4 +261,34 @@ abstract class FeatureTestBaseCase extends KernelTestCase
         }
         return $this->entityManager;
     }
+
+    /**
+     * @param string $uri
+     * @param mixed[] $data
+     * @param mixed[] $headers
+     * @return TestResponse
+     * @throws JsonException
+     */
+    public function deleteJson(string $uri, array $data = [], array $headers = []): TestResponse
+    {
+        $content = json_encode($data, JSON_THROW_ON_ERROR);
+
+        $jsonHeaders = [
+            'CONTENT_LENGTH' => mb_strlen($content, '8bit'),
+            'CONTENT_TYPE' => 'application/json',
+            'Accept' => 'application/json',
+        ];
+
+        $headers = array_replace($jsonHeaders, array_merge($this->getDefaultHeaders(), $headers));
+
+        return $this->apiCall(
+            'DELETE',
+            $uri,
+            [],
+            [],
+            [],
+            $this->transformHeadersToServerVars($headers),
+            $content
+        );
+    }
 }

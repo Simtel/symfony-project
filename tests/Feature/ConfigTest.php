@@ -200,6 +200,7 @@ final class ConfigTest extends FeatureTestBaseCase
 
         // Проверяем, что конфигурация действительно удалена
         $this->expectException(\Throwable::class);
+        /** @var ConfigRepositoryInterface $repository */
         $repository = self::getContainer()->get(ConfigRepositoryInterface::class);
         $repository->findById($config->getId());
     }
@@ -236,8 +237,17 @@ final class ConfigTest extends FeatureTestBaseCase
         $response = $this->deleteJson('/api/config/' . $invalidId);
 
         $response->assertStatus(422);
+        /** @var array{
+         *     error: mixed,
+         *     message: string,
+         *     details: array{
+         *         violations: array{
+         *             id: string
+         *         }
+         *     }
+         * } $responseData
+         */
         $responseData = $response->json();
-        self::assertIsArray($responseData);
         self::assertArrayHasKey('error', $responseData);
         self::assertArrayHasKey('message', $responseData);
         self::assertArrayHasKey('details', $responseData);
