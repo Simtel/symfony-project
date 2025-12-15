@@ -1,0 +1,9 @@
+### Get logs list
+GET http://localhost/api/log/list
+Content-Type: application/json
+X-AUTH-TOKEN: 123
+
+### Get specific log
+GET http://localhost/api/log/{log-id}
+Content-Type: application/json
+X-AUTH-TOKEN: 123

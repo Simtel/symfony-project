@@ -19,6 +19,11 @@ GET http://localhost/api/user/find/Simtel
 Content-Type: application/json
 X-AUTH-TOKEN: 123
 
+### Get users by location
+GET http://localhost/api/users/{location-id}
+Content-Type: application/json
+X-AUTH-TOKEN: 123
+
 ### Find user
 GET http://localhost/_profiler/
 X-AUTH-TOKEN: 123
