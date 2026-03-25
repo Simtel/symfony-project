@@ -12,7 +12,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         'orm' => [
             'naming_strategy' => 'doctrine.orm.naming_strategy.underscore_number_aware',
             'auto_mapping' => true,
-            'report_fields_where_declared' => true,
             'controller_resolver' => [
                 'auto_mapping' => false,
             ],
