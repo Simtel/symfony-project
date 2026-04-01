@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Context\Common\Infrastructure\EventListener\ApiExceptionEventListener;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -12,10 +11,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->autowire()
         ->autoconfigure();
 
-    $services->load('App\Context\Common\\', __DIR__ . '/../../../src/Context/Common/');
-
-    $services->set(ApiExceptionEventListener::class)
-        ->tag('kernel.event_listener', [
-        'event' => 'kernel.exception',
-    ]);
+    $services->load('App\Context\Common\\', dirname(__DIR__, 3) . '/src/Context/Common/');
 };

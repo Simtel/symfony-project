@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Context\Common\Infrastructure\Contract\CommandHandlerInterface;
-use App\Context\User\Infrastructure\Service\UserService;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -14,11 +12,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->autoconfigure()
         ->bind('string $publicDir', '%kernel.project_dir%/public');
 
-    $services->instanceof(CommandHandlerInterface::class)
-        ->tag('messenger.message_handler', ['bus' => 'command.bus']);
-
-    $services->load('App\Context\User\\', __DIR__ . '/../../../src/Context/User/');
-
-    $services->set(UserService::class)
-        ->public();
+    $services->load('App\Context\User\\', dirname(__DIR__, 3) . '/src/Context/User/');
 };

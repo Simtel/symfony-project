@@ -9,7 +9,9 @@ use App\Context\User\Application\CQRS\Command\UpdateUserCommand;
 use App\Context\User\Domain\Entity\Contact;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
+#[AsMessageHandler(bus: 'command.bus')]
 final readonly class UpdateUserCommandHandler implements CommandHandlerInterface
 {
     public function __construct(
