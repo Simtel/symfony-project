@@ -14,11 +14,12 @@ use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\OrderBy;
 use Doctrine\ORM\Mapping\PrePersist;
 use RuntimeException;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity()]
 #[HasLifecycleCallbacks]
-class User implements UserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -155,7 +156,7 @@ class User implements UserInterface
     #[PrePersist]
     public function fillSecretKeyBeforePersist(PrePersistEventArgs $eventArgs): void
     {
-        $this->secretKey = sha1($this->getName() . '/' . $this->getPassword());
+        $this->secretKey = sha1($this->getEmail());
     }
 
     public function getSecretKey(): ?string

@@ -21,9 +21,7 @@ final readonly class UserService implements UserServiceInterface
         if (!$lock->acquire()) {
             throw new AccessDeniedException('User service is locked');
         }
-        if ($lock->acquire(true)) {
-            sleep(3);
-            $lock->release();
-        }
+        sleep(3);
+        $lock->release();
     }
 }

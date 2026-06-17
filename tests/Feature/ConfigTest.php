@@ -8,6 +8,7 @@ use App\Context\User\Domain\Entity\User;
 use Doctrine\ORM\Exception\ORMException;
 use Exception;
 use JsonException as JsonExceptionAlias;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 use function PHPUnit\Framework\assertSame;
 
@@ -29,7 +30,10 @@ final class ConfigTest extends FeatureTestBaseCase
     {
         $em = $this->getEntityManager();
 
-        $user = new User('test@mail.com', 'Test', '456', '4444');
+        $user = new User('test@mail.com', 'Test', '', '4444');
+        /** @var UserPasswordHasherInterface $passwordHasher */
+        $passwordHasher = self::getContainer()->get(UserPasswordHasherInterface::class);
+        $user->setPassword($passwordHasher->hashPassword($user, '456'));
         $em->persist($user);
         $em->flush();
 
@@ -48,7 +52,10 @@ final class ConfigTest extends FeatureTestBaseCase
     {
         $em = $this->getEntityManager();
 
-        $user = new User('test@mail.com', 'Test', '456', '123');
+        $user = new User('test@mail.com', 'Test', '', '123');
+        /** @var UserPasswordHasherInterface $passwordHasher */
+        $passwordHasher = self::getContainer()->get(UserPasswordHasherInterface::class);
+        $user->setPassword($passwordHasher->hashPassword($user, '456'));
         $em->persist($user);
 
         $config = new Config('app', 'Test App', $user);

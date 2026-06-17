@@ -14,6 +14,7 @@ use App\Tests\Feature\FeatureTestBaseCase;
 use Exception;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Cache\InvalidArgumentException;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 final class ConfigProviderTest extends FeatureTestBaseCase
 {
@@ -52,7 +53,10 @@ final class ConfigProviderTest extends FeatureTestBaseCase
      */
     public function testProviderReturnFillViewConfig(): void
     {
-        $user = new User('test@test.com', 'Test', '4444', '3232323');
+        $user = new User('test@test.com', 'Test', '', '3232323');
+        /** @var UserPasswordHasherInterface $passwordHasher */
+        $passwordHasher = self::getContainer()->get(UserPasswordHasherInterface::class);
+        $user->setPassword($passwordHasher->hashPassword($user, '4444'));
         $config = new Config('app', 'Test Project', $user);
         $this->getEntityManager()->persist($config);
         $this->getEntityManager()->persist($user);

@@ -8,6 +8,7 @@ use App\Context\User\Domain\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 abstract class UnitTestBaseCase extends KernelTestCase
 {
@@ -34,7 +35,11 @@ abstract class UnitTestBaseCase extends KernelTestCase
         $default = ['email' => 'test@mail.com', 'name' => 'Test', 'password' => '456', 'token' => '4444'];
         $attributes = array_replace($default, $overrides);
 
-        $user = new User($attributes['email'], $attributes['name'], $attributes['password'], $attributes['token']);
+        $user = new User($attributes['email'], $attributes['name'], '', $attributes['token']);
+        /** @var UserPasswordHasherInterface $passwordHasher */
+        $passwordHasher = self::getContainer()->get(UserPasswordHasherInterface::class);
+        $hashedPassword = $passwordHasher->hashPassword($user, $attributes['password']);
+        $user->setPassword($hashedPassword);
         $user->setToken($attributes['token']);
         $this->entityManager->persist($user);
 

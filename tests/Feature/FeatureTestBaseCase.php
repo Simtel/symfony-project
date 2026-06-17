@@ -13,6 +13,7 @@ use JsonException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 abstract class FeatureTestBaseCase extends KernelTestCase
 {
@@ -241,7 +242,12 @@ abstract class FeatureTestBaseCase extends KernelTestCase
 
         $em = $this->getEntityManager();
 
-        $user = new User($attributes['email'], $attributes['name'], $attributes['password'], $attributes['token']);
+        $user = new User($attributes['email'], $attributes['name'], '', $attributes['token']);
+        /** @var UserPasswordHasherInterface $passwordHasher */
+        $passwordHasher = static::getContainer()->get(UserPasswordHasherInterface::class);
+        $hashedPassword = $passwordHasher->hashPassword($user, $attributes['password']);
+        $user->setPassword($hashedPassword);
+
         $em->persist($user);
 
         $em->flush();

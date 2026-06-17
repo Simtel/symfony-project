@@ -14,6 +14,7 @@ use App\Tests\Feature\FeatureTestBaseCase;
 use DateTimeImmutable;
 use Doctrine\ORM\Exception\ORMException;
 use Exception;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 final class UserUnitTest extends FeatureTestBaseCase
 {
@@ -22,11 +23,14 @@ final class UserUnitTest extends FeatureTestBaseCase
      */
     public function testSecretKey(): void
     {
-        $user = new User('test@mail.com', 'Test', '123', '123');
+        $user = new User('test@mail.com', 'Test', '', '123');
+        /** @var UserPasswordHasherInterface $passwordHasher */
+        $passwordHasher = self::getContainer()->get(UserPasswordHasherInterface::class);
+        $user->setPassword($passwordHasher->hashPassword($user, '123'));
 
         $this->getEntityManager()->persist($user);
 
-        self::assertSame(sha1('Test' . '/' . '123'), $user->getSecretKey());
+        self::assertSame(sha1('test@mail.com'), $user->getSecretKey());
     }
 
     /**
@@ -34,7 +38,10 @@ final class UserUnitTest extends FeatureTestBaseCase
      */
     public function testBlockedDateRange(): void
     {
-        $user = new User('test@mail.com', 'Test', '123', '333');
+        $user = new User('test@mail.com', 'Test', '', '333');
+        /** @var UserPasswordHasherInterface $passwordHasher */
+        $passwordHasher = self::getContainer()->get(UserPasswordHasherInterface::class);
+        $user->setPassword($passwordHasher->hashPassword($user, '123'));
         $user->setBlock(
             new Block(
                 new DateTimeImmutable('2022-01-21 13:56:50'),
@@ -183,7 +190,10 @@ final class UserUnitTest extends FeatureTestBaseCase
         $entityManager = $this->getEntityManager();
         $userRepository = new UserRepository($entityManager);
 
-        $user = new User('test@example.com', 'test', 'test', '23323');
+        $user = new User('test@example.com', 'test', '', '23323');
+        /** @var UserPasswordHasherInterface $passwordHasher */
+        $passwordHasher = self::getContainer()->get(UserPasswordHasherInterface::class);
+        $user->setPassword($passwordHasher->hashPassword($user, 'test'));
 
         $entityManager->persist($user);
         $entityManager->flush();

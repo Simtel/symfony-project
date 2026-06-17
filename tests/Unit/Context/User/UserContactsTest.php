@@ -8,6 +8,7 @@ use App\Context\User\Domain\Entity\Contact;
 use App\Context\User\Domain\Entity\User;
 use App\Tests\Feature\FeatureTestBaseCase;
 use Exception;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 final class UserContactsTest extends FeatureTestBaseCase
 {
@@ -17,7 +18,10 @@ final class UserContactsTest extends FeatureTestBaseCase
     public function testArrayContactsIncludeCodeAsKeys(): void
     {
         $em = $this->getEntityManager();
-        $user = new User('s@mail.com', 'Test', '134', '33333');
+        $user = new User('s@mail.com', 'Test', '', '33333');
+        /** @var UserPasswordHasherInterface $passwordHasher */
+        $passwordHasher = self::getContainer()->get(UserPasswordHasherInterface::class);
+        $user->setPassword($passwordHasher->hashPassword($user, '134'));
 
         $contactFirst = new Contact($user, 'first', 'First', '1');
         $contactSecond = new Contact($user, 'second', 'second', '1');
