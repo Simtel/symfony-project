@@ -41,9 +41,7 @@ final class TestEntityManager implements EntityManagerInterface
     ) {
     }
 
-    /**
-     * @phpstan-ignore-next-line
-     */
+
     public function getRepository($className): EntityRepository
     {
         return $this->wrappedEntityManager->getRepository($className);
