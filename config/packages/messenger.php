@@ -11,9 +11,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             'default_bus' => 'command.bus',
             'buses' => [
                 'command.bus' => [
-                    'middleware' => [
-                        'doctrine_transaction',
-                    ],
+                    'middleware' => [],
                 ],
             ],
             'transports' => [

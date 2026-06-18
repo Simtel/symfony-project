@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Context\Common\Infrastructure\Security\ApiKeyAuthenticator;
+use App\Context\User\Domain\Entity\User;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
@@ -12,15 +13,18 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             PasswordAuthenticatedUserInterface::class => 'auto',
         ],
         'providers' => [
-            'users_in_memory' => [
-                'memory' => null,
+            'app_user_provider' => [
+                'entity' => [
+                    'class' => User::class,
+                    'property' => 'token',
+                ],
             ],
         ],
         'firewalls' => [
             'main' => [
                 'lazy' => true,
-                'logout' => true,
-                'stateless' => false,
+                'stateless' => true,
+                'provider' => 'app_user_provider',
                 'custom_authenticators' => [
                     ApiKeyAuthenticator::class,
                 ],
