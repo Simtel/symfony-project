@@ -29,6 +29,7 @@
         "symfony/serializer": "^8",
         "symfony/telegram-notifier": "^8",
         "symfony/translation": "^8",
+        "symfony/twig-bundle": "^8",
         "symfony/uid": "^8",
         "symfony/validator": "^8",
         "symfony/yaml": "^8"
